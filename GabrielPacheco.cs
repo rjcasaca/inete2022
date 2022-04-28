@@ -20,7 +20,7 @@ namespace GetPost_Exemple
                 var result1 = cliente.GetAsync(endpoint).Result;
                 var json = result1.Content.ReadAsStringAsync().Result;
                 #endregion
-Lucas
+            //Lucas esteve aqui 
                 #region Method Post
                 var newPost = new Post()
                 {
