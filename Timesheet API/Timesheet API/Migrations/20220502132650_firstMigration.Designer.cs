@@ -11,7 +11,7 @@ using Timesheet_API.Models;
 namespace Timesheet_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220502092102_firstMigration")]
+    [Migration("20220502132650_firstMigration")]
     partial class firstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,12 +26,13 @@ namespace Timesheet_API.Migrations
             modelBuilder.Entity("Timesheet_API.Models.User", b =>
                 {
                     b.Property<string>("email")
+                        .HasMaxLength(254)
+                        .HasColumnType("nvarchar(254)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
-
-                    b.Property<string>("nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("email");
 

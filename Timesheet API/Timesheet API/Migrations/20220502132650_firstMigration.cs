@@ -13,7 +13,7 @@ namespace Timesheet_API.Migrations
                 columns: table => new
                 {
                     email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
-                    nome = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
+                    name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
