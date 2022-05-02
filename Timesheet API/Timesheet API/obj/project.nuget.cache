@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "91l/rtJJVnL0e4mIszEtapqZ7Kuxlq94ZDvtjDyKJxLowHmrzy0pjbhzL2Kt7UUsjW6Lpn09lywq5EDRcQUUaQ==",
+  "dgSpecHash": "Hc+rNMFIcFYJg8nJ5pq8/2qvcLxVXrEosEbN+aJRormP/BIUFGU9KH0noRZBIKS+tWxk4UrgXzahfDwvvrop1Q==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
+  "projectFilePath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Novo\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Novo\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",

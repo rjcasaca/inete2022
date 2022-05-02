@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\Timesheet API.csproj": {}
+    "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\Timesheet API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\Timesheet API.csproj": {
+    "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\Timesheet API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
+        "projectUniqueName": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
         "projectName": "Timesheet API",
-        "projectPath": "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
+        "projectPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\Timesheet API.csproj",
         "packagesPath": "C:\\Users\\Novo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Novo\\source\\repos\\Timesheet API\\Timesheet API\\obj\\",
+        "outputPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet API\\Timesheet API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
