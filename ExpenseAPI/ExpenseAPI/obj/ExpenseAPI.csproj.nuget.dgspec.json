@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Novo\\source\\repos\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj": {}
+    "C:\\Users\\Novo\\source\\repos\\inete2022\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Novo\\source\\repos\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj": {
+    "C:\\Users\\Novo\\source\\repos\\inete2022\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Novo\\source\\repos\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Novo\\source\\repos\\inete2022\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj",
         "projectName": "ExpenseAPI",
-        "projectPath": "C:\\Users\\Novo\\source\\repos\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj",
+        "projectPath": "C:\\Users\\Novo\\source\\repos\\inete2022\\ExpenseAPI\\ExpenseAPI\\ExpenseAPI.csproj",
         "packagesPath": "C:\\Users\\Novo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Novo\\source\\repos\\ExpenseAPI\\ExpenseAPI\\obj\\",
+        "outputPath": "C:\\Users\\Novo\\source\\repos\\inete2022\\ExpenseAPI\\ExpenseAPI\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
