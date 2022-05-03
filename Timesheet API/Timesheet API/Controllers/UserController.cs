@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Timesheet_API.Models.Entities.Users;
+using Timesheet_API.Repositories;
 
 namespace Timesheet_API.Controllers
 {
@@ -7,53 +9,54 @@ namespace Timesheet_API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
+        private readonly IUsersRepository repos;
+
+        public UserController(IUsersRepository _repos)
         {
-            try
-            {
-                return Ok();
-            }
-            catch
-            {
-                return BadRequest();
-            }
+            repos = _repos;
+        }
+
+        [HttpGet("{email}")]
+        public IActionResult Get([FromRoute] UserEmail user)
+        {
+            var user_db = repos.Read(user.email);
+            return Ok(user_db);
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post(PostUsers user)
         {
-            try
+            if (repos.Create(user))
             {
                 return Ok();
             }
-            catch
+            else
             {
                 return BadRequest();
             }
         }
 
         [HttpPut]
-        public IActionResult Put()
+        public IActionResult Put(PutUsers user)
         {
-            try
+            if (repos.Update(user))
             {
                 return Ok();
             }
-            catch
+            else
             {
                 return BadRequest();
             }
         }
 
-        [HttpDelete]
-        public IActionResult Delete() 
+        [HttpDelete("{email}")]
+        public IActionResult Delete([FromRoute] UserEmail user) 
         {
-            try
+            if (repos.Delete(user.email))
             {
                 return Ok();
             }
-            catch
+            else
             {
                 return BadRequest();
             }
