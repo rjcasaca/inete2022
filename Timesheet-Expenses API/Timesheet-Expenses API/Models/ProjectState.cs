@@ -10,5 +10,8 @@ namespace Timesheet_Expenses_API.Models
         public int ProjState_Id { get; set; }
         [Required, MaxLength(30)]
         public string State { get; set; }
+
+        //Navigation Properties
+        public Project Project { get; set; }
     }
 }
