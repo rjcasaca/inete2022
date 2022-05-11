@@ -10,6 +10,7 @@ namespace Timesheet_Expenses_API.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository repos;
+
         public UserController(IUserRepository _repos)
         {
             repos = _repos;
