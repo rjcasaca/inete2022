@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Timesheet_Expenses_API.Models
 {
-    [Table(name: "Project State")]
-    public class ProjectState
+    [Table(name:"Worklog State")]
+    public class WorklogState
     {
         [Key]
-        public int ProjState_Id { get; set; }
-        [Required, MaxLength(30)]
+        public int WorklogState_Id { get; set; }
+        [MaxLength(50)]
         public string State { get; set; }
 
         //Navigation Properties
-        public List<Project> Project { get; set; }
+        public List<Worklog> Worklog { get; set; }
     }
 }

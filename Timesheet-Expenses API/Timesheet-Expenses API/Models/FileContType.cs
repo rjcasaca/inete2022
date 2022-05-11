@@ -10,5 +10,8 @@ namespace Timesheet_Expenses_API.Models
         public int FileContTypeId { get; set; }
         [Required]
         public string Type { get; set; }
+
+        //Navigation Properties
+        public List<FileContent> FileContent { get; set; }
     }
 }

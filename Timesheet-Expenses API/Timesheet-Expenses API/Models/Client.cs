@@ -14,6 +14,6 @@ namespace Timesheet_Expenses_API.Models
         public string Email { get; set; }
 
         //Navigation Properties
-        public Project Project { get; set; }
+        public List<Project> Project { get; set; }
     }
 }

@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Timesheet_Expenses_API.Models
 {
-    [Table(name:"Expense Type")]
-    public class ExpenseState
+    [Table(name:"Biling Type")]
+    public class BilingType
     {
         [Key]
-        public int ExpenseTypeId { get; set; }
-        [Required]
+        public int BilingType_Id { get; set; }
+        [MaxLength(50)]
         public string Type { get; set; }
 
         //Navigation Properties
-        public List<Expense> Expenses { get; set; }
+        public List<Worklog> Worklog { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Timesheet_Expenses_API.Models;
 
@@ -11,9 +12,10 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    partial class _DbContextModelSnapshot : ModelSnapshot
+    [Migration("20220511092755_3thMigration")]
+    partial class _3thMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,58 +175,6 @@ namespace Timesheet_Expenses_API.Migrations
                     b.ToTable("Comment");
                 });
 
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
-                {
-                    b.Property<int>("Expenses_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Expenses_Id"), 1L, 1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ExpenseStateExpenseTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Project_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Qtd_Line")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("TotalMoney")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("User_Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Expenses_Id");
-
-                    b.HasIndex("ExpenseStateExpenseTypeId");
-
-                    b.HasIndex("Project_Id");
-
-                    b.HasIndex("User_Id");
-
-                    b.ToTable("Expense");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense_File", b =>
-                {
-                    b.Property<int>("FileContentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExpensesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FileContentId", "ExpensesId");
-
-                    b.HasIndex("ExpensesId");
-
-                    b.ToTable("Expense_File");
-                });
-
             modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseState", b =>
                 {
                     b.Property<int>("ExpenseTypeId")
@@ -280,30 +230,6 @@ namespace Timesheet_Expenses_API.Migrations
                     b.HasKey("FileContTypeId");
 
                     b.ToTable("FileCont Type");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Line", b =>
-                {
-                    b.Property<int>("Cod_Line")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cod_Line"), 1L, 1);
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Expenses_Id")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Money")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Cod_Line");
-
-                    b.HasIndex("Expenses_Id");
-
-                    b.ToTable("Line");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Project", b =>
@@ -542,52 +468,6 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Activity");
                 });
 
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
-                {
-                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", "ExpenseState")
-                        .WithMany("Expenses")
-                        .HasForeignKey("ExpenseStateExpenseTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Timesheet_Expenses_API.Models.Project", "Project")
-                        .WithMany("Expenses")
-                        .HasForeignKey("Project_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Timesheet_Expenses_API.Models.User", "User")
-                        .WithMany("Expenses")
-                        .HasForeignKey("User_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ExpenseState");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense_File", b =>
-                {
-                    b.HasOne("Timesheet_Expenses_API.Models.Expense", "Expenses")
-                        .WithMany("Expense_File")
-                        .HasForeignKey("ExpensesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Timesheet_Expenses_API.Models.FileContent", "FileContent")
-                        .WithMany("Expense_File")
-                        .HasForeignKey("FileContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Expenses");
-
-                    b.Navigation("FileContent");
-                });
-
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.FileContType", "FileContType")
@@ -597,17 +477,6 @@ namespace Timesheet_Expenses_API.Migrations
                         .IsRequired();
 
                     b.Navigation("FileContType");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Line", b =>
-                {
-                    b.HasOne("Timesheet_Expenses_API.Models.Expense", "Expenses")
-                        .WithMany("Line")
-                        .HasForeignKey("Expenses_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Project", b =>
@@ -720,23 +589,9 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
-                {
-                    b.Navigation("Expense_File");
-
-                    b.Navigation("Line");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseState", b =>
-                {
-                    b.Navigation("Expenses");
-                });
-
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>
                 {
                     b.Navigation("Activity_File");
-
-                    b.Navigation("Expense_File");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContType", b =>
@@ -748,8 +603,6 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.Navigation("Activity");
 
-                    b.Navigation("Expenses");
-
                     b.Navigation("Team");
                 });
 
@@ -760,8 +613,6 @@ namespace Timesheet_Expenses_API.Migrations
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.User", b =>
                 {
-                    b.Navigation("Expenses");
-
                     b.Navigation("Team");
 
                     b.Navigation("Worklog");

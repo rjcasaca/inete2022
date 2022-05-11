@@ -14,8 +14,11 @@ namespace Timesheet_Expenses_API.Models
         public DateTime EndDate { get; set; }
 
         //Navigation Properties
-        public List<Client> Client { get; set; }
-        public List<ProjectState> ProjectState { get; set; }
-        public List<Team> teams { get; set; }
+        public Client Client { get; set; }
+        public ProjectState ProjectState { get; set; }
+        public List<Team> Team { get; set; }
+        public List<Activity> Activity { get; set; }
+        public List<Expense> Expenses { get; set; }
+
     }
 }

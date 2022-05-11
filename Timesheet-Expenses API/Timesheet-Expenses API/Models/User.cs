@@ -14,6 +14,9 @@ namespace Timesheet_Expenses_API.Models
         public string Name { get; set; }
 
         //Navigation Properties
-        public List<Team> teams { get; set; }
+        public List<Team> Team { get; set; }
+        public List<Worklog> Worklog { get; set; }
+        public List<Expense> Expenses { get; set; }
+
     }
 }
