@@ -24,6 +24,7 @@ builder.Services.AddScoped<IBillingTypeRepository, BillingTypeRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<IWorklogRepository, WorklogRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 #endregion
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
