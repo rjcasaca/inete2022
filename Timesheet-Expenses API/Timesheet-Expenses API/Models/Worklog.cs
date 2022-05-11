@@ -16,7 +16,7 @@ namespace Timesheet_Expenses_API.Models
         //Navigation Properties
         public User User { get; set; }
         public Activity Activity { get; set; }
-        public BilingType BilingType { get; set; }
+        public BillingType BillingType { get; set; }
         public WorklogState WorklogState { get; set; }
     }
 }

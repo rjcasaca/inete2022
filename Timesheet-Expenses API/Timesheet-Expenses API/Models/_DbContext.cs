@@ -17,7 +17,7 @@ namespace Timesheet_Expenses_API.Models
 
         public DbSet<User> users { get; set; }
         public DbSet<WorklogState> worklogStates { get; set; }
-        public DbSet<BilingType> bilingTypes { get; set; }
+        public DbSet<BillingType> billingTypes { get; set; }
         public DbSet<UserFunction> userFunction { get; set; }
         public DbSet<ProjectState> projectStates { get; set; }
         public DbSet<Client> client { get; set; }

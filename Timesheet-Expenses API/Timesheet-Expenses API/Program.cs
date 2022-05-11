@@ -1,5 +1,6 @@
 using Timesheet_Expenses_API.Models;
 using Microsoft.EntityFrameworkCore;
+using Timesheet_Expenses_API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,11 @@ builder.Services.AddDbContext<_DbContext>(x => x.UseSqlServer(builder.Configurat
 
 //ConString Lucas
 //builder.Services.AddDbContext<_DbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("LucasConnection")));
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IProjectStateRepository, ProjectStateRepository>();
+builder.Services.AddScoped<IWorklogStateRepository, WorklogStateRepository>();
 #endregion
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
