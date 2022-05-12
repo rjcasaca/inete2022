@@ -12,6 +12,6 @@ namespace Timesheet_Expenses_API.Models
         public Base64FormattingOptions base64 { get; set; }
 
         //Navigation Properties
-        public List<FileContent> FileContent { get; set; }
+        public FileContent FileContent { get; set; }
     }
 }

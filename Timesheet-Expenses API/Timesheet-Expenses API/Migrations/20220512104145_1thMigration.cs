@@ -162,14 +162,14 @@ namespace Timesheet_Expenses_API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     FileContTypeId = table.Column<int>(type: "int", nullable: false),
-                    File_Id = table.Column<int>(type: "int", nullable: false)
+                    FileId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_File Content", x => x.FileContent_Id);
                     table.ForeignKey(
-                        name: "FK_File Content_File_File_Id",
-                        column: x => x.File_Id,
+                        name: "FK_File Content_File_FileId",
+                        column: x => x.FileId,
                         principalTable: "File",
                         principalColumn: "File_Id",
                         onDelete: ReferentialAction.Cascade);
@@ -430,7 +430,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     Cod_Line = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnityPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expenses_Id = table.Column<int>(type: "int", nullable: false)
                 },
@@ -491,14 +491,15 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "ExpensesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_File Content_File_Id",
-                table: "File Content",
-                column: "File_Id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_File Content_FileContTypeId",
                 table: "File Content",
                 column: "FileContTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_File Content_FileId",
+                table: "File Content",
+                column: "FileId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Line_Expenses_Id",

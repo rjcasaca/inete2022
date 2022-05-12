@@ -13,7 +13,7 @@ namespace Timesheet_Expenses_API.Models
         public int Qtd_Line { get; set; }
 
         //Navigation Properties
-        public ExpenseState ExpenseState { get; set; }
+        public ExpenseType ExpenseState { get; set; }
         public User User { get; set; }
         public Project Project { get; set; }
         public List<Expense_File> Expense_File { get; set; }

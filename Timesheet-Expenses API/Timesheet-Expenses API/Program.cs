@@ -30,6 +30,12 @@ builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IActivityStateRepository, ActivityStateRepository>();
 builder.Services.AddScoped<IActivity_FileRepository, Activity_FileRepository>();
 builder.Services.AddScoped<ILineRepository, LineRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+builder.Services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
+builder.Services.AddScoped<IExpense_FileRepository, Expense_FileRepository>();
+builder.Services.AddScoped<IFileContentRepository, FileContentRepository>();
+builder.Services.AddScoped<IFileContentTypeRepository, FileContentTypeRepository>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
 #endregion
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

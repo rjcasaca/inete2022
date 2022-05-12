@@ -4,11 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Timesheet_Expenses_API.Models
 {
     [Table(name:"Expense Type")]
-    public class ExpenseState
+    public class ExpenseType
     {
         [Key]
-        public int ExpenseTypeId { get; set; }
-        [Required]
+        public int ExpenseType_Id { get; set; }
+        [Required, MaxLength(30)]
         public string Type { get; set; }
 
         //Navigation Properties

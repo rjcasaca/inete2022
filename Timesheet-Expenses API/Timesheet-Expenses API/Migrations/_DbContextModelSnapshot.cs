@@ -269,7 +269,7 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<int>("FileContTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("File_Id")
+                    b.Property<int>("FileId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -281,7 +281,8 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasIndex("FileContTypeId");
 
-                    b.HasIndex("File_Id");
+                    b.HasIndex("FileId")
+                        .IsUnique();
 
                     b.ToTable("File Content");
                 });
@@ -317,7 +318,7 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<int>("Expenses_Id")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Money")
+                    b.Property<decimal>("UnityPrice")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Cod_Line");
@@ -618,8 +619,8 @@ namespace Timesheet_Expenses_API.Migrations
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.File", "File")
-                        .WithMany("FileContent")
-                        .HasForeignKey("File_Id")
+                        .WithOne("FileContent")
+                        .HasForeignKey("Timesheet_Expenses_API.Models.FileContent", "FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -763,7 +764,8 @@ namespace Timesheet_Expenses_API.Migrations
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.File", b =>
                 {
-                    b.Navigation("FileContent");
+                    b.Navigation("FileContent")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>

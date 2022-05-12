@@ -8,7 +8,7 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int FileContTypeId { get; set; }
-        [Required]
+        [Required, MaxLength(30)]
         public string Type { get; set; }
 
         //Navigation Properties
