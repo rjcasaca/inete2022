@@ -7,7 +7,7 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int Cod_Line { get; set; }
-        public decimal Money { get; set; }
+        public decimal UnityPrice { get; set; }
         public DateTime Date { get; set; }
 
         //Navigation Properties

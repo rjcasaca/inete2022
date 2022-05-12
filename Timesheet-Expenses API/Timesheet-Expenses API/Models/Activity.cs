@@ -16,7 +16,6 @@ namespace Timesheet_Expenses_API.Models
         public Project Project { get; set; }
         public ActivityState ActivityState { get; set; }
         public ActivityType ActivityType { get; set; }
-
         public List<Comment> Comment { get; set; }
         public List<Worklog> Worklog { get; set; }
         public List<Activity_File> Activity_File { get; set; }

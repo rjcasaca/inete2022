@@ -242,6 +242,22 @@ namespace Timesheet_Expenses_API.Migrations
                     b.ToTable("Expense Type");
                 });
 
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.File", b =>
+                {
+                    b.Property<int>("File_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("File_Id"), 1L, 1);
+
+                    b.Property<int>("base64")
+                        .HasColumnType("int");
+
+                    b.HasKey("File_Id");
+
+                    b.ToTable("File");
+                });
+
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>
                 {
                     b.Property<int>("FileContent_Id")
@@ -253,6 +269,9 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<int>("FileContTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("File_Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(250)
@@ -261,6 +280,8 @@ namespace Timesheet_Expenses_API.Migrations
                     b.HasKey("FileContent_Id");
 
                     b.HasIndex("FileContTypeId");
+
+                    b.HasIndex("File_Id");
 
                     b.ToTable("File Content");
                 });
@@ -596,6 +617,14 @@ namespace Timesheet_Expenses_API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Timesheet_Expenses_API.Models.File", "File")
+                        .WithMany("FileContent")
+                        .HasForeignKey("File_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("File");
+
                     b.Navigation("FileContType");
                 });
 
@@ -730,6 +759,11 @@ namespace Timesheet_Expenses_API.Migrations
             modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseState", b =>
                 {
                     b.Navigation("Expenses");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.File", b =>
+                {
+                    b.Navigation("FileContent");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>

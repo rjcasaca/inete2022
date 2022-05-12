@@ -35,5 +35,6 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<Expense> expenses { get; set; }
         public DbSet<Expense_File> expenses_files { get; set; }
         public DbSet<Line> lines { get; set; }
+        public DbSet<File> files { get; set; }
     }
 }

@@ -36,16 +36,16 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Biling Type",
+                name: "Billing Type",
                 columns: table => new
                 {
-                    BilingType_Id = table.Column<int>(type: "int", nullable: false)
+                    BillingType_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Biling Type", x => x.BilingType_Id);
+                    table.PrimaryKey("PK_Billing Type", x => x.BillingType_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,6 +73,19 @@ namespace Timesheet_Expenses_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expense Type", x => x.ExpenseTypeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "File",
+                columns: table => new
+                {
+                    File_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    base64 = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_File", x => x.File_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -142,6 +155,33 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "File Content",
+                columns: table => new
+                {
+                    FileContent_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    FileContTypeId = table.Column<int>(type: "int", nullable: false),
+                    File_Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_File Content", x => x.FileContent_Id);
+                    table.ForeignKey(
+                        name: "FK_File Content_File_File_Id",
+                        column: x => x.File_Id,
+                        principalTable: "File",
+                        principalColumn: "File_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_File Content_FileCont Type_FileContTypeId",
+                        column: x => x.FileContTypeId,
+                        principalTable: "FileCont Type",
+                        principalColumn: "FileContTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Project",
                 columns: table => new
                 {
@@ -206,6 +246,42 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Expense",
+                columns: table => new
+                {
+                    Expenses_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Qtd_Line = table.Column<int>(type: "int", nullable: false),
+                    ExpenseStateExpenseTypeId = table.Column<int>(type: "int", nullable: false),
+                    User_Id = table.Column<int>(type: "int", nullable: false),
+                    Project_Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expense", x => x.Expenses_Id);
+                    table.ForeignKey(
+                        name: "FK_Expense_Expense Type_ExpenseStateExpenseTypeId",
+                        column: x => x.ExpenseStateExpenseTypeId,
+                        principalTable: "Expense Type",
+                        principalColumn: "ExpenseTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Expense_Project_Project_Id",
+                        column: x => x.Project_Id,
+                        principalTable: "Project",
+                        principalColumn: "Project_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Expense_User_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "User",
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Team",
                 columns: table => new
                 {
@@ -234,6 +310,30 @@ namespace Timesheet_Expenses_API.Migrations
                         column: x => x.userID,
                         principalTable: "User",
                         principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Activity_File",
+                columns: table => new
+                {
+                    ActivityId = table.Column<int>(type: "int", nullable: false),
+                    FileContentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activity_File", x => new { x.ActivityId, x.FileContentId });
+                    table.ForeignKey(
+                        name: "FK_Activity_File_Activity_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activity",
+                        principalColumn: "Activity_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Activity_File_File Content_FileContentId",
+                        column: x => x.FileContentId,
+                        principalTable: "File Content",
+                        principalColumn: "FileContent_Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -268,7 +368,7 @@ namespace Timesheet_Expenses_API.Migrations
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     User_Id = table.Column<int>(type: "int", nullable: false),
                     Activity_Id = table.Column<int>(type: "int", nullable: false),
-                    BilingType_Id = table.Column<int>(type: "int", nullable: false),
+                    BillingType_Id = table.Column<int>(type: "int", nullable: false),
                     WorklogState_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -281,10 +381,10 @@ namespace Timesheet_Expenses_API.Migrations
                         principalColumn: "Activity_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Worklog_Biling Type_BilingType_Id",
-                        column: x => x.BilingType_Id,
-                        principalTable: "Biling Type",
-                        principalColumn: "BilingType_Id",
+                        name: "FK_Worklog_Billing Type_BillingType_Id",
+                        column: x => x.BillingType_Id,
+                        principalTable: "Billing Type",
+                        principalColumn: "BillingType_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Worklog_User_User_Id",
@@ -297,6 +397,51 @@ namespace Timesheet_Expenses_API.Migrations
                         column: x => x.WorklogState_Id,
                         principalTable: "Worklog State",
                         principalColumn: "WorklogState_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Expense_File",
+                columns: table => new
+                {
+                    FileContentId = table.Column<int>(type: "int", nullable: false),
+                    ExpensesId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expense_File", x => new { x.FileContentId, x.ExpensesId });
+                    table.ForeignKey(
+                        name: "FK_Expense_File_Expense_ExpensesId",
+                        column: x => x.ExpensesId,
+                        principalTable: "Expense",
+                        principalColumn: "Expenses_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Expense_File_File Content_FileContentId",
+                        column: x => x.FileContentId,
+                        principalTable: "File Content",
+                        principalColumn: "FileContent_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Line",
+                columns: table => new
+                {
+                    Cod_Line = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Expenses_Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Line", x => x.Cod_Line);
+                    table.ForeignKey(
+                        name: "FK_Line_Expense_Expenses_Id",
+                        column: x => x.Expenses_Id,
+                        principalTable: "Expense",
+                        principalColumn: "Expenses_Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -316,9 +461,49 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "Project_Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Activity_File_FileContentId",
+                table: "Activity_File",
+                column: "FileContentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comment_Activity_Id",
                 table: "Comment",
                 column: "Activity_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_ExpenseStateExpenseTypeId",
+                table: "Expense",
+                column: "ExpenseStateExpenseTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_Project_Id",
+                table: "Expense",
+                column: "Project_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_User_Id",
+                table: "Expense",
+                column: "User_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Expense_File_ExpensesId",
+                table: "Expense_File",
+                column: "ExpensesId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_File Content_File_Id",
+                table: "File Content",
+                column: "File_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_File Content_FileContTypeId",
+                table: "File Content",
+                column: "FileContTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Line_Expenses_Id",
+                table: "Line",
+                column: "Expenses_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_Client_Id",
@@ -346,9 +531,9 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "Activity_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Worklog_BilingType_Id",
+                name: "IX_Worklog_BillingType_Id",
                 table: "Worklog",
-                column: "BilingType_Id");
+                column: "BillingType_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Worklog_User_Id",
@@ -364,13 +549,16 @@ namespace Timesheet_Expenses_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Activity_File");
+
+            migrationBuilder.DropTable(
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "Expense Type");
+                name: "Expense_File");
 
             migrationBuilder.DropTable(
-                name: "FileCont Type");
+                name: "Line");
 
             migrationBuilder.DropTable(
                 name: "Team");
@@ -379,19 +567,34 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "Worklog");
 
             migrationBuilder.DropTable(
+                name: "File Content");
+
+            migrationBuilder.DropTable(
+                name: "Expense");
+
+            migrationBuilder.DropTable(
                 name: "User Function");
 
             migrationBuilder.DropTable(
                 name: "Activity");
 
             migrationBuilder.DropTable(
-                name: "Biling Type");
-
-            migrationBuilder.DropTable(
-                name: "User");
+                name: "Billing Type");
 
             migrationBuilder.DropTable(
                 name: "Worklog State");
+
+            migrationBuilder.DropTable(
+                name: "File");
+
+            migrationBuilder.DropTable(
+                name: "FileCont Type");
+
+            migrationBuilder.DropTable(
+                name: "Expense Type");
+
+            migrationBuilder.DropTable(
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Activity State");
