@@ -6,7 +6,7 @@ namespace Timesheet_Expenses_API.Repositories
     public interface IFileContentTypeRepository
     {
         public bool Create(PostFileContentType fileContentType);
-        public FileContType Read(int id);
+        public FileContentType Read(int id);
         public bool Update(PutFileContentType fileContentType);
         public bool Delete(int id);
     }
@@ -24,7 +24,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var fileContentType_db = new FileContType()
+                var fileContentType_db = new FileContentType()
                 {
                     Type = fileContentType.Type
                 };
@@ -39,7 +39,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        public FileContType Read(int id)
+        public FileContentType Read(int id)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
             catch
             {
-                return new FileContType();
+                return new FileContentType();
             }
         }
 
@@ -57,7 +57,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var fileContentType_db = db.fileContType.Find(fileContentType.FileContTypeId);
+                var fileContentType_db = db.fileContType.Find(fileContentType.FileContentType_Id);
                 fileContentType_db.Type = fileContentType.Type;
                 db.SaveChanges();
 

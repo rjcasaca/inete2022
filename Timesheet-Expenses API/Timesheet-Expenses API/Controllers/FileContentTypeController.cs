@@ -16,10 +16,10 @@ namespace Timesheet_Expenses_API.Controllers
             repos = _repos;
         }
 
-        [HttpGet("{FileContTypeId}")]
+        [HttpGet("{FileContentType_Id}")]
         public IActionResult Get([FromRoute] FileContentTypeId fileContentType)
         {
-            var fileContentType_db = repos.Read(fileContentType.FileContTypeId);
+            var fileContentType_db = repos.Read(fileContentType.FileContentType_Id);
 
             return Ok(fileContentType_db);
         }
@@ -42,10 +42,10 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{FileContTypeId}")]
+        [HttpDelete("{FileContentType_Id}")]
         public IActionResult Delete([FromRoute] FileContentTypeId fileContentType)
         {
-            if (repos.Delete(fileContentType.FileContTypeId))
+            if (repos.Delete(fileContentType.FileContentType_Id))
                 return Ok();
 
             return BadRequest();

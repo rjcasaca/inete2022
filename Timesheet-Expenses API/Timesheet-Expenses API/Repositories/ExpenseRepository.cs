@@ -29,7 +29,7 @@ namespace Timesheet_Expenses_API.Repositories
                     Project = expense.Project,
                     User = expense.User,
                     Date = expense.Date,
-                    ExpenseState = expense.ExpenseState,
+                    ExpenseType = expense.ExpenseState,
                     TotalMoney = expense.TotalMoney,
                     Qtd_Line = expense.Qtd_Line
                 };
@@ -62,11 +62,11 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var expense_db = db.expenses.Find(expense.Expenses_Id);
+                var expense_db = db.expenses.Find(expense.Expense_Id);
                 expense_db.Project = expense.Project;
                 expense_db.User = expense.User;
                 expense_db.Date = expense.Date;
-                expense_db.ExpenseState = expense.ExpenseState;
+                expense_db.ExpenseType = expense.ExpenseState;
                 expense_db.TotalMoney = expense.TotalMoney;
                 expense_db.Qtd_Line = expense.Qtd_Line;
                 db.SaveChanges();

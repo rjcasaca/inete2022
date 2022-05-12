@@ -8,11 +8,11 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int FileContent_Id { get; set; }
-        [MaxLength(250)]
+        [Required, MaxLength(250)]
         public string Name { get; set; }
 
         //Navigation Properties
-        public FileContType FileContType { get; set; }
+        public FileContentType FileContentType { get; set; }
         public int FileId { get; set; }
         public File File { get; set; }
         public List<Activity_File> Activity_File { get; set; }

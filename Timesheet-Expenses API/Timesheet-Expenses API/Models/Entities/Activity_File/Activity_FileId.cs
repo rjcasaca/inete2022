@@ -2,7 +2,7 @@
 {
     public class Activity_FileId
     {
-        public int ActivityId { get; set; }
-        public int FileContentId { get; set; }
+        public int Activity_Id { get; set; }
+        public int FileContent_Id { get; set; }
     }
 }

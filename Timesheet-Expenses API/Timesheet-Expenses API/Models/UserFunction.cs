@@ -7,7 +7,7 @@ namespace Timesheet_Expenses_API.Models
     public class UserFunction
     {
         [Key]
-        public int UserFunc_Id { get; set; }
+        public int UserFunction_Id { get; set; }
         [Required, MaxLength(30)]
         public string Function { get; set; }
     }

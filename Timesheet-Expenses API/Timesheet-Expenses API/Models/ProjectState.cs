@@ -7,7 +7,7 @@ namespace Timesheet_Expenses_API.Models
     public class ProjectState
     {
         [Key]
-        public int ProjState_Id { get; set; }
+        public int ProjectState_Id { get; set; }
         [Required, MaxLength(30)]
         public string State { get; set; }
 

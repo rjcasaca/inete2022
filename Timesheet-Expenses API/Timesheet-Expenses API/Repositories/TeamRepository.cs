@@ -60,7 +60,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var team_db = db.teams.Find(team.projectID, team.userID);
+                var team_db = db.teams.Find(team.Project_Id, team.User_Id);
                 team_db.TeamName = team.TeamName;
                 team_db.UserFunction = team.UserFunction;
                 db.SaveChanges();

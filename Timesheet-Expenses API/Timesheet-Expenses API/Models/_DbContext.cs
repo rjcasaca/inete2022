@@ -10,9 +10,9 @@ namespace Timesheet_Expenses_API.Models
         protected override void OnModelCreating (ModelBuilder builder)
         {
             base.OnModelCreating (builder);
-            builder.Entity<Team>().HasKey(t => new { t.projectID, t.userID });
+            builder.Entity<Team>().HasKey(t => new { t.ProjectId, t.UserId });
             builder.Entity<Activity_File>().HasKey(af => new { af.ActivityId, af.FileContentId });
-            builder.Entity<Expense_File>().HasKey(ef => new { ef.FileContentId, ef.ExpensesId });
+            builder.Entity<Expense_File>().HasKey(ef => new { ef.FileContentId, ef.ExpenseId });
         }
 
         public DbSet<User> users { get; set; }
@@ -23,7 +23,7 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<Client> client { get; set; }
         public DbSet<ActivityState> activityState { get; set; }
         public DbSet<ActivityType> activityType { get; set; }
-        public DbSet<FileContType> fileContType { get; set; }
+        public DbSet<FileContentType> fileContType { get; set; }
         public DbSet<ExpenseType> expenseType { get; set; }
         public DbSet<Project> projects { get; set; }
         public DbSet<Team> teams { get; set; }

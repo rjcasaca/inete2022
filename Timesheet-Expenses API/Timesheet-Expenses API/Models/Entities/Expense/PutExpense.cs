@@ -2,6 +2,6 @@
 {
     public class PutExpense:PostExpense
     {
-        public int Expenses_Id { get; set; }
+        public int Expense_Id { get; set; }
     }
 }

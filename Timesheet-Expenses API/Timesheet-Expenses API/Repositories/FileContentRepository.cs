@@ -28,7 +28,7 @@ namespace Timesheet_Expenses_API.Repositories
                 {
                     Name = fileContent.Name,
                     FileId = fileContent.FileId,
-                    FileContType = fileContent.FileContType
+                    FileContentType = fileContent.FileContentType
                 };
                 db.fileContents.Add(fileContent_db);
                 db.SaveChanges();
@@ -61,7 +61,7 @@ namespace Timesheet_Expenses_API.Repositories
             {
                 var fileContent_db = db.fileContents.Find(fileContent.FileContent_Id);
                 fileContent_db.Name = fileContent.Name;
-                fileContent_db.FileContType = fileContent.FileContType;
+                fileContent_db.FileContentType = fileContent.FileContentType;
                 fileContent_db.FileId = fileContent.FileId;
                 db.SaveChanges();
 

@@ -2,6 +2,6 @@
 {
     public class FileContentTypeId
     {
-        public int FileContTypeId { get; set; }
+        public int FileContentType_Id { get; set; }
     }
 }

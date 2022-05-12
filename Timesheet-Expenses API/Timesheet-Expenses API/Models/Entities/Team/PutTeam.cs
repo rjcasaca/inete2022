@@ -2,7 +2,7 @@
 {
     public class PutTeam:PostTeam
     {
-        public int userID { get; set; }
-        public int projectID { get; set; }
+        public int User_Id { get; set; }
+        public int Project_Id { get; set; }
     }
 }

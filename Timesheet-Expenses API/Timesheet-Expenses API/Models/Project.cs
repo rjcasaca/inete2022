@@ -8,7 +8,7 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int Project_Id { get; set; }
-        [MaxLength(150)]
+        [Required, MaxLength(150)]
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

@@ -6,6 +6,6 @@
         public DateTime Date { get; set; }
 
         //Navigation Properties
-        public Models.Expense Expenses { get; set; }
+        public Models.Expense Expense { get; set; }
     }
 }

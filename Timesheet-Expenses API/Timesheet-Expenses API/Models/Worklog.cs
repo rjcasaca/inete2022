@@ -8,6 +8,7 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int Cod_Worklog { get; set; }
+        [Required]
         public DateTime Date { get; set; }
         [Required]
         public decimal Hours { get; set; }

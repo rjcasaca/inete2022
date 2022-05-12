@@ -9,7 +9,7 @@ namespace Timesheet_Expenses_API.Models
         //Navigation Properties
         public int FileContentId { get; set; }
         public FileContent FileContent { get; set; }
-        public int ExpensesId { get; set; }
+        public int ExpenseId { get; set; }
         public Expense Expenses { get; set; }
     }
 }

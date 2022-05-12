@@ -16,10 +16,10 @@ namespace Timesheet_Expenses_API.Controllers
             repos = _repos;
         }
 
-        [HttpGet("{ActivityId};{FileContentId}")]
+        [HttpGet("{Activity_Id};{FileContent_Id}")]
         public IActionResult Get([FromRoute] Activity_FileId activity_File)
         {
-            var activity_File_db = repos.Read(activity_File.ActivityId, activity_File.FileContentId);
+            var activity_File_db = repos.Read(activity_File.Activity_Id, activity_File.FileContent_Id);
 
             return Ok(activity_File_db);
         }
@@ -42,10 +42,10 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{ActivityId};{FileContentId}")]
+        [HttpDelete("{Activity_Id};{FileContent_Id}")]
         public IActionResult Delete([FromRoute] Activity_FileId activity_File)
         {
-            if (repos.Delete(activity_File.ActivityId, activity_File.FileContentId))
+            if (repos.Delete(activity_File.Activity_Id, activity_File.FileContent_Id))
                 return Ok();
 
             return BadRequest();

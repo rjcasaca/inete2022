@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Timesheet_Expenses_API.Models
 {
-    [Table(name:"FileCont Type")]
-    public class FileContType
+    [Table(name:"File Content Type")]
+    public class FileContentType
     {
         [Key]
-        public int FileContTypeId { get; set; }
+        public int FileContentType_Id { get; set; }
         [Required, MaxLength(30)]
         public string Type { get; set; }
 

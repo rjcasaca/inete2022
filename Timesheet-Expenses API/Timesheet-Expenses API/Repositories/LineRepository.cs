@@ -28,7 +28,7 @@ namespace Timesheet_Expenses_API.Repositories
                 {
                     UnityPrice = line.UnityPrice,
                     Date = line.Date,
-                    Expenses = line.Expenses
+                    Expense = line.Expense
                 };
                 db.lines.Add(line_db);
                 db.SaveChanges();
@@ -62,7 +62,7 @@ namespace Timesheet_Expenses_API.Repositories
                 var line_db = db.lines.Find(line.Cod_Line);
                 line_db.UnityPrice = line.UnityPrice;
                 line_db.Date = line.Date;
-                line_db.Expenses = line.Expenses;
+                line_db.Expense = line.Expense;
                 db.SaveChanges();
 
                 return true;

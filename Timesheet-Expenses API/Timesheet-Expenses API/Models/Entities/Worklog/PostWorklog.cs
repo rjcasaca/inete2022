@@ -5,7 +5,6 @@ namespace Timesheet_Expenses_API.Models.Entities.Worklog
     public class PostWorklog
     {
         public DateTime Date { get; set; }
-        [Required]
         public decimal Hours { get; set; }
         public string Comment { get; set; }
 
