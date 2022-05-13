@@ -29,7 +29,8 @@ namespace Timesheet_Expenses_API.Repositories
                     Project = expense.Project,
                     User = expense.User,
                     Date = expense.Date,
-                    ExpenseType = expense.ExpenseState,
+                    ExpenseType = expense.ExpenseType,
+                    ExpenseState = expense.ExpenseState,
                     TotalMoney = expense.TotalMoney,
                     Qtd_Line = expense.Qtd_Line
                 };
@@ -66,7 +67,8 @@ namespace Timesheet_Expenses_API.Repositories
                 expense_db.Project = expense.Project;
                 expense_db.User = expense.User;
                 expense_db.Date = expense.Date;
-                expense_db.ExpenseType = expense.ExpenseState;
+                expense_db.ExpenseType = expense.ExpenseType;
+                expense_db.ExpenseState = expense.ExpenseState;
                 expense_db.TotalMoney = expense.TotalMoney;
                 expense_db.Qtd_Line = expense.Qtd_Line;
                 db.SaveChanges();

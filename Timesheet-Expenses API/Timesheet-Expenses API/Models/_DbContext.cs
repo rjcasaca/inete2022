@@ -25,6 +25,7 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<ActivityType> activityType { get; set; }
         public DbSet<FileContentType> fileContType { get; set; }
         public DbSet<ExpenseType> expenseType { get; set; }
+        public DbSet<ExpenseState> expenseState { get; set; }
         public DbSet<Project> projects { get; set; }
         public DbSet<Team> teams { get; set; }
         public DbSet<Activity> activities { get; set; }

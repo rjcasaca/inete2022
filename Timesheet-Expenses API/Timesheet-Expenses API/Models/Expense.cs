@@ -14,6 +14,7 @@ namespace Timesheet_Expenses_API.Models
 
         //Navigation Properties
         public ExpenseType ExpenseType { get; set; }
+        public ExpenseState ExpenseState { get; set; }
         public User User { get; set; }
         public Project Project { get; set; }
         public List<Expense_File> Expense_File { get; set; }

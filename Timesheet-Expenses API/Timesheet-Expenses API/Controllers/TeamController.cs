@@ -16,10 +16,10 @@ namespace Timesheet_Expenses_API.Controllers
             repos = _repos;
         }
 
-        [HttpGet("User_Id};{Project_Id}")]
+        [HttpGet("{UserId};{ProjectId}")]
         public IActionResult Get([FromRoute] TeamId team)
         {
-            var team_db = repos.Read(team.userID, team.projectID);
+            var team_db = repos.Read(team.UserId, team.ProjectId);
 
             return Ok(team_db);
         }
@@ -42,10 +42,10 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{UserI_d};{Project_Id}")]
+        [HttpDelete("{UserId};{ProjectId}")]
         public IActionResult Delete([FromRoute] TeamId team)
         {
-            if (repos.Delete(team.userID, team.projectID))
+            if (repos.Delete(team.UserId, team.ProjectId))
                 return Ok();
 
             return BadRequest();

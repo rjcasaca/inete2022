@@ -27,9 +27,9 @@ namespace Timesheet_Expenses_API.Repositories
                 var team_db = new Team()
                 {
                     TeamName = team.TeamName,
-                    UserFunction = team.UserFunction,
-                    user = team.user,
                     project = team.project,
+                    user = team.user,
+                    UserFunction = team.UserFunction
                 };
                 db.teams.Add(team_db);
                 db.SaveChanges();
@@ -60,8 +60,10 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var team_db = db.teams.Find(team.Project_Id, team.User_Id);
+                var team_db = db.teams.Find(team.UserId, team.ProjectId);
                 team_db.TeamName = team.TeamName;
+                team_db.project = team.project;
+                team_db.user = team.user;
                 team_db.UserFunction = team.UserFunction;
                 db.SaveChanges();
 

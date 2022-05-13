@@ -63,6 +63,19 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Expense State",
+                columns: table => new
+                {
+                    ExpenseState_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    State = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Expense State", x => x.ExpenseState_Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Expense Type",
                 columns: table => new
                 {
@@ -255,12 +268,19 @@ namespace Timesheet_Expenses_API.Migrations
                     TotalMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Qtd_Line = table.Column<int>(type: "int", nullable: false),
                     ExpenseType_Id = table.Column<int>(type: "int", nullable: false),
+                    ExpenseState_Id = table.Column<int>(type: "int", nullable: false),
                     User_Id = table.Column<int>(type: "int", nullable: false),
                     Project_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expense", x => x.Expense_Id);
+                    table.ForeignKey(
+                        name: "FK_Expense_Expense State_ExpenseState_Id",
+                        column: x => x.ExpenseState_Id,
+                        principalTable: "Expense State",
+                        principalColumn: "ExpenseState_Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Expense_Expense Type_ExpenseType_Id",
                         column: x => x.ExpenseType_Id,
@@ -471,6 +491,11 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "Activity_Id");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expense_ExpenseState_Id",
+                table: "Expense",
+                column: "ExpenseState_Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Expense_ExpenseType_Id",
                 table: "Expense",
                 column: "ExpenseType_Id");
@@ -590,6 +615,9 @@ namespace Timesheet_Expenses_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "File");
+
+            migrationBuilder.DropTable(
+                name: "Expense State");
 
             migrationBuilder.DropTable(
                 name: "Expense Type");

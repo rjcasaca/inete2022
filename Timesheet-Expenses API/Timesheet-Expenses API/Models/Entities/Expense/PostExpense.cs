@@ -7,7 +7,8 @@
         public int Qtd_Line { get; set; }
 
         //Navigation Properties
-        public Models.ExpenseType ExpenseState { get; set; }
+        public Models.ExpenseType ExpenseType { get; set; }
+        public Models.ExpenseState ExpenseState { get; set; }
         public Models.User User { get; set; }
         public Models.Project Project { get; set; }
     }

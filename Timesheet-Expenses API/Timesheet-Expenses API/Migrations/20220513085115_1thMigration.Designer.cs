@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220512154303_1thMigration")]
+    [Migration("20220513085115_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -186,6 +186,9 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ExpenseState_Id")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExpenseType_Id")
                         .HasColumnType("int");
 
@@ -202,6 +205,8 @@ namespace Timesheet_Expenses_API.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Expense_Id");
+
+                    b.HasIndex("ExpenseState_Id");
 
                     b.HasIndex("ExpenseType_Id");
 
@@ -225,6 +230,24 @@ namespace Timesheet_Expenses_API.Migrations
                     b.HasIndex("ExpenseId");
 
                     b.ToTable("Expense_File");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseState", b =>
+                {
+                    b.Property<int>("ExpenseState_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseState_Id"), 1L, 1);
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.HasKey("ExpenseState_Id");
+
+                    b.ToTable("Expense State");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseType", b =>
@@ -570,6 +593,12 @@ namespace Timesheet_Expenses_API.Migrations
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
                 {
+                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", "ExpenseState")
+                        .WithMany("Expenses")
+                        .HasForeignKey("ExpenseState_Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", "ExpenseType")
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseType_Id")
@@ -587,6 +616,8 @@ namespace Timesheet_Expenses_API.Migrations
                         .HasForeignKey("User_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ExpenseState");
 
                     b.Navigation("ExpenseType");
 
@@ -759,6 +790,11 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Expense_File");
 
                     b.Navigation("Line");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseState", b =>
+                {
+                    b.Navigation("Expenses");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.ExpenseType", b =>
