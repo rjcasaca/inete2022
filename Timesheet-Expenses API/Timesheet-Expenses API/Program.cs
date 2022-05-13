@@ -37,6 +37,7 @@ builder.Services.AddScoped<IFileContentRepository, FileContentRepository>();
 builder.Services.AddScoped<IFileContentTypeRepository, FileContentTypeRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IExpenseStateRepository, ExpenseStateRepository>();
+builder.Services.AddScoped<ITimesheetRepository, TimesheetRepository>();
 #endregion
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
