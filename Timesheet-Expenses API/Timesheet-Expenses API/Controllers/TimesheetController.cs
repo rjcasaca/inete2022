@@ -33,12 +33,28 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateWorklog(PostWorklog worklog)
+        public IActionResult PostWorklog(PostWorklogTimesheet worklog)
         {
             if (repos.CreateWorklog(worklog))
                 return Ok();
 
             return BadRequest();
+        }
+
+        [HttpGet("{activityId}")]
+        public IActionResult GetActivityInfo([FromRoute] int activityId)
+        {
+            var activity_db = repos.GetActivityInfo(activityId);
+
+            return Ok(activity_db);
+        }
+
+        [HttpGet("{projectId}")]
+        public IActionResult GetProjectInfo([FromRoute] int projectId)
+        {
+            var project_db = repos.GetProjectInfo(projectId);
+
+            return Ok(project_db);
         }
     }
 }

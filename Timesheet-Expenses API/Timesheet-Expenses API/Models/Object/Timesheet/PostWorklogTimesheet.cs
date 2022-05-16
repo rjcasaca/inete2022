@@ -1,6 +1,6 @@
 ﻿namespace Timesheet_Expenses_API.Models.Object.Timesheet
 {
-    public class PostWorklog
+    public class PostWorklogTimesheet
     {
         public DateTime Date { get; set; }
         public decimal Hours { get; set; }

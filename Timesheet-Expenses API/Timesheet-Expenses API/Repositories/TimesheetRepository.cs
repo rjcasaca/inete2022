@@ -7,15 +7,17 @@ namespace Timesheet_Expenses_API.Repositories
     {
         public int GetUserId(string email);
         public List<TimesheetWorklog> GetUserWorklog(DateTime date);
-        public bool CreateWorklog(PostWorklog worklog);
+        public bool CreateWorklog(PostWorklogTimesheet worklog);
+        public List<ActivityUser> GetActivityUser();
+        public Activity GetActivityInfo(int activityId);
+        public Project GetProjectInfo(int projectId);
     }
 
-    public class TimesheetRepository:ITimesheetRepository
+    public class TimesheetRepository : ITimesheetRepository
     {
         #region variables
         private readonly _DbContext db;
         private int userId;
-        private List<TimesheetWorklog> TimesheetWorklogs;
         #endregion
 
         public TimesheetRepository(_DbContext _db)
@@ -43,6 +45,8 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
+                List<TimesheetWorklog> TimesheetWorklogs = new List<TimesheetWorklog>();
+
                 //vai percorrer a semana toda e adicionar todas as worklogs da semana
                 List<Worklog> worklog = new List<Worklog>();
                 for (int i = 0; i < 7; i++)
@@ -76,7 +80,8 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        public bool CreateWorklog(PostWorklog worklog)
+        //cria um objecto do tipo Worklog e adiciona os dados do mesmo à base de dados
+        public bool CreateWorklog(PostWorklogTimesheet worklog)
         {
             try
             {
@@ -90,6 +95,7 @@ namespace Timesheet_Expenses_API.Repositories
                     WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklog.WorklogState)).FirstOrDefault().WorklogState_Id),
                     BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(worklog.BillingType)).FirstOrDefault().BillingType_Id)
                 };
+                //adiciona à base de dados e salva as alterações
                 db.worklogs.Add(worklog_db);
                 db.SaveChanges();
 
@@ -98,6 +104,73 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return false;
+            }
+        }
+
+        //devolve um lista com o nome e id das atividades relacionadas com o user
+        public List<ActivityUser> GetActivityUser()
+        {
+            try
+            {
+                List<ActivityUser> ActivityUsers = new List<ActivityUser>();
+
+                //vai obter todos os projectos relacionados com o user
+                List<Team> team_db = db.teams.Where(t => t.UserId.Equals(userId)).ToList();
+                List<Activity> activity_users = new List<Activity>();
+                //vai obter todas as atividades com os projetos relacionados com o user
+                foreach (Team t in team_db)
+                {
+                    var activity = db.activities.Where(a => a.Project.Project_Id.Equals(t.ProjectId)).ToList();
+                    foreach (Activity a in activity)
+                    {
+                        activity_users.Add(a);
+                    }
+                }
+
+                //adiciona o nome e o id a um objeto, o mesmo é depois adicionado a uma lista de objetos do mesmo tipo
+                foreach (Activity a in activity_users)
+                {
+                    var at_u = new ActivityUser
+                    {
+                        ActivityId = a.Activity_Id,
+                        ActivityName = a.Name
+                    };
+                    ActivityUsers.Add(at_u);
+                }
+
+                return ActivityUsers;
+            }
+            catch
+            {
+                return new List<ActivityUser>();
+            }
+        }
+
+        //recebe um id da atividade selecionada e devolve a informação de todos os campos da mesma
+        public Activity GetActivityInfo(int activityId)
+        {
+            try
+            {
+                var activityInfo = db.activities.Find(activityId);
+                return activityInfo;
+            }
+            catch
+            {
+                return new Activity();
+            }
+        }
+
+        //recebe um id de um porjecto selecionado e devolve a informação de todos os campos do mesmo
+        public Project GetProjectInfo(int projectId)
+        {
+            try
+            {
+                var projectInfo = db.projects.Find(projectId);
+                return projectInfo;
+            }
+            catch
+            {
+                return new Project();
             }
         }
     }
