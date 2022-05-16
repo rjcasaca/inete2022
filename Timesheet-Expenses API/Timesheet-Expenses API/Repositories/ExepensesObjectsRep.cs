@@ -40,7 +40,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                lstexpenses = db.expenses.Where(e => e.user_id.Equals(userId)).ToList();
+                lstexpenses = db.expenses.Where(e => e.User.User_Id.Equals(userId)).ToList();
                 return lstexpenses;
             }
             catch
@@ -61,8 +61,8 @@ namespace Timesheet_Expenses_API.Repositories
                     TotalMoney = 0,
                     ExpenseType = db.expenseType.Find(db.expenseType.Where(et => et.Type.Equals(newExpense.ExpenseType)).FirstOrDefault().ExpenseType_Id),
                     ExpenseState = db.expenseState.Find(db.expenseState.Where(es => es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id),
-                    project = db.projects.Find(db.projects.Where(p => p.Project_Id.Equals(newExpense.project_id)).FirstOrDefault().Project_Id),
-                    user_id = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id),
+                    Project = db.projects.Find(db.projects.Where(p => p.Project_Id.Equals(newExpense.project_id)).FirstOrDefault().Project_Id),
+                    User = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id),
                     Qtd_Line = 0
 
                 };

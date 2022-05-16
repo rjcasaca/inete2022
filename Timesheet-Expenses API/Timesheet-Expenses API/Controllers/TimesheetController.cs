@@ -37,7 +37,7 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(project_db);
         }*/
 
-        [HttpGet("{Date};{userId}")]
+        [HttpGet("{date};{userId}")]
         public IActionResult GetUserWorklog([FromRoute] DateTime date, int userId)
         {
             var worklog_db = repos.GetUserWorklog(date, userId);
