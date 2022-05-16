@@ -6,9 +6,9 @@ namespace Timesheet_Expenses_API.Repositories
     public interface ITimesheetRepository
     {
         public int GetUserId(string email);
-        public List<TimesheetWorklog> GetUserWorklog(DateTime date);
-        public bool CreateWorklog(PostWorklogTimesheet worklog);
-        public List<ActivityUser> GetActivityUser();
+        public List<TimesheetWorklog> GetUserWorklog(DateTime date, int userId);
+        public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
+        public List<ActivityUser> GetActivityUser(int userId);
         public Activity GetActivityInfo(int activityId);
         public Project GetProjectInfo(int projectId);
     }
@@ -17,21 +17,20 @@ namespace Timesheet_Expenses_API.Repositories
     {
         #region variables
         private readonly _DbContext db;
-        private int userId;
         #endregion
 
-        //Default-
+        //Default Constructor
         public TimesheetRepository(_DbContext _db)
         {
             db = _db;
         }
 
-        //recebe o email do utilizador e devolde o id do mesmo
+        //recebe o email do utilizador e devolde o id do mesmo (o id vai ser guardado em cache na app utilizada)
         public int GetUserId(string email)
         {
             try
             {
-                userId = db.users.Where(u => u.Email.Equals(email)).FirstOrDefault().User_Id;
+                int userId = db.users.Where(u => u.Email.Equals(email)).FirstOrDefault().User_Id;
 
                 return userId;
             }
@@ -42,7 +41,7 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe a data indicada e devolve uma lista com todas as worklogs do user
-        public List<TimesheetWorklog> GetUserWorklog(DateTime date)
+        public List<TimesheetWorklog> GetUserWorklog(DateTime date, int userId)
         {
             try
             {
@@ -82,7 +81,7 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //cria um objecto do tipo Worklog e adiciona os dados do mesmo à base de dados
-        public bool CreateWorklog(PostWorklogTimesheet worklog)
+        public bool CreateWorklog(PostWorklogTimesheet worklog, int userId)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //devolve um lista com o nome e id das atividades relacionadas com o user
-        public List<ActivityUser> GetActivityUser()
+        public List<ActivityUser> GetActivityUser(int userId)
         {
             try
             {
