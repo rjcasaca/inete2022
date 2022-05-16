@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220513085115_1thMigration")]
+    [Migration("20220516143003_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -452,7 +452,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("User_Id");
 
-                    b.ToTable("User");
+                    b.ToTable("ArquiUsers");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.UserFunction", b =>

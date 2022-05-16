@@ -17,35 +17,16 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpGet("{Email}")]
-        public IActionResult GetUserId([FromRoute] TimesheetUserInfo user)
+        public IActionResult GetUserId([FromRoute] TimesheetUserInfo userInfo)
         {
-            var user_db = repos.GetUserId(user.Email);
-
-            return Ok(user_db);
+            var uId_db = repos.GetUserId(userInfo.Email);
+            return Ok(uId_db);
         }
 
-        [HttpGet("{Date}")]
-        public IActionResult GetUserWorklog([FromRoute] DateTime date)
-        {
-            var worklog_db = repos.GetUserWorklog(date);
-
-            return Ok(worklog_db);
-        }
-
-        [HttpPost]
-        public IActionResult PostWorklog(PostWorklogTimesheet worklog)
-        {
-            if (repos.CreateWorklog(worklog))
-                return Ok();
-
-            return BadRequest();
-        }
-
-        [HttpGet("{activityId}")]
+        /*[HttpGet("{activityId}")]
         public IActionResult GetActivityInfo([FromRoute] int activityId)
         {
             var activity_db = repos.GetActivityInfo(activityId);
-
             return Ok(activity_db);
         }
 
@@ -53,8 +34,41 @@ namespace Timesheet_Expenses_API.Controllers
         public IActionResult GetProjectInfo([FromRoute] int projectId)
         {
             var project_db = repos.GetProjectInfo(projectId);
-
             return Ok(project_db);
+        }*/
+
+        [HttpGet("{Date};{userId}")]
+        public IActionResult GetUserWorklog([FromRoute] DateTime date, int userId)
+        {
+            var worklog_db = repos.GetUserWorklog(date, userId);
+            return Ok(worklog_db);
+        }
+
+        [HttpPost]
+        public IActionResult PostWorklog(PostWorklogTimesheet worklog, int userId)
+        {
+            if (repos.CreateWorklog(worklog, userId))
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpPut]
+        public IActionResult UpdateWorklog(PutWorklogTimesheet worklog)
+        {
+            if (repos.UpdateWorklog(worklog))
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpDelete("{worklog}")]
+        public IActionResult Delete([FromRoute] int worklog)
+        {
+            if (repos.DeleteWorklog(worklog))
+                return Ok();
+
+            return BadRequest();
         }
     }
 }

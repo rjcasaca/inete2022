@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Timesheet_Expenses_API.Models
 {
-    [Table(name:"User")]
+    [Table(name:"ArquiUsers")]
     public class User
     {
         [Key]

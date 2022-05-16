@@ -36,6 +36,20 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ArquiUsers",
+                columns: table => new
+                {
+                    User_Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ArquiUsers", x => x.User_Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Billing Type",
                 columns: table => new
                 {
@@ -125,20 +139,6 @@ namespace Timesheet_Expenses_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Project State", x => x.ProjectState_Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    User_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(254)", maxLength: 254, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.User_Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -276,6 +276,12 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     table.PrimaryKey("PK_Expense", x => x.Expense_Id);
                     table.ForeignKey(
+                        name: "FK_Expense_ArquiUsers_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "ArquiUsers",
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Expense_Expense State_ExpenseState_Id",
                         column: x => x.ExpenseState_Id,
                         principalTable: "Expense State",
@@ -293,12 +299,6 @@ namespace Timesheet_Expenses_API.Migrations
                         principalTable: "Project",
                         principalColumn: "Project_Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Expense_User_User_Id",
-                        column: x => x.User_Id,
-                        principalTable: "User",
-                        principalColumn: "User_Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,6 +314,12 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     table.PrimaryKey("PK_Team", x => new { x.ProjectId, x.UserId });
                     table.ForeignKey(
+                        name: "FK_Team_ArquiUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "ArquiUsers",
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Team_Project_ProjectId",
                         column: x => x.ProjectId,
                         principalTable: "Project",
@@ -324,12 +330,6 @@ namespace Timesheet_Expenses_API.Migrations
                         column: x => x.UserFunction_Id,
                         principalTable: "User Function",
                         principalColumn: "UserFunction_Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Team_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "User_Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -401,16 +401,16 @@ namespace Timesheet_Expenses_API.Migrations
                         principalColumn: "Activity_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Worklog_ArquiUsers_User_Id",
+                        column: x => x.User_Id,
+                        principalTable: "ArquiUsers",
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Worklog_Billing Type_BillingType_Id",
                         column: x => x.BillingType_Id,
                         principalTable: "Billing Type",
                         principalColumn: "BillingType_Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Worklog_User_User_Id",
-                        column: x => x.User_Id,
-                        principalTable: "User",
-                        principalColumn: "User_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Worklog_Worklog State_WorklogState_Id",
@@ -617,13 +617,13 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "File");
 
             migrationBuilder.DropTable(
+                name: "ArquiUsers");
+
+            migrationBuilder.DropTable(
                 name: "Expense State");
 
             migrationBuilder.DropTable(
                 name: "Expense Type");
-
-            migrationBuilder.DropTable(
-                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Activity State");

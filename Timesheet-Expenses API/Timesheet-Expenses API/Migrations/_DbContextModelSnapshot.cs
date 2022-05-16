@@ -450,7 +450,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("User_Id");
 
-                    b.ToTable("User");
+                    b.ToTable("ArquiUsers");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.UserFunction", b =>

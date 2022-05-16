@@ -8,6 +8,8 @@ namespace Timesheet_Expenses_API.Repositories
         public int GetUserId(string email);
         public List<TimesheetWorklog> GetUserWorklog(DateTime date, int userId);
         public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
+        public bool UpdateWorklog(PutWorklogTimesheet worklog);
+        public bool DeleteWorklog(int worklogId);
         public List<ActivityUser> GetActivityUser(int userId);
         public Activity GetActivityInfo(int activityId);
         public Project GetProjectInfo(int projectId);
@@ -97,6 +99,48 @@ namespace Timesheet_Expenses_API.Repositories
                 };
                 //adiciona à base de dados e salva as alterações
                 db.worklogs.Add(worklog_db);
+                db.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //recebe os novos valores de uma worklog e atualiza os mesmos
+        public bool UpdateWorklog(PutWorklogTimesheet worklog)
+        {
+            try
+            {
+                //procura o registo com o id indicado
+                var worklog_db = db.worklogs.Find(worklog.worklogId);
+                //atualiza os dados igualando os mesmos
+                worklog_db.Date = worklog.Date;
+                worklog_db.Hours = worklog.Hours;
+                worklog_db.Comment = worklog.Comment;
+                worklog_db.Activity = db.activities.Find(worklog.Activity);
+                worklog_db.WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklog.WorklogState)).FirstOrDefault().WorklogState_Id);
+                worklog_db.BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(worklog.BillingType)).FirstOrDefault().BillingType_Id);
+                db.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        //recebe um id de uma worklog e elimina a mesma da base de dados
+        public bool DeleteWorklog(int worklogId)
+        {
+            try
+            {
+                //procura a worklog com o id recebido
+                var worklog_db = db.worklogs.Find(worklogId);
+                db.worklogs.Remove(worklog_db);
                 db.SaveChanges();
 
                 return true;
