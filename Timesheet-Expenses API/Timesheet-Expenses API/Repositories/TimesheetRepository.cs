@@ -21,7 +21,7 @@ namespace Timesheet_Expenses_API.Repositories
         private readonly _DbContext db;
         #endregion
 
-        //Default Constructor
+        //Default-Constructor
         public TimesheetRepository(_DbContext _db)
         {
             db = _db;
