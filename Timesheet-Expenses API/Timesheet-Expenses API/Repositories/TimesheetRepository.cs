@@ -149,25 +149,30 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        //devolve um lista com o nome e id das atividades relacionadas com o user
+        //recebe um id do user e um id do projecto selecionado, devolve uma lista com o nome e id das atividades relacionadas com o user
         public List<ActivityUser> GetActivityUser(int userId, int projectId)
         {
             try
             {
                 List<ActivityUser> ActivityUsers = new List<ActivityUser>();
 
+                //lista de User_Activity com apenas o userId indicado
                 var userActivity_db = db.activities_users.Where(ua => ua.UserId.Equals(userId)).ToList();
+                //adicionar os ids das atividades relacionadas ao user incicados a uma lista de números inteiros
                 List<int> activitiesIds = new List<int>();
                 foreach (User_Activity ua in userActivity_db)
                 {
                     activitiesIds.Add(ua.ActivityId);
                 }
 
+                //lista de Activity com apenas o projectId indicado
                 var activities = db.activities.Where(a => a.Project.Project_Id.Equals(projectId)).ToList();
+                //comparar os ids das atividades relacionadas com o user indicado com os ids das atividades relacionadas com o projecto indicado
                 foreach (Activity a in activities)
                 {
                     foreach (int i in activitiesIds)
                     {
+                        //caso seja igual adicionar o mesmo à lista
                         if (a.Activity_Id == i)
                         {
                             ActivityUser actUser = new ActivityUser();
