@@ -13,6 +13,7 @@ namespace Timesheet_Expenses_API.Models
             builder.Entity<Team>().HasKey(t => new { t.ProjectId, t.UserId });
             builder.Entity<Activity_File>().HasKey(af => new { af.ActivityId, af.FileContentId });
             builder.Entity<Expense_File>().HasKey(ef => new { ef.FileContentId, ef.ExpenseId });
+            builder.Entity<User_Activity>().HasKey(ua => new {ua.UserId, ua.ActivityId});
         }
 
         public DbSet<User> users { get; set; }
@@ -37,5 +38,6 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<Expense_File> expenses_files { get; set; }
         public DbSet<Line> lines { get; set; }
         public DbSet<File> files { get; set; }
+        public DbSet<User_Activity> activities_users { get; set; }
     }
 }

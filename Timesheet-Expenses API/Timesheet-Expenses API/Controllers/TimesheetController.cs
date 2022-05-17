@@ -5,7 +5,7 @@ using Timesheet_Expenses_API.Repositories;
 
 namespace Timesheet_Expenses_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TimesheetController : Controller
     {
@@ -23,19 +23,12 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(uId_db);
         }
 
-        /*[HttpGet("{activityId}")]
-        public IActionResult GetActivityInfo([FromRoute] int activityId)
+        [HttpGet("{userId};{projectId}")]
+        public IActionResult GetActivityUser([FromRoute] int userId, int projectId)
         {
-            var activity_db = repos.GetActivityInfo(activityId);
-            return Ok(activity_db);
+            var uId_db = repos.GetActivityUser(userId, projectId);
+            return Ok(uId_db);
         }
-
-        [HttpGet("{projectId}")]
-        public IActionResult GetProjectInfo([FromRoute] int projectId)
-        {
-            var project_db = repos.GetProjectInfo(projectId);
-            return Ok(project_db);
-        }*/
 
         [HttpGet("{date};{userId}")]
         public IActionResult GetUserWorklog([FromRoute] DateTime date, int userId)
@@ -63,7 +56,7 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpDelete("{worklog}")]
-        public IActionResult Delete([FromRoute] int worklog)
+        public IActionResult DeleteWorklog([FromRoute] int worklog)
         {
             if (repos.DeleteWorklog(worklog))
                 return Ok();

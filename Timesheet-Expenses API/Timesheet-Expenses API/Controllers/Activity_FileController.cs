@@ -5,7 +5,7 @@ using Timesheet_Expenses_API.Repositories;
 
 namespace Timesheet_Expenses_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class Activity_FileController : Controller
     {

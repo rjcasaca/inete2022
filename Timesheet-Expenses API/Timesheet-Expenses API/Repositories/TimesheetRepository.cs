@@ -10,9 +10,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
         public bool UpdateWorklog(PutWorklogTimesheet worklog);
         public bool DeleteWorklog(int worklogId);
-        public List<ActivityUser> GetActivityUser(int userId);
-        public Activity GetActivityInfo(int activityId);
-        public Project GetProjectInfo(int projectId);
+        public List<ActivityUser> GetActivityUser(int userId, int projectId);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -152,34 +150,32 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //devolve um lista com o nome e id das atividades relacionadas com o user
-        public List<ActivityUser> GetActivityUser(int userId)
+        public List<ActivityUser> GetActivityUser(int userId, int projectId)
         {
             try
             {
                 List<ActivityUser> ActivityUsers = new List<ActivityUser>();
 
-                //vai obter todos os projectos relacionados com o user
-                List<Team> team_db = db.teams.Where(t => t.UserId.Equals(userId)).ToList();
-                List<Activity> activity_users = new List<Activity>();
-                //vai obter todas as atividades com os projetos relacionados com o user
-                foreach (Team t in team_db)
+                var userActivity_db = db.activities_users.Where(ua => ua.UserId.Equals(userId)).ToList();
+                List<int> activitiesIds = new List<int>();
+                foreach (User_Activity ua in userActivity_db)
                 {
-                    var activity = db.activities.Where(a => a.Project.Project_Id.Equals(t.ProjectId)).ToList();
-                    foreach (Activity a in activity)
-                    {
-                        activity_users.Add(a);
-                    }
+                    activitiesIds.Add(ua.ActivityId);
                 }
 
-                //adiciona o nome e o id a um objeto, o mesmo é depois adicionado a uma lista de objetos do mesmo tipo
-                foreach (Activity a in activity_users)
+                var activities = db.activities.Where(a => a.Project.Project_Id.Equals(projectId)).ToList();
+                foreach (Activity a in activities)
                 {
-                    var at_u = new ActivityUser
+                    foreach (int i in activitiesIds)
                     {
-                        ActivityId = a.Activity_Id,
-                        ActivityName = a.Name
-                    };
-                    ActivityUsers.Add(at_u);
+                        if (a.Activity_Id == i)
+                        {
+                            ActivityUser actUser = new ActivityUser();
+                            actUser.ActivityId = a.Activity_Id;
+                            actUser.ActivityName = a.Name;
+                            ActivityUsers.Add(actUser);
+                        }
+                    }
                 }
 
                 return ActivityUsers;
@@ -187,34 +183,6 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return new List<ActivityUser>();
-            }
-        }
-
-        //recebe um id da atividade selecionada e devolve a informação de todos os campos da mesma
-        public Activity GetActivityInfo(int activityId)
-        {
-            try
-            {
-                var activityInfo = db.activities.Find(activityId);
-                return activityInfo;
-            }
-            catch
-            {
-                return new Activity();
-            }
-        }
-
-        //recebe um id de um porjecto selecionado e devolve a informação de todos os campos do mesmo
-        public Project GetProjectInfo(int projectId)
-        {
-            try
-            {
-                var projectInfo = db.projects.Find(projectId);
-                return projectInfo;
-            }
-            catch
-            {
-                return new Project();
             }
         }
     }

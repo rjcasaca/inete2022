@@ -378,6 +378,30 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "User_Activity",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ActivityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_User_Activity", x => new { x.UserId, x.ActivityId });
+                    table.ForeignKey(
+                        name: "FK_User_Activity_Activity_ActivityId",
+                        column: x => x.ActivityId,
+                        principalTable: "Activity",
+                        principalColumn: "Activity_Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_User_Activity_ArquiUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "ArquiUsers",
+                        principalColumn: "User_Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Worklog",
                 columns: table => new
                 {
@@ -552,6 +576,11 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_User_Activity_ActivityId",
+                table: "User_Activity",
+                column: "ActivityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Worklog_Activity_Id",
                 table: "Worklog",
                 column: "Activity_Id");
@@ -588,6 +617,9 @@ namespace Timesheet_Expenses_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Team");
+
+            migrationBuilder.DropTable(
+                name: "User_Activity");
 
             migrationBuilder.DropTable(
                 name: "Worklog");

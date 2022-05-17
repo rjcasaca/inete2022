@@ -453,6 +453,21 @@ namespace Timesheet_Expenses_API.Migrations
                     b.ToTable("ArquiUsers");
                 });
 
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.User_Activity", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "ActivityId");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("User_Activity");
+                });
+
             modelBuilder.Entity("Timesheet_Expenses_API.Models.UserFunction", b =>
                 {
                     b.Property<int>("UserFunction_Id")
@@ -719,6 +734,25 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("user");
                 });
 
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.User_Activity", b =>
+                {
+                    b.HasOne("Timesheet_Expenses_API.Models.Activity", "activity")
+                        .WithMany("user_Activities")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Timesheet_Expenses_API.Models.User", "user")
+                        .WithMany("user_Activities")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("activity");
+
+                    b.Navigation("user");
+                });
+
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Worklog", b =>
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Activity", "Activity")
@@ -761,6 +795,8 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Comment");
 
                     b.Navigation("Worklog");
+
+                    b.Navigation("user_Activities");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.ActivityState", b =>
@@ -839,6 +875,8 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Team");
 
                     b.Navigation("Worklog");
+
+                    b.Navigation("user_Activities");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.WorklogState", b =>
