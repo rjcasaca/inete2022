@@ -14,6 +14,7 @@ namespace Timesheet_Expenses_API.Repositories
         public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId);
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
+        public byte[] GetFile(int fileContId);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -372,6 +373,21 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return new ProjectInfo();
+            }
+        }
+
+        //recebe um fileContentId e devolve o ficheiro do mesmo
+        public byte[] GetFile(int fileContId)
+        {
+            try
+            {
+                //procura o fileContent correspondente ao fileContId recebido
+                var fileId = db.fileContents.Find(fileContId).FileId;
+                return db.files.Find(fileId).base64;
+            }
+            catch
+            {
+                return new byte[0];
             }
         }
     }
