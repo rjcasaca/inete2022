@@ -2,7 +2,11 @@
 {
     public class ActivityInfo
     {
-        public string ActivityName { get; set; }
-        public int ActivityId { get; set; }
+        public ActivityIdName ActivityIdName { get; set; }
+        public string ActivityState { get; set; }
+        public string ActivityType { get; set; }
+        public string ActivityDescription { get; set; }
+        public List<FileContInfo> FileContInfo { get; set; }
+        public ProjectsIdName ProjectInfo { get; set; }
     }
 }

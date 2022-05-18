@@ -6,12 +6,14 @@ namespace Timesheet_Expenses_API.Repositories
     public interface ITimesheetRepository
     {
         public int GetUserId(string email);
-        public List<TimesheetWorklog> GetUserWorklog(DateTime date, int userId);
         public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
         public bool UpdateWorklog(PutWorklogTimesheet worklog);
         public bool DeleteWorklog(int worklogId);
-        public List<ActivityInfo> GetActivityUser(int userId, int projectId);
-        public List<UserProjectsInfo> GetProjectUser(int userId);
+        public List<ProjectsIdName> GetProjectUser(int userId);
+        public List<ActivityIdName> GetActivityUser(int userId, int projectId);
+        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId);
+        public ActivityInfo GetActivitiesInfo(int activityId);
+        public ProjectInfo GetProjectInfo(int projectId);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -38,76 +40,6 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return 0;
-            }
-        }
-
-        //recebe a data indicada e devolve uma lista com todas as worklogs do user
-        public List<TimesheetWorklog> GetUserWorklog(DateTime date, int userId)
-        {
-            try
-            {
-                List<TimesheetWorklog> TimesheetWorklogs = new List<TimesheetWorklog>();
-
-                //vai percorrer a semana toda e adicionar todas as worklogs da semana
-                List<Worklog> worklog = new List<Worklog>();
-                for (int i = 0; i < 7; i++)
-                {
-                    List<Worklog> worklogAux = db.worklogs.Where(wl => wl.User.User_Id.Equals(userId)&& wl.Date.Equals(date.AddDays(i))).ToList();
-                    foreach (Worklog w in worklogAux)
-                    {
-                        worklog.Add(w);
-                    }
-                }
-
-                //todos os ids das diferentes atividades da worklog
-                List<ActivityInfo> activitiesInfos = new List<ActivityInfo>();
-                foreach (Worklog wl in worklog)
-                {
-                    bool aux = false;
-                    foreach (ActivityInfo ai in activitiesInfos)
-                    {
-                        if (ai.ActivityId == wl.ActivityId)
-                        {
-                            aux = true;
-                            break;
-                        }
-                    }
-                    if (aux == false)
-                    {
-                        ActivityInfo actInfo = new ActivityInfo();
-                        actInfo.ActivityId = wl.ActivityId;
-                        actInfo.ActivityName = db.activities.Find(wl.ActivityId).Name;
-                        activitiesInfos.Add(actInfo);
-                    }
-                }
-
-                foreach (ActivityInfo ai in activitiesInfos)
-                {
-                    List<WorklogInfo> worklogInfos = new List<WorklogInfo>();
-                    TimesheetWorklog tw = new TimesheetWorklog();
-                    tw.Activity = ai;
-                    foreach (Worklog wl in worklog)
-                    {
-                        if (ai.ActivityId == wl.ActivityId)
-                        {
-                            WorklogInfo wli = new WorklogInfo();
-                            wli.worklogId = wl.Cod_Worklog;
-                            wli.Hours = wl.Hours;
-                            wli.Date = wl.Date;
-                            worklogInfos.Add(wli);
-                        }
-                    }
-                    tw.WeekWorklog = worklogInfos;
-                    
-                    TimesheetWorklogs.Add(tw);
-                }
-
-
-                return TimesheetWorklogs;
-            }
-            catch
-            {
-                return new List<TimesheetWorklog>();
             }
         }
 
@@ -181,11 +113,11 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe um id do user e um id do projecto selecionado, devolve uma lista com o nome e id das atividades relacionadas com o user
-        public List<ActivityInfo> GetActivityUser(int userId, int projectId)
+        public List<ActivityIdName> GetActivityUser(int userId, int projectId)
         {
             try
             {
-                List<ActivityInfo> ActivityUsers = new List<ActivityInfo>();
+                List<ActivityIdName> ActivityUsers = new List<ActivityIdName>();
 
                 //lista de User_Activity com apenas o userId indicado
                 var userActivity_db = db.activities_users.Where(ua => ua.UserId.Equals(userId)).ToList();
@@ -206,7 +138,7 @@ namespace Timesheet_Expenses_API.Repositories
                         //caso seja igual adicionar o mesmo à lista
                         if (a.Activity_Id == i)
                         {
-                            ActivityInfo actUser = new ActivityInfo();
+                            ActivityIdName actUser = new ActivityIdName();
                             actUser.ActivityId = a.Activity_Id;
                             actUser.ActivityName = a.Name;
                             ActivityUsers.Add(actUser);
@@ -218,21 +150,23 @@ namespace Timesheet_Expenses_API.Repositories
             }
             catch
             {
-                return new List<ActivityInfo>();
+                return new List<ActivityIdName>();
             }
         }
 
-        //recebe o id do user e devolve uma liste com o nome e id de todos os projetos ao qual está relacionado
-        public List<UserProjectsInfo> GetProjectUser(int userId)
+        //recebe o id do user e devolve uma lista com o nome e id de todos os projetos ao qual está relacionado
+        public List<ProjectsIdName> GetProjectUser(int userId)
         {
             try
             {
+                //procura as equipas com o userId indicado
                 var team = db.teams.Where(t => t.UserId.Equals(userId)).ToList();
-                List<UserProjectsInfo> projectsInfo = new List<UserProjectsInfo>();
+                //cria e devolve a lista de projectos que se relacionam com o user
+                List<ProjectsIdName> projectsInfo = new List<ProjectsIdName>();
                 foreach (Team t in team)
                 {
                     var proj = db.projects.Find(t.ProjectId);
-                    var pInfo = new UserProjectsInfo();
+                    var pInfo = new ProjectsIdName();
                     pInfo.projectId = proj.Project_Id;
                     pInfo.PorjectName = proj.Name;
                     projectsInfo.Add(pInfo);
@@ -242,7 +176,202 @@ namespace Timesheet_Expenses_API.Repositories
             }
             catch
             {
-                return new List<UserProjectsInfo>();
+                return new List<ProjectsIdName>();
+            }
+        }
+
+        //recebe a data indicada e devolve uma lista com todas as worklogs do user
+        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId)
+        {
+            try
+            {
+                List<TimesheetWorklog> TimesheetWorklogs = new List<TimesheetWorklog>();
+
+                //vai percorrer a semana toda e adicionar todas as worklogs da semana do user indicado a uma lista
+                List<Worklog> worklog = new List<Worklog>();
+                for (int i = 0; i < 7; i++)
+                {
+                    List<Worklog> worklogAux = db.worklogs.Where(wl => wl.User.User_Id.Equals(userId) && wl.Date.Equals(date.AddDays(i))).ToList();
+                    foreach (Worklog w in worklogAux)
+                    {
+                        worklog.Add(w);
+                    }
+                }
+
+                //todos os ids e nomes das diferentes atividades da worklog
+                List<ActivityIdName> activitiesInfos = new List<ActivityIdName>();
+                foreach (Worklog wl in worklog)
+                {
+                    bool aux = false;
+                    foreach (ActivityIdName ai in activitiesInfos)
+                    {
+                        if (ai.ActivityId == wl.ActivityId)
+                        {
+                            aux = true;
+                            break;
+                        }
+                    }
+                    //caso o id da worklog ainda não esteja alucado na lista activitiesInfos vai criar um objeto ActivityInfo e adicionar o mesmo
+                    if (aux == false)
+                    {
+                        ActivityIdName actInfo = new ActivityIdName();
+                        actInfo.ActivityId = wl.ActivityId;
+                        actInfo.ActivityName = db.activities.Find(wl.ActivityId).Name;
+                        activitiesInfos.Add(actInfo);
+                    }
+                }
+
+                //vai criar um objeto TimesheetWorklog e adicionar o mesmo à lista a que vamos dar return
+                foreach (ActivityIdName ai in activitiesInfos)
+                {
+                    List<WorklogInfo> worklogInfos = new List<WorklogInfo>();
+                    TimesheetWorklog tw = new TimesheetWorklog();
+                    tw.Activity = ai;
+                    foreach (Worklog wl in worklog)
+                    {
+                        if (ai.ActivityId == wl.ActivityId)
+                        {
+                            WorklogInfo wli = new WorklogInfo();
+                            wli.worklogId = wl.Cod_Worklog;
+                            wli.Hours = wl.Hours;
+                            wli.Date = wl.Date;
+                            worklogInfos.Add(wli);
+                        }
+                    }
+                    tw.WeekWorklog = worklogInfos;
+
+                    TimesheetWorklogs.Add(tw);
+                }
+
+                return TimesheetWorklogs;
+            }
+            catch
+            {
+                return new List<TimesheetWorklog>();
+            }
+        }
+
+        //recebe um id de uma atividade e devolve a informação da atividade, assim como uma lista de todos os ficheiros(nome e id, o proprio ficheiro não é enviado aqui) relacionados com essa atividade
+        public ActivityInfo GetActivitiesInfo(int activityId)
+        {
+            try
+            {
+                //procura a Activity com o id recebido
+                var activity = db.activities.Find(activityId);
+
+                //cria um objeto do tipo ActivityInfo e preenche os campos do mesmo
+                ActivityInfo activityInfos = new ActivityInfo();
+                activityInfos.ActivityIdName.ActivityName = activity.Name;
+                activityInfos.ActivityIdName.ActivityId = activityId;
+                activityInfos.ActivityState = db.activityState.Find(activity.ActivityStateId).State;
+                activityInfos.ActivityType = db.activityType.Find(activity.ActivityTypeId).Type;
+                activityInfos.ActivityDescription = activity.Description;
+                activityInfos.ProjectInfo.PorjectName = db.projects.Find(activity.ProjectId).Name;
+                activityInfos.ProjectInfo.projectId = db.projects.Find(activity.ProjectId).Project_Id;
+
+                //procura todos os registos em activities_file com o activityId indicado
+                var actFile = db.activities_files.Where(af => af.ActivityId.Equals(activityId)).ToList();
+                //preenche a infomação de cada file e adiciona o mesmo ao objeto do tipo ActivityInfo
+                List<FileContInfo> fileContInfos = new List<FileContInfo>();
+                foreach (Activity_File actF in actFile)
+                {
+                    var fileCont = db.fileContents.Find(actF.FileContentId);
+                    FileContInfo fileContInfo = new FileContInfo();
+                    fileContInfo.FileContId = fileCont.FileContent_Id;
+                    fileContInfo.Name = fileCont.Name;
+                    fileContInfos.Add(fileContInfo);
+                }
+                activityInfos.FileContInfo = fileContInfos;
+
+                return activityInfos;
+            }
+            catch
+            {
+                return new ActivityInfo();
+            }
+        }
+
+        //recebe o id do project indicado e devolve as informações do mesmo, tal como as equipas que têm algum tipo de relação com o mesmo
+        public ProjectInfo GetProjectInfo(int projectId)
+        {
+            try
+            {
+                ProjectInfo projectInfo = new ProjectInfo();
+                //encontra o Project com o projectId indicado
+                var project = db.projects.Find(projectId);
+
+                //adicionar o PorjectName e projectId do Project
+                ProjectsIdName projectIdName = new ProjectsIdName();
+                projectIdName.projectId = project.Project_Id;
+                projectIdName.PorjectName = project.Name;
+                projectInfo.ProjectsIdName = projectIdName;
+
+                //cria uma lista de Activities que estão relacionadas ao Project
+                var activitiesProj = db.activities.Where(a => a.ProjectId.Equals(projectId)).ToList();
+                List<ActivityIdName> activities = new List<ActivityIdName>();
+                foreach (Activity a in activitiesProj)
+                {
+                    ActivityIdName actIdName = new ActivityIdName();
+                    actIdName.ActivityId = a.Activity_Id;
+                    actIdName.ActivityName = a.Name;
+                    activities.Add(actIdName);
+                }
+                projectInfo.ProjectActivities = activities;
+                //adiciona ProjectState e StartDate e EndDate
+                projectInfo.ProjectState = db.projectStates.Find(project.ProjectStateId).State;
+                projectInfo.StartDate = project.StartDate;
+                projectInfo.EndDate = project.EndDate;
+
+                //adiciona as informações sobre o Client
+                ClientEmailName client = new ClientEmailName();
+                client.Email = db.client.Find(project.ClientId).Email;
+                client.Name = db.client.Find(project.ClientId).Name;
+                projectInfo.Client = client;
+
+                //cria um objecto de TeamInfo e adiciona o mesmo a projectInfo
+                var projectTeams = db.teams.Where(t => t.ProjectId.Equals(projectId)).ToList();
+                List<TeamInfo> teams = new List<TeamInfo>();
+                foreach (Team t in projectTeams)
+                {
+                    bool aux = false;
+                    foreach (TeamInfo tf in teams)
+                    {
+                        if (tf.Name == t.TeamName)
+                        {
+                            aux = true;
+                            break;
+                        }
+                    }
+                    //vai criar um objeto do tipo TeamInfo caso o TeamName seja novo para a coleção teams
+                    if (aux == false)
+                    {
+                        //adiciona ao objeto TeamInfo o TeamName
+                        TeamInfo teamInfo = new TeamInfo();
+                        teamInfo.Name = t.TeamName;
+                        //procura todos os registos das teams com o Name igual e adiciona a uma List<Team>
+                        var teamNames = db.teams.Where(ta => ta.TeamName.Equals(teamInfo.Name)).ToList();
+                        List<TimesheetUserInfo> userInfos = new List<TimesheetUserInfo>();
+                        foreach (Team tm in teamNames)
+                        {
+                            //para cada User dentro da Team vai adicionar as informações do mesmo
+                            TimesheetUserInfo timesheetUserInfo = new TimesheetUserInfo();
+                            timesheetUserInfo.Name = db.users.Find(tm.UserId).Name;
+                            timesheetUserInfo.Email = db.users.Find(tm.UserId).Email;
+                            timesheetUserInfo.Function = db.userFunction.Find(tm.UserFunctionId).Function;
+                            userInfos.Add(timesheetUserInfo);
+                        }
+                        //adiciona a TimesheetUserInfo e por fim adiciona a teams o objecto teamInfo
+                        teamInfo.UserInfo = userInfos;
+                        teams.Add(teamInfo);
+                    }
+                }
+                projectInfo.Teams = teams;
+
+                return projectInfo;
+            }
+            catch
+            {
+                return new ProjectInfo();
             }
         }
     }

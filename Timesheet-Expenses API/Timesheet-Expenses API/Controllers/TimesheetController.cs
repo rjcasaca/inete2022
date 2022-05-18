@@ -38,9 +38,23 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpGet("{date};{userId}")]
-        public IActionResult GetUserWorklog([FromRoute] DateTime date, int userId)
+        public IActionResult GetUserWeekWorklog([FromRoute] DateTime date, int userId)
         {
-            var worklog_db = repos.GetUserWorklog(date, userId);
+            var worklog_db = repos.GetUserWeekWorklog(date, userId);
+            return Ok(worklog_db);
+        }
+
+        [HttpGet("{activityId}")]
+        public IActionResult GetActivitiesInfo([FromRoute] int activityId)
+        {
+            var worklog_db = repos.GetActivitiesInfo(activityId);
+            return Ok(worklog_db);
+        }
+
+        [HttpGet("{projectId}")]
+        public IActionResult GetProjectInfo([FromRoute] int projectId)
+        {
+            var worklog_db = repos.GetProjectInfo(projectId);
             return Ok(worklog_db);
         }
 

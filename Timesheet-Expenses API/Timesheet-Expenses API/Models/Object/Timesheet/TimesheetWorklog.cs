@@ -2,7 +2,7 @@
 {
     public class TimesheetWorklog
     {
-        public ActivityInfo Activity { get; set; }
+        public ActivityIdName Activity { get; set; }
         public List<WorklogInfo> WeekWorklog { get; set; }
 
     }
