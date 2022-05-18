@@ -10,7 +10,8 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
         public bool UpdateWorklog(PutWorklogTimesheet worklog);
         public bool DeleteWorklog(int worklogId);
-        public List<ActivityUser> GetActivityUser(int userId, int projectId);
+        public List<ActivityInfo> GetActivityUser(int userId, int projectId);
+        public List<UserProjectsInfo> GetProjectUser(int userId);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -51,23 +52,53 @@ namespace Timesheet_Expenses_API.Repositories
                 List<Worklog> worklog = new List<Worklog>();
                 for (int i = 0; i < 7; i++)
                 {
-                    worklog = db.worklogs.Where(wl => wl.User.Equals(userId) && wl.Date.Equals(date.AddDays(i))).ToList();
+                    List<Worklog> worklogAux = db.worklogs.Where(wl => wl.User.User_Id.Equals(userId)&& wl.Date.Equals(date.AddDays(i))).ToList();
+                    foreach (Worklog w in worklogAux)
+                    {
+                        worklog.Add(w);
+                    }
                 }
 
                 //todos os ids das diferentes atividades da worklog
-                var activitiesId = worklog.Select(wl => wl.Activity.Activity_Id).Distinct().ToList();
-                foreach (int i in activitiesId)
+                List<ActivityInfo> activitiesInfos = new List<ActivityInfo>();
+                foreach (Worklog wl in worklog)
                 {
-                    //cria um novo objecto do tipo TimesheetWorklog sempre que começa o ciclo
-                    TimesheetWorklog tw = new TimesheetWorklog();
-                    tw.ActivityId = i;
-                    foreach (Worklog wl in worklog)
+                    bool aux = false;
+                    foreach (ActivityInfo ai in activitiesInfos)
                     {
-                        if (i == wl.Activity.Activity_Id)
+                        if (ai.ActivityId == wl.ActivityId)
                         {
-                            tw.Worklog.Add(wl);
+                            aux = true;
+                            break;
                         }
                     }
+                    if (aux == false)
+                    {
+                        ActivityInfo actInfo = new ActivityInfo();
+                        actInfo.ActivityId = wl.ActivityId;
+                        actInfo.ActivityName = db.activities.Find(wl.ActivityId).Name;
+                        activitiesInfos.Add(actInfo);
+                    }
+                }
+
+                foreach (ActivityInfo ai in activitiesInfos)
+                {
+                    List<WorklogInfo> worklogInfos = new List<WorklogInfo>();
+                    TimesheetWorklog tw = new TimesheetWorklog();
+                    tw.Activity = ai;
+                    foreach (Worklog wl in worklog)
+                    {
+                        if (ai.ActivityId == wl.ActivityId)
+                        {
+                            WorklogInfo wli = new WorklogInfo();
+                            wli.worklogId = wl.Cod_Worklog;
+                            wli.Hours = wl.Hours;
+                            wli.Date = wl.Date;
+                            worklogInfos.Add(wli);
+                        }
+                    }
+                    tw.WeekWorklog = worklogInfos;
+                    
                     TimesheetWorklogs.Add(tw);
                 }
 
@@ -150,11 +181,11 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe um id do user e um id do projecto selecionado, devolve uma lista com o nome e id das atividades relacionadas com o user
-        public List<ActivityUser> GetActivityUser(int userId, int projectId)
+        public List<ActivityInfo> GetActivityUser(int userId, int projectId)
         {
             try
             {
-                List<ActivityUser> ActivityUsers = new List<ActivityUser>();
+                List<ActivityInfo> ActivityUsers = new List<ActivityInfo>();
 
                 //lista de User_Activity com apenas o userId indicado
                 var userActivity_db = db.activities_users.Where(ua => ua.UserId.Equals(userId)).ToList();
@@ -175,7 +206,7 @@ namespace Timesheet_Expenses_API.Repositories
                         //caso seja igual adicionar o mesmo à lista
                         if (a.Activity_Id == i)
                         {
-                            ActivityUser actUser = new ActivityUser();
+                            ActivityInfo actUser = new ActivityInfo();
                             actUser.ActivityId = a.Activity_Id;
                             actUser.ActivityName = a.Name;
                             ActivityUsers.Add(actUser);
@@ -187,7 +218,31 @@ namespace Timesheet_Expenses_API.Repositories
             }
             catch
             {
-                return new List<ActivityUser>();
+                return new List<ActivityInfo>();
+            }
+        }
+
+        //recebe o id do user e devolve uma liste com o nome e id de todos os projetos ao qual está relacionado
+        public List<UserProjectsInfo> GetProjectUser(int userId)
+        {
+            try
+            {
+                var team = db.teams.Where(t => t.UserId.Equals(userId)).ToList();
+                List<UserProjectsInfo> projectsInfo = new List<UserProjectsInfo>();
+                foreach (Team t in team)
+                {
+                    var proj = db.projects.Find(t.ProjectId);
+                    var pInfo = new UserProjectsInfo();
+                    pInfo.projectId = proj.Project_Id;
+                    pInfo.PorjectName = proj.Name;
+                    projectsInfo.Add(pInfo);
+                }
+
+                return projectsInfo;
+            }
+            catch
+            {
+                return new List<UserProjectsInfo>();
             }
         }
     }

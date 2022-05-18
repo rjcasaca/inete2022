@@ -62,8 +62,7 @@ namespace Timesheet_Expenses_API.Repositories
                     ExpenseType = db.expenseType.Find(db.expenseType.Where(et => et.Type.Equals(newExpense.ExpenseType)).FirstOrDefault().ExpenseType_Id),
                     ExpenseState = db.expenseState.Find(db.expenseState.Where(es => es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id),
                     Project = db.projects.Find(db.projects.Where(p => p.Project_Id.Equals(newExpense.project_id)).FirstOrDefault().Project_Id),
-                    User = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id),
-                    Qtd_Line = 0
+                    User = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id)
 
                 };
                 db.expenses.Add(obj);

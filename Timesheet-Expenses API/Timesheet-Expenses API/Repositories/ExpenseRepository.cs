@@ -31,8 +31,7 @@ namespace Timesheet_Expenses_API.Repositories
                     Date = expense.Date,
                     ExpenseType = expense.ExpenseType,
                     ExpenseState = expense.ExpenseState,
-                    TotalMoney = expense.TotalMoney,
-                    Qtd_Line = expense.Qtd_Line
+                    TotalMoney = expense.TotalMoney
                 };
                 db.expenses.Add(expense_db);
                 db.SaveChanges();
@@ -70,7 +69,6 @@ namespace Timesheet_Expenses_API.Repositories
                 expense_db.ExpenseType = expense.ExpenseType;
                 expense_db.ExpenseState = expense.ExpenseState;
                 expense_db.TotalMoney = expense.TotalMoney;
-                expense_db.Qtd_Line = expense.Qtd_Line;
                 db.SaveChanges();
 
                 return true;

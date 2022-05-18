@@ -12,9 +12,13 @@ namespace Timesheet_Expenses_API.Models
         public string Name { get; set; }
 
         //Navigation Properties
+        public int FileContentTypeId { get; set; }
         public FileContentType FileContentType { get; set; }
+
         public int FileId { get; set; }
         public File File { get; set; }
+
+
         public List<Activity_File> Activity_File { get; set; }
         public List<Expense_File> Expense_File { get; set; }
     }

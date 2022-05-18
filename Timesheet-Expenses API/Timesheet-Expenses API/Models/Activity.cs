@@ -13,9 +13,16 @@ namespace Timesheet_Expenses_API.Models
         public string Description { get; set; }
 
         //Navigation Properties
+        public int ProjectId { get; set; }
         public Project Project { get; set; }
+
+        public int ActivityStateId { get; set; }
         public ActivityState ActivityState { get; set; }
+
+        public int ActivityTypeId { get; set; }
         public ActivityType ActivityType { get; set; }
+
+
         public List<User_Activity> user_Activities { get; set; }
         public List<Comment> Comment { get; set; }
         public List<Worklog> Worklog { get; set; }

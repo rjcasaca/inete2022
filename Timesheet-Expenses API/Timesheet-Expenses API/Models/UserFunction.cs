@@ -10,5 +10,8 @@ namespace Timesheet_Expenses_API.Models
         public int UserFunction_Id { get; set; }
         [Required, MaxLength(30)]
         public string Function { get; set; }
+
+        //Navigation Properties
+        List<Team> teams { get; set; }
     }
 }

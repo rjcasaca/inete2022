@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220517091635_1thMigration")]
+    [Migration("20220517145725_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,10 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Activity_Id"), 1L, 1);
 
-                    b.Property<int>("ActivityState_Id")
+                    b.Property<int>("ActivityStateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ActivityType_Id")
+                    b.Property<int>("ActivityTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -47,16 +47,16 @@ namespace Timesheet_Expenses_API.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("Project_Id")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.HasKey("Activity_Id");
 
-                    b.HasIndex("ActivityState_Id");
+                    b.HasIndex("ActivityStateId");
 
-                    b.HasIndex("ActivityType_Id");
+                    b.HasIndex("ActivityTypeId");
 
-                    b.HasIndex("Project_Id");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("Activity");
                 });
@@ -161,7 +161,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Comment_Id"), 1L, 1);
 
-                    b.Property<int>("Activity_Id")
+                    b.Property<int>("ActivityId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -170,7 +170,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("Comment_Id");
 
-                    b.HasIndex("Activity_Id");
+                    b.HasIndex("ActivityId");
 
                     b.ToTable("Comment");
                 });
@@ -186,33 +186,30 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExpenseState_Id")
+                    b.Property<int>("ExpenseStateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExpenseType_Id")
+                    b.Property<int>("ExpenseTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Project_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Qtd_Line")
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalMoney")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("User_Id")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Expense_Id");
 
-                    b.HasIndex("ExpenseState_Id");
+                    b.HasIndex("ExpenseStateId");
 
-                    b.HasIndex("ExpenseType_Id");
+                    b.HasIndex("ExpenseTypeId");
 
-                    b.HasIndex("Project_Id");
+                    b.HasIndex("ProjectId");
 
-                    b.HasIndex("User_Id");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Expense");
                 });
@@ -276,8 +273,9 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("File_Id"), 1L, 1);
 
-                    b.Property<int>("base64")
-                        .HasColumnType("int");
+                    b.Property<byte[]>("base64")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("File_Id");
 
@@ -292,7 +290,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileContent_Id"), 1L, 1);
 
-                    b.Property<int>("FileContentType_Id")
+                    b.Property<int>("FileContentTypeId")
                         .HasColumnType("int");
 
                     b.Property<int>("FileId")
@@ -305,7 +303,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("FileContent_Id");
 
-                    b.HasIndex("FileContentType_Id");
+                    b.HasIndex("FileContentTypeId");
 
                     b.HasIndex("FileId")
                         .IsUnique();
@@ -342,7 +340,7 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Expense_Id")
+                    b.Property<int>("ExpenseId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnityPrice")
@@ -350,7 +348,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("Cod_Line");
 
-                    b.HasIndex("Expense_Id");
+                    b.HasIndex("ExpenseId");
 
                     b.ToTable("Line");
                 });
@@ -363,7 +361,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Project_Id"), 1L, 1);
 
-                    b.Property<int>("Client_Id")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndDate")
@@ -374,7 +372,7 @@ namespace Timesheet_Expenses_API.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("ProjectState_Id")
+                    b.Property<int>("ProjectStateId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -382,9 +380,9 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("Project_Id");
 
-                    b.HasIndex("Client_Id");
+                    b.HasIndex("ClientId");
 
-                    b.HasIndex("ProjectState_Id");
+                    b.HasIndex("ProjectStateId");
 
                     b.ToTable("Project");
                 });
@@ -420,12 +418,12 @@ namespace Timesheet_Expenses_API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("UserFunction_Id")
+                    b.Property<int>("UserFunctionId")
                         .HasColumnType("int");
 
                     b.HasKey("ProjectId", "UserId");
 
-                    b.HasIndex("UserFunction_Id");
+                    b.HasIndex("UserFunctionId");
 
                     b.HasIndex("UserId");
 
@@ -496,10 +494,10 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Cod_Worklog"), 1L, 1);
 
-                    b.Property<int>("Activity_Id")
+                    b.Property<int>("ActivityId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BillingType_Id")
+                    b.Property<int>("BillingTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -512,21 +510,21 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<decimal>("Hours")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("User_Id")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WorklogState_Id")
+                    b.Property<int>("WorklogStateId")
                         .HasColumnType("int");
 
                     b.HasKey("Cod_Worklog");
 
-                    b.HasIndex("Activity_Id");
+                    b.HasIndex("ActivityId");
 
-                    b.HasIndex("BillingType_Id");
+                    b.HasIndex("BillingTypeId");
 
-                    b.HasIndex("User_Id");
+                    b.HasIndex("UserId");
 
-                    b.HasIndex("WorklogState_Id");
+                    b.HasIndex("WorklogStateId");
 
                     b.ToTable("Worklog");
                 });
@@ -553,19 +551,19 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.ActivityState", "ActivityState")
                         .WithMany("Activity")
-                        .HasForeignKey("ActivityState_Id")
+                        .HasForeignKey("ActivityStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.ActivityType", "ActivityType")
                         .WithMany("Activity")
-                        .HasForeignKey("ActivityType_Id")
+                        .HasForeignKey("ActivityTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.Project", "Project")
                         .WithMany("Activity")
-                        .HasForeignKey("Project_Id")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -599,7 +597,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Activity", "Activity")
                         .WithMany("Comment")
-                        .HasForeignKey("Activity_Id")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -610,25 +608,25 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", "ExpenseState")
                         .WithMany("Expenses")
-                        .HasForeignKey("ExpenseState_Id")
+                        .HasForeignKey("ExpenseStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", "ExpenseType")
                         .WithMany("Expenses")
-                        .HasForeignKey("ExpenseType_Id")
+                        .HasForeignKey("ExpenseTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.Project", "Project")
                         .WithMany("Expenses")
-                        .HasForeignKey("Project_Id")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.User", "User")
                         .WithMany("Expenses")
-                        .HasForeignKey("User_Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -664,7 +662,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.FileContentType", "FileContentType")
                         .WithMany("FileContent")
-                        .HasForeignKey("FileContentType_Id")
+                        .HasForeignKey("FileContentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -683,7 +681,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Expense", "Expense")
                         .WithMany("Line")
-                        .HasForeignKey("Expense_Id")
+                        .HasForeignKey("ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -694,13 +692,13 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Client", "Client")
                         .WithMany("Project")
-                        .HasForeignKey("Client_Id")
+                        .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.ProjectState", "ProjectState")
                         .WithMany("Project")
-                        .HasForeignKey("ProjectState_Id")
+                        .HasForeignKey("ProjectStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -719,7 +717,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasOne("Timesheet_Expenses_API.Models.UserFunction", "UserFunction")
                         .WithMany()
-                        .HasForeignKey("UserFunction_Id")
+                        .HasForeignKey("UserFunctionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -759,25 +757,25 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Activity", "Activity")
                         .WithMany("Worklog")
-                        .HasForeignKey("Activity_Id")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.BillingType", "BillingType")
                         .WithMany("Worklog")
-                        .HasForeignKey("BillingType_Id")
+                        .HasForeignKey("BillingTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.User", "User")
                         .WithMany("Worklog")
-                        .HasForeignKey("User_Id")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.WorklogState", "WorklogState")
                         .WithMany("Worklog")
-                        .HasForeignKey("WorklogState_Id")
+                        .HasForeignKey("WorklogStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

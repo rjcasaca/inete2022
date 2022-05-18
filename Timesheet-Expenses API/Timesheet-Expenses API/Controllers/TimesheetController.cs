@@ -23,11 +23,18 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(uId_db);
         }
 
+        [HttpGet("{userId}")]
+        public IActionResult GetProjectUser([FromRoute] int userId)
+        {
+            var projects_db = repos.GetProjectUser(userId);
+            return Ok(projects_db);
+        }
+
         [HttpGet("{userId};{projectId}")]
         public IActionResult GetActivityUser([FromRoute] int userId, int projectId)
         {
-            var uId_db = repos.GetActivityUser(userId, projectId);
-            return Ok(uId_db);
+            var ActivityUser_db = repos.GetActivityUser(userId, projectId);
+            return Ok(ActivityUser_db);
         }
 
         [HttpGet("{date};{userId}")]

@@ -9,6 +9,7 @@ namespace Timesheet_Expenses_API.Models
         //Navigation Properties
         public int ActivityId { get; set; }
         public Activity Activity { get; set; }
+
         public int FileContentId { get; set; }
         public FileContent FileContent { get; set; }
     }

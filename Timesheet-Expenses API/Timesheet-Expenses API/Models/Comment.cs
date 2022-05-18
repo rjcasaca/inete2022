@@ -11,6 +11,7 @@ namespace Timesheet_Expenses_API.Models
         public string Text { get; set; }
 
         //Navigation Properties
+        public int ActivityId { get; set; }
         public Activity Activity { get; set; }
     }
 }

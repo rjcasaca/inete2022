@@ -15,9 +15,16 @@ namespace Timesheet_Expenses_API.Models
         public string Comment { get; set; }
 
         //Navigation Properties
+        public int UserId { get; set; }
         public User User { get; set; }
+
+        public int ActivityId { get; set; }
         public Activity Activity { get; set; }
+
+        public int BillingTypeId { get; set; }
         public BillingType BillingType { get; set; }
+
+        public int WorklogStateId { get; set; }
         public WorklogState WorklogState { get; set; }
     }
 }

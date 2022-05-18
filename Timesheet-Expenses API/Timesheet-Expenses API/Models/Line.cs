@@ -11,6 +11,7 @@ namespace Timesheet_Expenses_API.Models
         public DateTime Date { get; set; }
 
         //Navigation Properties
+        public int ExpenseId { get; set; }
         public Expense Expense { get; set; }
     }
 }

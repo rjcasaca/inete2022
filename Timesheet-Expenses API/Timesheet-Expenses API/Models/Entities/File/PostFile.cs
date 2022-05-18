@@ -2,6 +2,6 @@
 {
     public class PostFile
     {
-        public Base64FormattingOptions base64 { get; set; }
+        public byte[] base64 { get; set; }
     }
 }

@@ -4,7 +4,6 @@
     {
         public DateTime Date { get; set; }
         public decimal TotalMoney { get; set; }
-        public int Qtd_Line { get; set; }
 
         //Navigation Properties
         public Models.ExpenseType ExpenseType { get; set; }
