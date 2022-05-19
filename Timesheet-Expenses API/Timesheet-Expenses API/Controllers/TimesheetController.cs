@@ -65,6 +65,13 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(file_db);
         }
 
+        [HttpGet("{worklogId}")]
+        public IActionResult GetWorklog([FromRoute] int worklogId)
+        {
+            var worklogId_db = repos.GetWorklog(worklogId);
+            return Ok(worklogId_db);
+        }
+
         [HttpPost]
         public IActionResult PostWorklog(PostWorklogTimesheet worklog, int userId)
         {

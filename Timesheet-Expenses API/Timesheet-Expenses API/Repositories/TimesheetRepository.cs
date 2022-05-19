@@ -6,6 +6,7 @@ namespace Timesheet_Expenses_API.Repositories
     public interface ITimesheetRepository
     {
         public int GetUserId(string email);
+        public WorklogCompleteInfo GetWorklog(int worklogId);
         public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
         public bool UpdateWorklog(PutWorklogTimesheet worklog);
         public bool DeleteWorklog(int worklogId);
@@ -41,6 +42,28 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return 0;
+            }
+        }
+
+        //recebe um worklogId e devolve as informações sobre o mesmo indicado
+        public WorklogCompleteInfo GetWorklog(int worklogId)
+        {
+            try
+            {
+                var worklog = db.worklogs.Find(worklogId);
+                WorklogCompleteInfo wlInfo = new WorklogCompleteInfo();
+                wlInfo.ActivityName = db.activities.Find(worklog.ActivityId).Name;
+                wlInfo.BillingType = db.billingTypes.Find(worklog.BillingTypeId).Type;
+                wlInfo.WorklogState = db.worklogStates.Find(worklog.WorklogStateId).State;
+                wlInfo.Hours = worklog.Hours;
+                wlInfo.Comment = worklog.Comment;
+                wlInfo.Date = worklog.Date;
+
+                return wlInfo;
+            }
+            catch
+            {
+                return new WorklogCompleteInfo();
             }
         }
 
