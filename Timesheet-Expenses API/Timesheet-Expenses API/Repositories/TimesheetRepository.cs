@@ -45,7 +45,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        //recebe um worklogId e devolve as informações sobre o mesmo indicado
+        //recebe um worklogId e devolve as informações sobre o mesmo indicado      
         public WorklogCompleteInfo GetWorklog(int worklogId)
         {
             try

@@ -124,5 +124,56 @@ namespace Timesheet_Expenses_API.Repositories
         
         
         }
+        public bool CreateBill(Bill bill)
+        {
+            try
+            {
+                var file = new Models.File
+                {
+
+                    File_Id = bill.FileId,
+                    base64 = bill.base64
+
+
+
+                };
+                db.files.Add(file);
+                db.SaveChanges();
+
+                var fileContentType = new Models.FileContentType
+                {
+                    FileContentType_Id=bill.FileContentId,
+                    Type=bill.Type
+
+
+                };
+                db.fileContType.Add(fileContentType);
+                db.SaveChanges();
+
+                var FileContent = new Models.FileContent
+                {
+                    Name = bill.Name,
+                    FileId = bill.FileId,
+                    FileContentTypeId = bill.FileContentId
+
+
+
+
+                };
+                db.fileContents.Add(FileContent);
+                db.SaveChanges();
+                return true;
+
+            }
+            catch 
+            {
+
+                return false;
+            }
+        
+        
+        
+        }
+
     }
 }
