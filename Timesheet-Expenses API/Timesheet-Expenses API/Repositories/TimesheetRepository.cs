@@ -285,13 +285,19 @@ namespace Timesheet_Expenses_API.Repositories
 
                 //cria um objeto do tipo ActivityInfo e preenche os campos do mesmo
                 ActivityInfo activityInfos = new ActivityInfo();
-                activityInfos.ActivityIdName.ActivityName = activity.Name;
-                activityInfos.ActivityIdName.ActivityId = activityId;
+                ActivityIdName actIdName = new ActivityIdName();
+                actIdName.ActivityName = activity.Name;
+                actIdName.ActivityId = activity.Activity_Id;
+                activityInfos.ActivityIdName = actIdName;
+
                 activityInfos.ActivityState = db.activityState.Find(activity.ActivityStateId).State;
                 activityInfos.ActivityType = db.activityType.Find(activity.ActivityTypeId).Type;
                 activityInfos.ActivityDescription = activity.Description;
-                activityInfos.ProjectInfo.PorjectName = db.projects.Find(activity.ProjectId).Name;
-                activityInfos.ProjectInfo.projectId = db.projects.Find(activity.ProjectId).Project_Id;
+
+                ProjectsIdName projIdName = new ProjectsIdName();
+                projIdName.projectId = db.projects.Find(activity.ProjectId).Project_Id;
+                projIdName.PorjectName = db.projects.Find(activity.ProjectId).Name;
+                activityInfos.ProjectInfo = projIdName;
 
                 //procura todos os registos em activities_file com o activityId indicado
                 var actFile = db.activities_files.Where(af => af.ActivityId.Equals(activityId)).ToList();
