@@ -162,6 +162,13 @@ namespace Timesheet_Expenses_API.Repositories
                 };
                 db.fileContents.Add(FileContent);
                 db.SaveChanges();
+
+                var ExpenseFileContent = new Models.Expense_File
+                {
+                    ExpenseId=bill.expenseid,
+                    FileContentId=bill.FileContent_Id
+
+                };
                 return true;
 
             }
