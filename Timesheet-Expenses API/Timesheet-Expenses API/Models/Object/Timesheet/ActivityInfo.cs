@@ -8,5 +8,6 @@
         public string ActivityDescription { get; set; }
         public List<FileContInfo> FileContInfo { get; set; }
         public ProjectsIdName ProjectInfo { get; set; }
+        public List<CommentText> ActivityComments { get; set; }
     }
 }

@@ -313,6 +313,16 @@ namespace Timesheet_Expenses_API.Repositories
                 }
                 activityInfos.FileContInfo = fileContInfos;
 
+                var comments = db.comments.Where(c => c.ActivityId.Equals(activityId)).ToList();
+                List<CommentText> commentsText = new List<CommentText>();
+                foreach (Comment c in comments)
+                {
+                    CommentText ct = new CommentText();
+                    ct.Text = c.Text;
+                    commentsText.Add(ct);
+                }
+                activityInfos.ActivityComments = commentsText;
+
                 return activityInfos;
             }
             catch
