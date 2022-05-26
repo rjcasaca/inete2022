@@ -14,10 +14,11 @@ namespace Timesheet_Expenses_API.Controllers
         {
             repos = _repos;
         }
+
         [HttpGet("{email}")]
-        public IActionResult GetUserInfo([FromRoute] ExpensesID user)
+        public IActionResult GetUserInfo([FromRoute] string email)
         {
-            var user_db = repos.GetUserId(user.email);
+            var user_db = repos.GetUserId(email);
 
             return Ok(user_db);
         }

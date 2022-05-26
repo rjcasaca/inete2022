@@ -6,27 +6,25 @@ namespace Timesheet_Expenses_API.Repositories
     public interface IExepensesObjectsRep
     {
         public int GetUserId(string email);
-        public List<Expense> GetExpenses();
+        public List<Expense> GetExpenses(int userId);
         public bool CreateExpense(ExpObj expense);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
     {
         private readonly _DbContext db;
-        private int userId;
-        private List<Expense> lstexpenses;
 
         public ExepensesObjectsRep(_DbContext _db)
         {
             db = _db;
         }
-       
+
         //Busca o id user do email que recebe
         public int GetUserId(string email)
         {
             try
             {
-                userId = db.users.Where(u => u.Email.Equals(email)).FirstOrDefault().User_Id;
+                int userId = db.users.Where(u => u.Email.Equals(email)).FirstOrDefault().User_Id;
 
                 return userId;
             }
@@ -35,21 +33,21 @@ namespace Timesheet_Expenses_API.Repositories
                 return 0;
             }
         }
+
         //busca todas as expenses do user 
-        public List<Expense> GetExpenses()
+        public List<Expense> GetExpenses(int userId)
         {
             try
             {
-                lstexpenses = db.expenses.Where(e => e.User.User_Id.Equals(userId)).ToList();
+                List<Expense> lstexpenses = db.expenses.Where(e => e.User.User_Id.Equals(userId)).ToList();
                 return lstexpenses;
             }
             catch
             {
                 return new List<Expense>();
-
             }
-
         }
+
         //criar um despesa
         public bool CreateExpense(ExpObj newExpense)
         {
@@ -63,7 +61,6 @@ namespace Timesheet_Expenses_API.Repositories
                     ExpenseState = db.expenseState.Find(db.expenseState.Where(es => es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id),
                     Project = db.projects.Find(db.projects.Where(p => p.Project_Id.Equals(newExpense.project_id)).FirstOrDefault().Project_Id),
                     User = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id)
-
                 };
                 db.expenses.Add(obj);
                 db.SaveChanges();
@@ -74,7 +71,6 @@ namespace Timesheet_Expenses_API.Repositories
             {
                 return false;
             }
-
         }
 
         //Calcula o valor Total gasto
@@ -82,7 +78,6 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-
                 var TotalMoney = db.lines.Where(l => l.Expense.Equals(expenseid)).Sum(l => l.UnityPrice);
 
                 var expense = db.expenses.Find(expenseid);
@@ -90,8 +85,6 @@ namespace Timesheet_Expenses_API.Repositories
                 db.SaveChanges();
 
                 return true;
-
-
             }
             catch
             {
@@ -99,31 +92,30 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
+
         //cria um line 
         public bool CreateLine(LinesObj line)
         {
-            try 
+            try
             {
-                var obj = new Line {
+                var obj = new Line
+                {
 
                     UnityPrice = line.UnityPrice,
                     Date = line.Date,
                     Expense = db.expenses.Find(line.Expense)
-                
-                
                 };
                 db.lines.Add(obj);
                 db.SaveChanges();
-            
-            
-            return true;
+
+                return true;
             }
-            catch {
+            catch
+            {
                 return false;
             }
-        
-        
         }
+
         public bool CreateBill(Bill bill)
         {
             try
@@ -133,19 +125,14 @@ namespace Timesheet_Expenses_API.Repositories
 
                     File_Id = bill.FileId,
                     base64 = bill.base64
-
-
-
                 };
                 db.files.Add(file);
                 db.SaveChanges();
 
                 var fileContentType = new Models.FileContentType
                 {
-                    FileContentType_Id=bill.FileContentId,
-                    Type=bill.Type
-
-
+                    FileContentType_Id = bill.FileContentId,
+                    Type = bill.Type
                 };
                 db.fileContType.Add(fileContentType);
                 db.SaveChanges();
@@ -155,31 +142,21 @@ namespace Timesheet_Expenses_API.Repositories
                     Name = bill.Name,
                     FileId = bill.FileId,
                     FileContentTypeId = bill.FileContentId
-
-
-
-
                 };
                 db.fileContents.Add(FileContent);
                 db.SaveChanges();
 
                 var ExpenseFileContent = new Models.Expense_File
                 {
-                    ExpenseId=bill.expenseid,
-                    FileContentId=bill.FileContent_Id
-
+                    ExpenseId = bill.expenseid,
+                    FileContentId = bill.FileContent_Id
                 };
                 return true;
-
             }
-            catch 
+            catch
             {
-
                 return false;
             }
-        
-        
-        
         }
 
     }

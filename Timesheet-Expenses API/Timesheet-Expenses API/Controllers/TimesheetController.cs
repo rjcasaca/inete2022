@@ -90,7 +90,7 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{worklog}")]
+        [HttpDelete("{worklogId}")]
         public IActionResult DeleteWorklog([FromRoute] int worklog)
         {
             if (repos.DeleteWorklog(worklog))
