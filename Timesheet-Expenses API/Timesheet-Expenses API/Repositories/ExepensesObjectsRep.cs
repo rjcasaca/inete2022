@@ -8,6 +8,9 @@ namespace Timesheet_Expenses_API.Repositories
         public int GetUserId(string email);
         public List<Expense> GetExpenses(int userId);
         public bool CreateExpense(ExpObj expense);
+        public bool PutLine(int expenseid);
+        public bool CreateLine(LinesObj line);
+        public bool CreateBill(Bill bill);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
