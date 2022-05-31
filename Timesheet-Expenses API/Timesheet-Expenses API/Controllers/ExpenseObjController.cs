@@ -23,6 +23,7 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user_db);
         }
+
         [HttpGet("{userid}")]
         public IActionResult GetExpenses([FromRoute] int userid)
         {
@@ -30,6 +31,8 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user);
         }
+
+        [HttpPost]
         public IActionResult CreateExpense(ExpObj expense)
         {
             if (repos.CreateExpense(expense))
@@ -37,6 +40,9 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
+
+        [HttpPut]
+
         public IActionResult PutLine(int expenseid)
         {
             if (repos.PutLine(expenseid))
@@ -44,6 +50,8 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
         public IActionResult CreateLine(LinesObj line)
         {
             if (repos.CreateLine(line))
@@ -51,6 +59,8 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
+
+        [HttpPost]
         public IActionResult CreateBill(Bill bill)
         {
             if (repos.CreateBill(bill))
