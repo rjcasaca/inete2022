@@ -17,6 +17,8 @@ namespace Timesheet_Expenses_API.Repositories
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
         public MondayDate GetMondayDate(int day, int month, int year);
+        public List<string> GetBillingTypes();
+        public List<string> GetWorklogState();
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -54,11 +56,17 @@ namespace Timesheet_Expenses_API.Repositories
                 var worklog = db.worklogs.Find(worklogId);
                 WorklogCompleteInfo wlInfo = new WorklogCompleteInfo();
                 wlInfo.ActivityName = db.activities.Find(worklog.ActivityId).Name;
+                wlInfo.ActivityId = worklog.ActivityId;
                 wlInfo.BillingType = db.billingTypes.Find(worklog.BillingTypeId).Type;
                 wlInfo.WorklogState = db.worklogStates.Find(worklog.WorklogStateId).State;
                 wlInfo.Hours = worklog.Hours;
                 wlInfo.Comment = worklog.Comment;
-                wlInfo.Date = worklog.Date;
+                int day = worklog.Date.Day;
+                int month = worklog.Date.Month;
+                int year = worklog.Date.Year;
+                wlInfo.Day = day;
+                wlInfo.Month = month;
+                wlInfo.Year = year;
 
                 return wlInfo;
             }
@@ -73,9 +81,10 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
+                DateTime date = Convert.ToDateTime(worklog.Day + "-" + worklog.Month + "-" + worklog.Year);
                 var worklog_db = new Worklog
                 {
-                    Date = worklog.Date,
+                    Date = date,
                     Hours = worklog.Hours,
                     Comment = worklog.Comment,
                     User = db.users.Find(userId),
@@ -100,10 +109,11 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
+                DateTime date = Convert.ToDateTime(worklog.Day + "-" + worklog.Month + "-" + worklog.Year);
                 //procura o registo com o id indicado
                 var worklog_db = db.worklogs.Find(worklog.worklogId);
                 //atualiza os dados igualando os mesmos
-                worklog_db.Date = worklog.Date;
+                worklog_db.Date = date;
                 worklog_db.Hours = worklog.Hours;
                 worklog_db.Comment = worklog.Comment;
                 worklog_db.Activity = db.activities.Find(worklog.Activity);
@@ -525,6 +535,46 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return new MondayDate();
+            }
+        }
+
+        //retorna todos os billing types
+        public List<string> GetBillingTypes()
+        {
+            try
+            {
+                List<string> BillingTypes = new List<string>();
+                var BillingTypesObj = db.billingTypes.ToList();
+                foreach (BillingType bt in BillingTypesObj)
+                {
+                    BillingTypes.Add(bt.Type);
+                }
+
+                return BillingTypes;
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
+        //retorna todos os worklog states
+        public List<string> GetWorklogState()
+        {
+            try
+            {
+                List<string> WorklogState = new List<string>();
+                var WorklogStateObj = db.worklogStates.ToList();
+                foreach (WorklogState bt in WorklogStateObj)
+                {
+                    WorklogState.Add(bt.State);
+                }
+
+                return WorklogState;
+            }
+            catch
+            {
+                return new List<string>();
             }
         }
     }

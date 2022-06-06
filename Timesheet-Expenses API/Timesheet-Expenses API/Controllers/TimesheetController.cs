@@ -16,6 +16,20 @@ namespace Timesheet_Expenses_API.Controllers
             repos = _repos;
         }
 
+        [HttpGet]
+        public IActionResult GetBillingTypes()
+        {
+            var BillingTypes_db = repos.GetBillingTypes();
+            return Ok(BillingTypes_db);
+        }
+
+        [HttpGet]
+        public IActionResult GetWorklogState()
+        {
+            var WorklogState_db = repos.GetWorklogState();
+            return Ok(WorklogState_db);
+        }
+
         [HttpGet("{userEmail}")]
         public IActionResult GetUserId([FromRoute] string userEmail)
         {
