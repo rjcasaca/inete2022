@@ -39,7 +39,13 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user);
         }
+        [HttpGet("{user}")]
+        public IActionResult GetTypeList([FromRoute] int user)
+        {
+            var userid = repos.GetTypeList(user);
 
+            return Ok(userid);
+        }
         [HttpPost]
         public IActionResult CreateExpense(ExpObj expense)
         {

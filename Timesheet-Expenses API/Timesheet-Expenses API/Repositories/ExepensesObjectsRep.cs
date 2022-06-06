@@ -12,7 +12,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateLine(LinesObj line);
         public bool CreateBill(Bill bill);
         public decimal ValueAproved(int userid);
-     
+        public List<ExpenseType> GetTypeList(int user);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -53,6 +53,21 @@ namespace Timesheet_Expenses_API.Repositories
             }
         
         
+        }
+        public List<ExpenseType> GetTypeList(int user)
+        {
+
+            try
+            {
+                List<ExpenseType> lstexpensestype = db.expenseType.ToList();
+                return lstexpensestype;
+            }
+            catch
+            {
+                return new List<ExpenseType>();
+            }
+
+
         }
         //busca todas as expenses do user 
         public List<Expense> GetExpenses(int userId)
