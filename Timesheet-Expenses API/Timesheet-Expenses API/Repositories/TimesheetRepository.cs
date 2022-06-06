@@ -13,10 +13,10 @@ namespace Timesheet_Expenses_API.Repositories
         public bool DeleteWorklog(int worklogId);
         public List<ProjectsIdName> GetProjectUser(int userId);
         public List<ActivityIdName> GetActivityUser(int userId, int projectId);
-        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId);
+        public List<TimesheetWorklog> GetUserWeekWorklog(int day, int month, int year, int userId);
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
-        public byte[] GetFile(int fileContId);
+        public MondayDate GetMondayDate(int day, int month, int year);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -206,10 +206,11 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe a data indicada e devolve uma lista com todas as worklogs do user
-        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId)
+        public List<TimesheetWorklog> GetUserWeekWorklog(int day, int month, int year, int userId)
         {
             try
             {
+                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
                 List<TimesheetWorklog> TimesheetWorklogs = new List<TimesheetWorklog>();
 
                 //vai percorrer a semana toda e adicionar todas as worklogs da semana do user indicado a uma lista
@@ -249,7 +250,6 @@ namespace Timesheet_Expenses_API.Repositories
                 //vai criar um objeto TimesheetWorklog e adicionar o mesmo à lista a que vamos dar return
                 foreach (ActivityIdName ai in activitiesInfos)
                 {
-                    List<WorklogInfo> worklogInfos = new List<WorklogInfo>();
                     TimesheetWorklog tw = new TimesheetWorklog();
                     tw.Activity = ai;
                     foreach (Worklog wl in worklog)
@@ -259,12 +259,55 @@ namespace Timesheet_Expenses_API.Repositories
                             WorklogInfo wli = new WorklogInfo();
                             wli.worklogId = wl.Cod_Worklog;
                             wli.Hours = wl.Hours;
-                            wli.Date = wl.Date;
-                            worklogInfos.Add(wli);
+                            //ver o dia da semana
+                            if (wl.Date.DayOfWeek == DayOfWeek.Monday)
+                            {
+                                tw.Monday = wli;
+                            }
+                            else
+                            {
+                                if (wl.Date.DayOfWeek == DayOfWeek.Tuesday)
+                                {
+                                    tw.Tuesday = wli;
+                                }
+                                else
+                                {
+                                    if (wl.Date.DayOfWeek == DayOfWeek.Wednesday)
+                                    {
+                                        tw.Wednesday = wli;
+                                    }
+                                    else
+                                    {
+                                        if (wl.Date.DayOfWeek == DayOfWeek.Thursday)
+                                        {
+                                            tw.Thursday = wli;
+                                        }
+                                        else
+                                        {
+                                            if (wl.Date.DayOfWeek == DayOfWeek.Friday)
+                                            {
+                                                tw.Friday = wli;
+                                            }
+                                            else
+                                            {
+                                                if (wl.Date.DayOfWeek == DayOfWeek.Saturday)
+                                                {
+                                                    tw.Saturday = wli;
+                                                }
+                                                else
+                                                {
+                                                    if (wl.Date.DayOfWeek == DayOfWeek.Sunday)
+                                                    {
+                                                        tw.Sunday = wli;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
-                    tw.WeekWorklog = worklogInfos;
-
                     TimesheetWorklogs.Add(tw);
                 }
 
@@ -299,20 +342,6 @@ namespace Timesheet_Expenses_API.Repositories
                 projIdName.projectId = db.projects.Find(activity.ProjectId).Project_Id;
                 projIdName.PorjectName = db.projects.Find(activity.ProjectId).Name;
                 activityInfos.ProjectInfo = projIdName;
-
-                //procura todos os registos em activities_file com o activityId indicado
-                var actFile = db.activities_files.Where(af => af.ActivityId.Equals(activityId)).ToList();
-                //preenche a infomação de cada file e adiciona o mesmo ao objeto do tipo ActivityInfo
-                List<FileContInfo> fileContInfos = new List<FileContInfo>();
-                foreach (Activity_File actF in actFile)
-                {
-                    var fileCont = db.fileContents.Find(actF.FileContentId);
-                    FileContInfo fileContInfo = new FileContInfo();
-                    fileContInfo.FileContId = fileCont.FileContent_Id;
-                    fileContInfo.Name = fileCont.Name;
-                    fileContInfos.Add(fileContInfo);
-                }
-                activityInfos.FileContInfo = fileContInfos;
 
                 var comments = db.comments.Where(c => c.ActivityId.Equals(activityId)).ToList();
                 List<CommentText> commentsText = new List<CommentText>();
@@ -416,18 +445,86 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        //recebe um fileContentId e devolve o ficheiro do mesmo
-        public byte[] GetFile(int fileContId)
+        //recebe uma data e retorna uma data da segunda feira da data recebida
+        public MondayDate GetMondayDate(int day, int month, int year)
         {
             try
             {
-                //procura o fileContent correspondente ao fileContId recebido
-                var fileId = db.fileContents.Find(fileContId).FileId;
-                return db.files.Find(fileId).base64;
+                MondayDate mondayDate = new MondayDate();
+                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
+
+                if (date.DayOfWeek == DayOfWeek.Monday)
+                {
+                    mondayDate.Day = day;
+                    mondayDate.Month = month;
+                    mondayDate.Year = year;
+                }
+                else
+                {
+                    if (date.DayOfWeek == DayOfWeek.Tuesday)
+                    {
+                        date = date.AddDays(-1);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                    }
+                    else
+                    {
+                        if (date.DayOfWeek == DayOfWeek.Wednesday)
+                        {
+                            date = date.AddDays(-2);
+                            mondayDate.Day = date.Day;
+                            mondayDate.Month = date.Month;
+                            mondayDate.Year = date.Year;
+                        }
+                        else
+                        {
+                            if (date.DayOfWeek == DayOfWeek.Thursday)
+                            {
+                                date = date.AddDays(-3);
+                                mondayDate.Day = date.Day;
+                                mondayDate.Month = date.Month;
+                                mondayDate.Year = date.Year;
+                            }
+                            else
+                            {
+                                if (date.DayOfWeek == DayOfWeek.Friday)
+                                {
+                                    date = date.AddDays(-4);
+                                    mondayDate.Day = date.Day;
+                                    mondayDate.Month = date.Month;
+                                    mondayDate.Year = date.Year;
+                                }
+                                else
+                                {
+                                    if (date.DayOfWeek == DayOfWeek.Saturday)
+                                    {
+                                        date = date.AddDays(-5);
+                                        mondayDate.Day = date.Day;
+                                        mondayDate.Month = date.Month;
+                                        mondayDate.Year = date.Year;
+                                    }
+                                    else
+                                    {
+                                        if (date.DayOfWeek == DayOfWeek.Sunday)
+                                        {
+                                            date = date.AddDays(-6);
+                                            mondayDate.Day = date.Day;
+                                            mondayDate.Month = date.Month;
+                                            mondayDate.Year = date.Year;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                return mondayDate;
             }
             catch
             {
-                return new byte[0];
+                return new MondayDate();
             }
         }
     }

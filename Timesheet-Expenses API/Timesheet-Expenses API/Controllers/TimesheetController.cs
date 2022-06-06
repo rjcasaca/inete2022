@@ -37,11 +37,18 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(ActivityUser_db);
         }
 
-        [HttpGet("{date};{userId}")]
-        public IActionResult GetUserWeekWorklog([FromRoute] DateTime date, int userId)
+        [HttpGet("{day};{month};{year};{userId}")]
+        public IActionResult GetUserWeekWorklog([FromRoute] int day, int month, int year, int userId)
         {
-            var weekWorklog_db = repos.GetUserWeekWorklog(date, userId);
+            var weekWorklog_db = repos.GetUserWeekWorklog(day, month, year, userId);
             return Ok(weekWorklog_db);
+        }
+
+        [HttpGet("{day};{month};{year}")]
+        public IActionResult GetMondayDate([FromRoute] int day, int month, int year)
+        {
+            var mondayDate_db = repos.GetMondayDate(day, month, year);
+            return Ok(mondayDate_db);
         }
 
         [HttpGet("{activityId}")]
@@ -56,13 +63,6 @@ namespace Timesheet_Expenses_API.Controllers
         {
             var projectInfo_db = repos.GetProjectInfo(projectId);
             return Ok(projectInfo_db);
-        }
-
-        [HttpGet("{fileContId}")]
-        public IActionResult GetFile([FromRoute] int fileContId)
-        {
-            var file_db = repos.GetFile(fileContId);
-            return Ok(file_db);
         }
 
         [HttpGet("{worklogId}")]

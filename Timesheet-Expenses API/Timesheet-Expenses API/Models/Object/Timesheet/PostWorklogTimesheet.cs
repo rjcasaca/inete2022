@@ -2,7 +2,9 @@
 {
     public class PostWorklogTimesheet
     {
-        public DateTime Date { get; set; }
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
         public decimal Hours { get; set; }
         public string Comment { get; set; }
         public int Activity { get; set; }
