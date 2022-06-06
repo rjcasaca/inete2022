@@ -11,7 +11,6 @@ namespace Timesheet_Expenses_API.Models
         [Required]
         public byte[] base64 { get; set; }
 
-        //Navigation Properties
-        public FileContent FileContent { get; set; }
+    
     }
 }

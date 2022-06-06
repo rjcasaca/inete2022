@@ -24,6 +24,14 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(user_db);
         }
 
+        [HttpGet("{user}")]
+        public IActionResult ValueAproved([FromRoute]int user)
+        {
+            var user_db = repos.ValueAproved(user);
+
+            return Ok(user_db);
+        }
+
         [HttpGet("{userid}")]
         public IActionResult GetExpenses([FromRoute] int userid)
         {
@@ -59,7 +67,7 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
-
+       
         [HttpPost]
         public IActionResult CreateBill(Bill bill)
         {

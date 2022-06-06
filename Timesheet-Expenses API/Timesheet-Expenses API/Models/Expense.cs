@@ -13,19 +13,17 @@ namespace Timesheet_Expenses_API.Models
 
         //Navigation Properties
         public int ExpenseTypeId { get; set; }
-        public ExpenseType ExpenseType { get; set; }
+       
 
         public int ExpenseStateId { get; set; }
-        public ExpenseState ExpenseState { get; set; }
+      
 
         public int UserId { get; set; }
-        public User User { get; set; }
+     
 
         public int ProjectId { get; set; }
-        public Project Project { get; set; }
-
-
-        public List<Expense_File> Expense_File { get; set; }
-        public List<Line> Line { get; set; }
+  
+     
+       
     }
 }

@@ -26,8 +26,7 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
 builder.Services.AddScoped<IActivityStateRepository, ActivityStateRepository>();
 builder.Services.AddScoped<IActivity_FileRepository, Activity_FileRepository>();
-builder.Services.AddScoped<ILineRepository, LineRepository>();
-builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+
 builder.Services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
 builder.Services.AddScoped<IExpense_FileRepository, Expense_FileRepository>();
 builder.Services.AddScoped<IFileContentRepository, FileContentRepository>();

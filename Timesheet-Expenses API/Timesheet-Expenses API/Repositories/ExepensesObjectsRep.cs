@@ -11,6 +11,8 @@ namespace Timesheet_Expenses_API.Repositories
         public bool PutLine(int expenseid);
         public bool CreateLine(LinesObj line);
         public bool CreateBill(Bill bill);
+        public decimal ValueAproved(int userid);
+     
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -36,13 +38,28 @@ namespace Timesheet_Expenses_API.Repositories
                 return 0;
             }
         }
+        public decimal ValueAproved(int userid)
+        {
+            try 
+            {
+                decimal Result = db.expenses.Where(l => l.ExpenseStateId.Equals(userid)).Sum(l => l.TotalMoney);
 
+
+                return Result;
+            }
+            catch {
+
+                return -1;
+            }
+        
+        
+        }
         //busca todas as expenses do user 
         public List<Expense> GetExpenses(int userId)
         {
             try
             {
-                List<Expense> lstexpenses = db.expenses.Where(e => e.User.User_Id.Equals(userId)).ToList();
+               List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userId)).ToList();
                 return lstexpenses;
             }
             catch
@@ -50,7 +67,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return new List<Expense>();
             }
         }
-
+        
         //criar um despesa
         public bool CreateExpense(ExpObj newExpense)
         {
@@ -60,15 +77,15 @@ namespace Timesheet_Expenses_API.Repositories
                 {
                     Date = newExpense.Date,
                     TotalMoney = 0,
-                    ExpenseType = db.expenseType.Find(db.expenseType.Where(et => et.Type.Equals(newExpense.ExpenseType)).FirstOrDefault().ExpenseType_Id),
-                    ExpenseState = db.expenseState.Find(db.expenseState.Where(es => es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id),
-                    Project = db.projects.Find(db.projects.Where(p => p.Project_Id.Equals(newExpense.project_id)).FirstOrDefault().Project_Id),
-                    User = db.users.Find(db.users.Where(u => u.User_Id.Equals(newExpense.User)).FirstOrDefault().User_Id)
+                    ExpenseTypeId = db.expenseType.Where(e => e.Type.Equals(newExpense.ExpenseType)).FirstOrDefault().ExpenseType_Id,
+                    ExpenseStateId= db.expenseState.Where(es=>es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id,
+                    UserId = GetUserId(newExpense.User),
+                    ProjectId= db.projects.Where(p => p.Name.Equals(newExpense.project_name)).FirstOrDefault().Project_Id
                 };
                 db.expenses.Add(obj);
                 db.SaveChanges();
 
-                return false;
+                return true;
             }
             catch
             {
@@ -81,7 +98,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var TotalMoney = db.lines.Where(l => l.Expense.Equals(expenseid)).Sum(l => l.UnityPrice);
+                var TotalMoney = db.lines.Where(l => l.ExpenseId.Equals(expenseid)).Sum(l => l.UnityPrice);
 
                 var expense = db.expenses.Find(expenseid);
                 expense.TotalMoney = TotalMoney;
@@ -100,17 +117,19 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateLine(LinesObj line)
         {
             try
-            {
+            { 
                 var obj = new Line
                 {
 
                     UnityPrice = line.UnityPrice,
                     Date = line.Date,
-                    Expense = db.expenses.Find(line.Expense)
-                };
+                    ExpenseId = line.Expense
+                    
+            };
                 db.lines.Add(obj);
                 db.SaveChanges();
-
+                
+                PutLine(obj.ExpenseId);
                 return true;
             }
             catch
@@ -118,7 +137,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-
+       
         public bool CreateBill(Bill bill)
         {
             try

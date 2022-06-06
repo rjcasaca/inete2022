@@ -14,7 +14,7 @@ namespace Timesheet_Expenses_API.Models
             builder.Entity<Activity_File>().HasKey(af => new { af.ActivityId, af.FileContentId });
             builder.Entity<Expense_File>().HasKey(ef => new { ef.FileContentId, ef.ExpenseId });
             builder.Entity<User_Activity>().HasKey(ua => new {ua.UserId, ua.ActivityId});
-            builder.Entity<File>().HasOne(f => f.FileContent).WithOne(c => c.File).HasForeignKey<FileContent>(fc => fc.FileId);
+           
         }
 
         public DbSet<User> users { get; set; }
