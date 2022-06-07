@@ -8,8 +8,8 @@ namespace Timesheet_Expenses_API.Repositories
     {
         public int GetUserId(string email);
         public WorklogCompleteInfo GetWorklog(int worklogId);
-        public bool CreateWorklog(PostWorklogTimesheet worklog, int userId);
-        public bool UpdateWorklog(PutWorklogTimesheet worklog);
+        public bool CreateWorklog(int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
+        public bool UpdateWorklog(int worklogId, decimal hours, string comment, string billingType, string worklogState);
         public bool DeleteWorklog(int worklogId);
         public List<ProjectsIdName> GetProjectUser(int userId);
         public List<ActivityIdName> GetActivityUser(int userId, int projectId);
@@ -55,6 +55,7 @@ namespace Timesheet_Expenses_API.Repositories
             {
                 var worklog = db.worklogs.Find(worklogId);
                 WorklogCompleteInfo wlInfo = new WorklogCompleteInfo();
+                wlInfo.WorklogId = worklogId;
                 wlInfo.ActivityName = db.activities.Find(worklog.ActivityId).Name;
                 wlInfo.ActivityId = worklog.ActivityId;
                 wlInfo.BillingType = db.billingTypes.Find(worklog.BillingTypeId).Type;
@@ -77,20 +78,20 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //cria um objecto do tipo Worklog e adiciona os dados do mesmo à base de dados
-        public bool CreateWorklog(PostWorklogTimesheet worklog, int userId)
+        public bool CreateWorklog(int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
             try
             {
-                DateTime date = Convert.ToDateTime(worklog.Day + "-" + worklog.Month + "-" + worklog.Year);
+                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
                 var worklog_db = new Worklog
                 {
                     Date = date,
-                    Hours = worklog.Hours,
-                    Comment = worklog.Comment,
+                    Hours = hours,
+                    Comment = comment,
                     User = db.users.Find(userId),
-                    Activity = db.activities.Find(worklog.Activity),
-                    WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklog.WorklogState)).FirstOrDefault().WorklogState_Id),
-                    BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(worklog.BillingType)).FirstOrDefault().BillingType_Id)
+                    Activity = db.activities.Find(activity),
+                    WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklogState)).FirstOrDefault().WorklogState_Id),
+                    BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(billingType)).FirstOrDefault().BillingType_Id)
                 };
                 //adiciona à base de dados e salva as alterações
                 db.worklogs.Add(worklog_db);
@@ -105,20 +106,17 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe os novos valores de uma worklog e atualiza os mesmos
-        public bool UpdateWorklog(PutWorklogTimesheet worklog)
+        public bool UpdateWorklog(int worklogId, decimal hours, string comment, string billingType, string worklogState)
         {
             try
             {
-                DateTime date = Convert.ToDateTime(worklog.Day + "-" + worklog.Month + "-" + worklog.Year);
                 //procura o registo com o id indicado
-                var worklog_db = db.worklogs.Find(worklog.worklogId);
+                var worklog_db = db.worklogs.Find(worklogId);
                 //atualiza os dados igualando os mesmos
-                worklog_db.Date = date;
-                worklog_db.Hours = worklog.Hours;
-                worklog_db.Comment = worklog.Comment;
-                worklog_db.Activity = db.activities.Find(worklog.Activity);
-                worklog_db.WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklog.WorklogState)).FirstOrDefault().WorklogState_Id);
-                worklog_db.BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(worklog.BillingType)).FirstOrDefault().BillingType_Id);
+                worklog_db.Hours = hours;
+                worklog_db.Comment = comment;
+                worklog_db.WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklogState)).FirstOrDefault().WorklogState_Id);
+                worklog_db.BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(billingType)).FirstOrDefault().BillingType_Id);
                 db.SaveChanges();
 
                 return true;
@@ -270,51 +268,29 @@ namespace Timesheet_Expenses_API.Repositories
                             wli.worklogId = wl.Cod_Worklog;
                             wli.Hours = wl.Hours;
                             //ver o dia da semana
-                            if (wl.Date.DayOfWeek == DayOfWeek.Monday)
+                            switch (wl.Date.DayOfWeek)
                             {
-                                tw.Monday = wli;
-                            }
-                            else
-                            {
-                                if (wl.Date.DayOfWeek == DayOfWeek.Tuesday)
-                                {
+                                case DayOfWeek.Monday:
+                                    tw.Monday = wli;
+                                    break;
+                                case DayOfWeek.Tuesday:
                                     tw.Tuesday = wli;
-                                }
-                                else
-                                {
-                                    if (wl.Date.DayOfWeek == DayOfWeek.Wednesday)
-                                    {
-                                        tw.Wednesday = wli;
-                                    }
-                                    else
-                                    {
-                                        if (wl.Date.DayOfWeek == DayOfWeek.Thursday)
-                                        {
-                                            tw.Thursday = wli;
-                                        }
-                                        else
-                                        {
-                                            if (wl.Date.DayOfWeek == DayOfWeek.Friday)
-                                            {
-                                                tw.Friday = wli;
-                                            }
-                                            else
-                                            {
-                                                if (wl.Date.DayOfWeek == DayOfWeek.Saturday)
-                                                {
-                                                    tw.Saturday = wli;
-                                                }
-                                                else
-                                                {
-                                                    if (wl.Date.DayOfWeek == DayOfWeek.Sunday)
-                                                    {
-                                                        tw.Sunday = wli;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
+                                    break;
+                                case DayOfWeek.Wednesday:
+                                    tw.Wednesday = wli;
+                                    break;
+                                case DayOfWeek.Thursday:
+                                    tw.Thursday = wli;
+                                    break;
+                                case DayOfWeek.Friday:
+                                    tw.Friday = wli;
+                                    break;
+                                case DayOfWeek.Saturday:
+                                    tw.Saturday = wli;
+                                    break;
+                                case DayOfWeek.Sunday:
+                                    tw.Sunday = wli;
+                                    break;
                             }
                         }
                     }
@@ -463,73 +439,50 @@ namespace Timesheet_Expenses_API.Repositories
                 MondayDate mondayDate = new MondayDate();
                 DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
 
-                if (date.DayOfWeek == DayOfWeek.Monday)
+                switch (date.DayOfWeek)
                 {
-                    mondayDate.Day = day;
-                    mondayDate.Month = month;
-                    mondayDate.Year = year;
-                }
-                else
-                {
-                    if (date.DayOfWeek == DayOfWeek.Tuesday)
-                    {
+                    case DayOfWeek.Monday:
+                        mondayDate.Day = day;
+                        mondayDate.Month = month;
+                        mondayDate.Year = year;
+                        break;
+                    case DayOfWeek.Tuesday:
                         date = date.AddDays(-1);
                         mondayDate.Day = date.Day;
                         mondayDate.Month = date.Month;
                         mondayDate.Year = date.Year;
-                    }
-                    else
-                    {
-                        if (date.DayOfWeek == DayOfWeek.Wednesday)
-                        {
-                            date = date.AddDays(-2);
-                            mondayDate.Day = date.Day;
-                            mondayDate.Month = date.Month;
-                            mondayDate.Year = date.Year;
-                        }
-                        else
-                        {
-                            if (date.DayOfWeek == DayOfWeek.Thursday)
-                            {
-                                date = date.AddDays(-3);
-                                mondayDate.Day = date.Day;
-                                mondayDate.Month = date.Month;
-                                mondayDate.Year = date.Year;
-                            }
-                            else
-                            {
-                                if (date.DayOfWeek == DayOfWeek.Friday)
-                                {
-                                    date = date.AddDays(-4);
-                                    mondayDate.Day = date.Day;
-                                    mondayDate.Month = date.Month;
-                                    mondayDate.Year = date.Year;
-                                }
-                                else
-                                {
-                                    if (date.DayOfWeek == DayOfWeek.Saturday)
-                                    {
-                                        date = date.AddDays(-5);
-                                        mondayDate.Day = date.Day;
-                                        mondayDate.Month = date.Month;
-                                        mondayDate.Year = date.Year;
-                                    }
-                                    else
-                                    {
-                                        if (date.DayOfWeek == DayOfWeek.Sunday)
-                                        {
-                                            date = date.AddDays(-6);
-                                            mondayDate.Day = date.Day;
-                                            mondayDate.Month = date.Month;
-                                            mondayDate.Year = date.Year;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                        break;
+                    case DayOfWeek.Wednesday:
+                        date = date.AddDays(-2);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                        break;
+                    case DayOfWeek.Thursday:
+                        date = date.AddDays(-3);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                        break;
+                    case DayOfWeek.Friday:
+                        date = date.AddDays(-4);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                        break;
+                    case DayOfWeek.Saturday:
+                        date = date.AddDays(-5);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                        break;
+                    case DayOfWeek.Sunday:
+                        date = date.AddDays(-6);
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
+                        break;
                 }
-
                 return mondayDate;
             }
             catch

@@ -86,28 +86,28 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(worklogId_db);
         }
 
-        [HttpPost]
-        public IActionResult PostWorklog(PostWorklogTimesheet worklog, int userId)
+        [HttpPost("{day};{month};{year};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
+        public IActionResult CreateWorklog([FromRoute] int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
-            if (repos.CreateWorklog(worklog, userId))
+            if (repos.CreateWorklog(day, month, year, hours, comment, activity, billingType, worklogState, userId))
                 return Ok();
 
             return BadRequest();
         }
 
-        [HttpPut]
-        public IActionResult UpdateWorklog(PutWorklogTimesheet worklog)
+        [HttpPut("{worklogId};{hours};{comment};{billingType};{worklogState}")]
+        public IActionResult UpdateWorklog([FromRoute] int worklogId, decimal hours, string comment, string billingType, string worklogState)
         {
-            if (repos.UpdateWorklog(worklog))
+            if (repos.UpdateWorklog(worklogId, hours, comment, billingType, worklogState))
                 return Ok();
 
             return BadRequest();
         }
 
         [HttpDelete("{worklogId}")]
-        public IActionResult DeleteWorklog([FromRoute] int worklog)
+        public IActionResult DeleteWorklog([FromRoute] int worklogId)
         {
-            if (repos.DeleteWorklog(worklog))
+            if (repos.DeleteWorklog(worklogId))
                 return Ok();
 
             return BadRequest();

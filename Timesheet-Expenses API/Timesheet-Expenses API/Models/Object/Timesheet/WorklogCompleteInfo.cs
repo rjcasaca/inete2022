@@ -3,6 +3,7 @@
     public class WorklogCompleteInfo
     {
         public string ActivityName { get; set; }
+        public int WorklogId { get; set; }
         public int ActivityId { get; set; }
         public string Comment { get; set; }
         public string WorklogState { get; set; }
