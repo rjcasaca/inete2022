@@ -12,27 +12,6 @@ builder.Services.AddControllers();
 //ConString
 builder.Services.AddDbContext<_DbContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserFunctionRepository, UserFunctionRepository>();
-builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<IProjectStateRepository, ProjectStateRepository>();
-builder.Services.AddScoped<IWorklogStateRepository, WorklogStateRepository>();
-builder.Services.AddScoped<IBillingTypeRepository, BillingTypeRepository>();
-builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<ITeamRepository, TeamRepository>();
-builder.Services.AddScoped<IWorklogRepository, WorklogRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
-builder.Services.AddScoped<IActivityTypeRepository, ActivityTypeRepository>();
-builder.Services.AddScoped<IActivityStateRepository, ActivityStateRepository>();
-builder.Services.AddScoped<IActivity_FileRepository, Activity_FileRepository>();
-
-builder.Services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
-builder.Services.AddScoped<IExpense_FileRepository, Expense_FileRepository>();
-builder.Services.AddScoped<IFileContentRepository, FileContentRepository>();
-builder.Services.AddScoped<IFileContentTypeRepository, FileContentTypeRepository>();
-builder.Services.AddScoped<IFileRepository, FileRepository>();
-builder.Services.AddScoped<IExpenseStateRepository, ExpenseStateRepository>();
 builder.Services.AddScoped<ITimesheetRepository, TimesheetRepository>();
 builder.Services.AddScoped<IExepensesObjectsRep, ExepensesObjectsRep>();
 #endregion
