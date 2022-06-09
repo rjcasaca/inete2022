@@ -7,7 +7,7 @@ namespace Timesheet_Expenses_API.Repositories
     {
         public int GetUserId(string email);
         public List<Expense> GetExpenses(int userId);
-        public bool CreateExpense(ExpObj expense);
+        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney);
         public bool PutLine(int expenseid);
         public bool CreateLine(LinesObj line);
         public bool CreateBill(Bill bill);
@@ -82,24 +82,24 @@ namespace Timesheet_Expenses_API.Repositories
                 return new List<Expense>();
             }
         }
-        
+
         //criar um despesa
-        public bool CreateExpense(ExpObj newExpense)
+        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney)
         {
             try
             {
-                var obj = new Expense
+                Expense obj = new Expense
                 {
-                    Date = newExpense.Date,
-                    TotalMoney = 0,
-                    ExpenseTypeId = db.expenseType.Where(e => e.Type.Equals(newExpense.ExpenseType)).FirstOrDefault().ExpenseType_Id,
-                    ExpenseStateId= db.expenseState.Where(es=>es.State.Equals(newExpense.ExpenseState)).FirstOrDefault().ExpenseState_Id,
-                    UserId = GetUserId(newExpense.User),
-                    ProjectId= db.projects.Where(p => p.Name.Equals(newExpense.project_name)).FirstOrDefault().Project_Id
+                    Date = data,
+                    TotalMoney = TotalMoney,
+                    ExpenseTypeId = db.expenseType.Where(e => e.Type.Equals(ExpenseType)).FirstOrDefault().ExpenseType_Id,
+                    ExpenseStateId = db.expenseState.Where(es => es.State.Equals(ExpenseStateId)).FirstOrDefault().ExpenseState_Id,
+                    UserId = GetUserId(email),
+                    ProjectId = db.projects.Where(p => p.Name.Equals(ProjectId)).FirstOrDefault().Project_Id
                 };
                 db.expenses.Add(obj);
                 db.SaveChanges();
-
+                 
                 return true;
             }
             catch

@@ -46,10 +46,10 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(userid);
         }
-        [HttpPost]
-        public IActionResult CreateExpense(ExpObj expense)
+        [HttpPost("{data};{ExpenseType};{ExpenseStateId};{email};{ProjectId};{TotalMoney}")]
+        public IActionResult CreateExpense([FromRoute] DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney)
         {
-            if (repos.CreateExpense(expense))
+            if (repos.CreateExpense(data, ExpenseType, ExpenseStateId, email, ProjectId, TotalMoney))
                 return Ok();
 
             return BadRequest();
