@@ -9,6 +9,7 @@ namespace Timesheet_Expenses_API.Repositories
         public int GetUserId(string email);
         public WorklogCompleteInfo GetWorklog(int worklogId);
         public bool CreateWorklog(int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
+        public bool CreateWorklogByPeriod(int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
         public bool UpdateWorklog(int worklogId, decimal hours, string comment, string billingType, string worklogState);
         public bool DeleteWorklog(int worklogId);
         public List<ProjectsIdName> GetProjectUser(int userId);
@@ -16,9 +17,9 @@ namespace Timesheet_Expenses_API.Repositories
         public List<TimesheetWorklog> GetUserWeekWorklog(int day, int month, int year, int userId);
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
-        public MondayDate GetMondayDate(int day, int month, int year);
         public List<string> GetBillingTypes();
         public List<string> GetWorklogState();
+        public Date AddDays(int day, int month, int year, int AddDays);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -105,6 +106,41 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
+        //cria um objecto do tipo Worklog para cada dia de entre duas datas e adiciona os dados do mesmo à base de dados
+        public bool CreateWorklogByPeriod(int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        {
+            try
+            {
+                DateTime StartDate = Convert.ToDateTime(Sday + "-" + Smonth + "-" + Syear);
+                DateTime EndDate = Convert.ToDateTime(Eday + "-" + Emonth + "-" + Eyear);
+
+                while (StartDate != EndDate)
+                {
+                    var worklog_db = new Worklog
+                    {
+                        Date = StartDate,
+                        Hours = hours,
+                        Comment = comment,
+                        User = db.users.Find(userId),
+                        Activity = db.activities.Find(activity),
+                        WorklogState = db.worklogStates.Find(db.worklogStates.Where(ws => ws.State.Equals(worklogState)).FirstOrDefault().WorklogState_Id),
+                        BillingType = db.billingTypes.Find(db.billingTypes.Where(bt => bt.Type.Equals(billingType)).FirstOrDefault().BillingType_Id)
+                    };
+                    //adiciona à base de dados e salva as alterações
+                    db.worklogs.Add(worklog_db);
+                    db.SaveChanges();
+                    //adiciono um dia à data inicial
+                    StartDate = StartDate.AddDays(1);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         //recebe os novos valores de uma worklog e atualiza os mesmos
         public bool UpdateWorklog(int worklogId, decimal hours, string comment, string billingType, string worklogState)
         {
@@ -171,10 +207,13 @@ namespace Timesheet_Expenses_API.Repositories
                         //caso seja igual adicionar o mesmo à lista
                         if (a.Activity_Id == i)
                         {
-                            ActivityIdName actUser = new ActivityIdName();
-                            actUser.ActivityId = a.Activity_Id;
-                            actUser.ActivityName = a.Name;
-                            ActivityUsers.Add(actUser);
+                            if (a.ActivityStateId != 2)
+                            {
+                                ActivityIdName actUser = new ActivityIdName();
+                                actUser.ActivityId = a.Activity_Id;
+                                actUser.ActivityName = a.Name;
+                                ActivityUsers.Add(actUser);
+                            }
                         }
                     }
                 }
@@ -199,10 +238,13 @@ namespace Timesheet_Expenses_API.Repositories
                 foreach (Team t in team)
                 {
                     var proj = db.projects.Find(t.ProjectId);
-                    var pInfo = new ProjectsIdName();
-                    pInfo.projectId = proj.Project_Id;
-                    pInfo.PorjectName = proj.Name;
-                    projectsInfo.Add(pInfo);
+                    if (proj.ProjectStateId != 2)
+                    {
+                        var pInfo = new ProjectsIdName();
+                        pInfo.projectId = proj.Project_Id;
+                        pInfo.PorjectName = proj.Name;
+                        projectsInfo.Add(pInfo);
+                    }
                 }
 
                 return projectsInfo;
@@ -431,20 +473,61 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        //recebe uma data e retorna uma data da segunda feira da data recebida
-        public MondayDate GetMondayDate(int day, int month, int year)
+        //retorna todos os billing types
+        public List<string> GetBillingTypes()
         {
             try
             {
-                MondayDate mondayDate = new MondayDate();
-                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
+                List<string> BillingTypes = new List<string>();
+                var BillingTypesObj = db.billingTypes.ToList();
+                foreach (BillingType bt in BillingTypesObj)
+                {
+                    BillingTypes.Add(bt.Type);
+                }
 
+                return BillingTypes;
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
+        //retorna todos os worklog states
+        public List<string> GetWorklogState()
+        {
+            try
+            {
+                List<string> WorklogState = new List<string>();
+                var WorklogStateObj = db.worklogStates.ToList();
+                foreach (WorklogState bt in WorklogStateObj)
+                {
+                    WorklogState.Add(bt.State);
+                }
+
+                return WorklogState;
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
+
+        //adiciona o numero de dias referidos na data recebida, retorna a segunda feira da data já com os dias adicionados
+        public Date AddDays(int day, int month, int year, int AddDays)
+        {
+            try
+            {
+                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
+                Date mondayDate = new Date();
+
+                date = date.AddDays(AddDays);
                 switch (date.DayOfWeek)
                 {
                     case DayOfWeek.Monday:
-                        mondayDate.Day = day;
-                        mondayDate.Month = month;
-                        mondayDate.Year = year;
+                        mondayDate.Day = date.Day;
+                        mondayDate.Month = date.Month;
+                        mondayDate.Year = date.Year;
                         break;
                     case DayOfWeek.Tuesday:
                         date = date.AddDays(-1);
@@ -483,51 +566,12 @@ namespace Timesheet_Expenses_API.Repositories
                         mondayDate.Year = date.Year;
                         break;
                 }
+
                 return mondayDate;
             }
             catch
             {
-                return new MondayDate();
-            }
-        }
-
-        //retorna todos os billing types
-        public List<string> GetBillingTypes()
-        {
-            try
-            {
-                List<string> BillingTypes = new List<string>();
-                var BillingTypesObj = db.billingTypes.ToList();
-                foreach (BillingType bt in BillingTypesObj)
-                {
-                    BillingTypes.Add(bt.Type);
-                }
-
-                return BillingTypes;
-            }
-            catch
-            {
-                return new List<string>();
-            }
-        }
-
-        //retorna todos os worklog states
-        public List<string> GetWorklogState()
-        {
-            try
-            {
-                List<string> WorklogState = new List<string>();
-                var WorklogStateObj = db.worklogStates.ToList();
-                foreach (WorklogState bt in WorklogStateObj)
-                {
-                    WorklogState.Add(bt.State);
-                }
-
-                return WorklogState;
-            }
-            catch
-            {
-                return new List<string>();
+                return new Date();
             }
         }
     }

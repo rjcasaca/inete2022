@@ -58,11 +58,11 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(weekWorklog_db);
         }
 
-        [HttpGet("{day};{month};{year}")]
-        public IActionResult GetMondayDate([FromRoute] int day, int month, int year)
+        [HttpGet("{day};{month};{year};{AddDays}")]
+        public IActionResult AddDays([FromRoute] int day, int month, int year, int AddDays)
         {
-            var mondayDate_db = repos.GetMondayDate(day, month, year);
-            return Ok(mondayDate_db);
+            var newDate_db = repos.AddDays(day, month, year, AddDays);
+            return Ok(newDate_db);
         }
 
         [HttpGet("{activityId}")]
@@ -90,6 +90,15 @@ namespace Timesheet_Expenses_API.Controllers
         public IActionResult CreateWorklog([FromRoute] int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
             if (repos.CreateWorklog(day, month, year, hours, comment, activity, billingType, worklogState, userId))
+                return Ok();
+
+            return BadRequest();
+        }
+
+        [HttpPost("{Eday};{Emonth};{Eyear};{Sday};{Smonth};{Syear};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
+        public IActionResult CreateWorklogByPeriod([FromRoute] int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        {
+            if (repos.CreateWorklogByPeriod(Eday, Emonth, Eyear, Sday, Smonth, Syear, hours, comment, activity, billingType, worklogState, userId))
                 return Ok();
 
             return BadRequest();
