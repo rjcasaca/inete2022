@@ -13,6 +13,8 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateBill(Bill bill);
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
+        public decimal ValuePending(int userid);
+        public decimal ValueDenied(int userid);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -38,21 +40,80 @@ namespace Timesheet_Expenses_API.Repositories
                 return 0;
             }
         }
+        //Busca Valor Aprovado
         public decimal ValueAproved(int userid)
         {
-            try 
+            try
             {
-                decimal Result = db.expenses.Where(l => l.ExpenseStateId.Equals(userid)).Sum(l => l.TotalMoney);
-
-
-                return Result;
+                decimal result = 0;
+                List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
+                foreach(Expense exp in lstexpenses) 
+                {
+                    if (exp.ExpenseStateId == 1) 
+                    {
+                        result += exp.TotalMoney;
+                    
+                    
+                    }
+                
+                }
+                return result ;
             }
-            catch {
-
-                return -1;
+            catch
+            {
+                return 0;
             }
-        
-        
+
+        }
+        //Busca Valor PEndente
+        public decimal ValuePending(int userid)
+        {
+            try
+            {
+                decimal result = 0;
+                List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
+                foreach (Expense exp in lstexpenses)
+                {
+                    if (exp.ExpenseStateId == 3)
+                    {
+                        result += exp.TotalMoney;
+
+
+                    }
+
+                }
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+        //Busca Valor Rejeitado
+        public decimal ValueDenied(int userid)
+        {
+            try
+            {
+                decimal result = 0;
+                List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
+                foreach (Expense exp in lstexpenses)
+                {
+                    if (exp.ExpenseStateId == 2)
+                    {
+                        result += exp.TotalMoney;
+
+
+                    }
+
+                }
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+
         }
         public List<ExpenseType> GetTypeList(int user)
         {
@@ -82,12 +143,11 @@ namespace Timesheet_Expenses_API.Repositories
                 return new List<Expense>();
             }
         }
-
         //criar um despesa
         public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney)
         {
-            try
-            {
+            try { 
+           
                 Expense obj = new Expense
                 {
                     Date = data,
@@ -107,7 +167,6 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-
         //Calcula o valor Total gasto
         public bool PutLine(int expenseid)
         {
@@ -127,8 +186,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-
-        //cria um line 
+        //cria um line
         public bool CreateLine(LinesObj line)
         {
             try
@@ -152,7 +210,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-       
+       //Crianção da Fatura
         public bool CreateBill(Bill bill)
         {
             try
@@ -194,6 +252,18 @@ namespace Timesheet_Expenses_API.Repositories
             {
                 return false;
             }
+        }
+        public bool Update(string Newstate,int idExpense)
+        {
+            try 
+            {var expID= db.expenseState.Where(es => es.State.Equals(Newstate)).FirstOrDefault().ExpenseState_Id;
+                var expense = db.expenses.Find(idExpense);
+                expense.ExpenseStateId = expID;
+                db.SaveChanges();
+                return true;
+            } 
+            catch { return false; }
+
         }
 
     }

@@ -31,7 +31,20 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user_db);
         }
+        [HttpGet("{user}")]
+        public IActionResult ValuePending([FromRoute] int user)
+        {
+            var user_db = repos.ValuePending(user);
 
+            return Ok(user_db);
+        }
+        [HttpGet("{user}")]
+        public IActionResult ValueDenied([FromRoute] int user)
+        {
+            var user_db = repos.ValueDenied(user);
+
+            return Ok(user_db);
+        }
         [HttpGet("{userid}")]
         public IActionResult GetExpenses([FromRoute] int userid)
         {

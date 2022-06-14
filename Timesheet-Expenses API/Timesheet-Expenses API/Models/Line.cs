@@ -12,6 +12,7 @@ namespace Timesheet_Expenses_API.Models
 
         //Navigation Properties
         public int ExpenseId { get; set; }
+        public Expense Expenseid { get; set; }
         
     }
 }
