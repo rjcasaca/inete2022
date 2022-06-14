@@ -51,17 +51,17 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(ActivityUser_db);
         }
 
-        [HttpGet("{day};{month};{year};{userId}")]
-        public IActionResult GetUserWeekWorklog([FromRoute] int day, int month, int year, int userId)
+        [HttpGet("{date};{userId}")]
+        public IActionResult GetUserWeekWorklog([FromRoute] DateTime date, int userId)
         {
-            var weekWorklog_db = repos.GetUserWeekWorklog(day, month, year, userId);
+            var weekWorklog_db = repos.GetUserWeekWorklog(date, userId);
             return Ok(weekWorklog_db);
         }
 
-        [HttpGet("{day};{month};{year};{AddDays}")]
-        public IActionResult AddDays([FromRoute] int day, int month, int year, int AddDays)
+        [HttpGet("{date};{AddDays}")]
+        public IActionResult AddDays([FromRoute] DateTime date, int AddDays)
         {
-            var newDate_db = repos.AddDays(day, month, year, AddDays);
+            var newDate_db = repos.AddDays(date, AddDays);
             return Ok(newDate_db);
         }
 
@@ -86,40 +86,32 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(worklogId_db);
         }
 
-        [HttpPost("{day};{month};{year};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
-        public IActionResult CreateWorklog([FromRoute] int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        [HttpPost("{date};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
+        public IActionResult CreateWorklog([FromRoute] DateTime date, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
-            if (repos.CreateWorklog(day, month, year, hours, comment, activity, billingType, worklogState, userId))
-                return Ok();
-
-            return BadRequest();
+            var createWl = repos.CreateWorklog(date, hours, comment, activity, billingType, worklogState, userId);
+            return Ok(createWl);
         }
 
-        [HttpPost("{Eday};{Emonth};{Eyear};{Sday};{Smonth};{Syear};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
-        public IActionResult CreateWorklogByPeriod([FromRoute] int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        [HttpPost("{EndDate};{StartDate};{hours};{comment};{activity};{billingType};{worklogState};{userId}")]
+        public IActionResult CreateWorklogByPeriod([FromRoute] DateTime EndDate, DateTime StartDate, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
-            if (repos.CreateWorklogByPeriod(Eday, Emonth, Eyear, Sday, Smonth, Syear, hours, comment, activity, billingType, worklogState, userId))
-                return Ok();
-
-            return BadRequest();
+            var createWl = repos.CreateWorklogByPeriod(EndDate, StartDate, hours, comment, activity, billingType, worklogState, userId);
+            return Ok(createWl);
         }
 
         [HttpPut("{worklogId};{hours};{comment};{billingType};{worklogState}")]
         public IActionResult UpdateWorklog([FromRoute] int worklogId, decimal hours, string comment, string billingType, string worklogState)
         {
-            if (repos.UpdateWorklog(worklogId, hours, comment, billingType, worklogState))
-                return Ok();
-
-            return BadRequest();
+            var updateWl = repos.UpdateWorklog(worklogId, hours, comment, billingType, worklogState);
+            return Ok(updateWl);
         }
 
         [HttpDelete("{worklogId}")]
         public IActionResult DeleteWorklog([FromRoute] int worklogId)
         {
-            if (repos.DeleteWorklog(worklogId))
-                return Ok();
-
-            return BadRequest();
+            var deleteWl = repos.DeleteWorklog(worklogId);
+            return Ok(deleteWl);
         }
     }
 }

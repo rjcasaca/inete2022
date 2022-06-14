@@ -8,18 +8,18 @@ namespace Timesheet_Expenses_API.Repositories
     {
         public int GetUserId(string email);
         public WorklogCompleteInfo GetWorklog(int worklogId);
-        public bool CreateWorklog(int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
-        public bool CreateWorklogByPeriod(int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
+        public bool CreateWorklog(DateTime date, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
+        public bool CreateWorklogByPeriod(DateTime EndDate, DateTime StartDate, decimal hours, string comment, int activity, string billingType, string worklogState, int userId);
         public bool UpdateWorklog(int worklogId, decimal hours, string comment, string billingType, string worklogState);
         public bool DeleteWorklog(int worklogId);
         public List<ProjectsIdName> GetProjectUser(int userId);
         public List<ActivityIdName> GetActivityUser(int userId, int projectId);
-        public List<TimesheetWorklog> GetUserWeekWorklog(int day, int month, int year, int userId);
+        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId);
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
         public List<string> GetBillingTypes();
         public List<string> GetWorklogState();
-        public Date AddDays(int day, int month, int year, int AddDays);
+        public Date AddDays(DateTime date, int AddDays);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -79,11 +79,28 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //cria um objecto do tipo Worklog e adiciona os dados do mesmo à base de dados
-        public bool CreateWorklog(int day, int month, int year, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        public bool CreateWorklog(DateTime date, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
             try
             {
-                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
+                //verifica se esta worklog existe
+                var verifWL1 = db.worklogs.Where(wl => wl.Date.Equals(date) && wl.ActivityId.Equals(activity) && wl.UserId.Equals(userId)).ToList();
+                if (verifWL1.Count() != 0)
+                    throw new Exception("This worklog already exists!!");
+
+                //verifica se neste dia o total de horas já excedeu as 24 horas
+                var verifWL2 = db.worklogs.Where(wl => wl.Date.Equals(date) && wl.UserId.Equals(userId)).ToList();
+                decimal dayHours = hours;
+                foreach (Worklog wl in verifWL2)
+                {
+                    dayHours += wl.Hours;
+                }
+                if (dayHours > 24)
+                {
+                    throw new Exception("Excedeu as horas de um dia!");
+                }
+
+                //cria a worklog
                 var worklog_db = new Worklog
                 {
                     Date = date,
@@ -107,15 +124,36 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //cria um objecto do tipo Worklog para cada dia de entre duas datas e adiciona os dados do mesmo à base de dados
-        public bool CreateWorklogByPeriod(int Eday, int Emonth, int Eyear, int Sday, int Smonth, int Syear, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
+        public bool CreateWorklogByPeriod(DateTime EndDate, DateTime StartDate, decimal hours, string comment, int activity, string billingType, string worklogState, int userId)
         {
             try
             {
-                DateTime StartDate = Convert.ToDateTime(Sday + "-" + Smonth + "-" + Syear);
-                DateTime EndDate = Convert.ToDateTime(Eday + "-" + Emonth + "-" + Eyear);
+                //verifica se existe alguma workog no periodo escolhido
+                DateTime DateAux = StartDate;
+                while (DateAux != EndDate)
+                {
+                    var verifWL = db.worklogs.Where(wl => wl.Date.Equals(DateAux) && wl.ActivityId.Equals(activity) && wl.UserId.Equals(userId)).ToList();
+                    if (verifWL.Count() != 0)
+                        throw new Exception("This worklog already exists!!");
+
+                    //verifica se neste dia o total de horas já excedeu as 24 horas
+                    var verifWL2 = db.worklogs.Where(wl => wl.Date.Equals(DateAux) && wl.UserId.Equals(userId)).ToList();
+                    decimal dayHours = hours;
+                    foreach (Worklog wl in verifWL2)
+                    {
+                        dayHours += wl.Hours;
+                    }
+                    if (dayHours > 24)
+                    {
+                        throw new Exception("Excedeu as horas de um dia!");
+                    }
+
+                    DateAux = DateAux.AddDays(1);
+                }
 
                 while (StartDate != EndDate)
                 {
+                    // cria a worklog
                     var worklog_db = new Worklog
                     {
                         Date = StartDate,
@@ -256,11 +294,10 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //recebe a data indicada e devolve uma lista com todas as worklogs do user
-        public List<TimesheetWorklog> GetUserWeekWorklog(int day, int month, int year, int userId)
+        public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId)
         {
             try
             {
-                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
                 List<TimesheetWorklog> TimesheetWorklogs = new List<TimesheetWorklog>();
 
                 //vai percorrer a semana toda e adicionar todas as worklogs da semana do user indicado a uma lista
@@ -514,11 +551,10 @@ namespace Timesheet_Expenses_API.Repositories
         }
 
         //adiciona o numero de dias referidos na data recebida, retorna a segunda feira da data já com os dias adicionados
-        public Date AddDays(int day, int month, int year, int AddDays)
+        public Date AddDays(DateTime date, int AddDays)
         {
             try
             {
-                DateTime date = Convert.ToDateTime(day + "-" + month + "-" + year);
                 Date mondayDate = new Date();
 
                 date = date.AddDays(AddDays);
