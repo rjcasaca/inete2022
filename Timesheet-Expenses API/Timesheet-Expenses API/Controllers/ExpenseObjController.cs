@@ -84,6 +84,14 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
+        [HttpPut]
+        public IActionResult UpdateState(int expenseid, string newstate)
+        {
+            if (repos.UpdateState(expenseid, newstate))
+                return Ok();
+
+            return BadRequest();
+        }
 
         [HttpPost]
         public IActionResult CreateLine(LinesObj line)

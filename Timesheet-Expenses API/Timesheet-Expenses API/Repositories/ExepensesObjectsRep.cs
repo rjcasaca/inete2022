@@ -16,6 +16,7 @@ namespace Timesheet_Expenses_API.Repositories
         public decimal ValuePending(int userid);
         public decimal ValueDenied(int userid);
         public decimal ValueTotal(int userid);
+        public bool UpdateState(int expenseid, string newstate);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -201,6 +202,25 @@ namespace Timesheet_Expenses_API.Repositories
 
                 var expense = db.expenses.Find(expenseid);
                 expense.TotalMoney = TotalMoney;
+                db.SaveChanges();
+
+                return true;
+            }
+            catch
+            {
+
+                return false;
+            }
+        }
+        public bool UpdateState(int expenseid, string newstate)
+        {
+            try
+            {
+                var expense = db.expenses.Where(e => e.ExpenseStateId.Equals(expenseid)).FirstOrDefault();
+                expense.ExpenseStateId = db.expenseState.Where(es => es.State.Equals(newstate)).FirstOrDefault().ExpenseState_Id;
+
+                
+               
                 db.SaveChanges();
 
                 return true;
