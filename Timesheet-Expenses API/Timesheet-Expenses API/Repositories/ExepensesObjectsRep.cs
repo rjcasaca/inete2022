@@ -15,6 +15,7 @@ namespace Timesheet_Expenses_API.Repositories
         public List<ExpenseType> GetTypeList(int user);
         public decimal ValuePending(int userid);
         public decimal ValueDenied(int userid);
+        public decimal ValueTotal(int userid);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -105,6 +106,30 @@ namespace Timesheet_Expenses_API.Repositories
 
 
                     }
+
+                }
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+
+        }
+        public decimal ValueTotal(int userid)
+        {
+            try
+            {
+                decimal result = 0;
+                List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
+                foreach (Expense exp in lstexpenses)
+                {
+                   
+                    
+                        result += exp.TotalMoney;
+
+
+                    
 
                 }
                 return result;

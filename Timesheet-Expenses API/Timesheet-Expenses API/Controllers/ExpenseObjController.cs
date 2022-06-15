@@ -39,6 +39,13 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(user_db);
         }
         [HttpGet("{user}")]
+        public IActionResult ValueTotal([FromRoute] int user)
+        {
+            var user_db = repos.ValueTotal(user);
+
+            return Ok(user_db);
+        }
+        [HttpGet("{user}")]
         public IActionResult ValueDenied([FromRoute] int user)
         {
             var user_db = repos.ValueDenied(user);
