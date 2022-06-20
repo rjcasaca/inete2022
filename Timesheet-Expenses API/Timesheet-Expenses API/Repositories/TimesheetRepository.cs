@@ -454,8 +454,12 @@ namespace Timesheet_Expenses_API.Repositories
                 projectInfo.ProjectActivities = activities;
                 //adiciona ProjectState e StartDate e EndDate
                 projectInfo.ProjectState = db.projectStates.Find(project.ProjectStateId).State;
-                projectInfo.StartDate = project.StartDate;
-                projectInfo.EndDate = project.EndDate;
+                projectInfo.StartDay = project.StartDate.Day;
+                projectInfo.StartMonth = project.StartDate.Month;
+                projectInfo.StartYear = project.StartDate.Year;
+                projectInfo.EndDay = project.EndDate.Day;
+                projectInfo.EndMonth = project.EndDate.Month;
+                projectInfo.EndYear = project.EndDate.Year;
 
                 //adiciona as informações sobre o Client
                 ClientEmailName client = new ClientEmailName();

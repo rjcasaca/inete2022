@@ -6,8 +6,12 @@
         public List<ActivityIdName> ProjectActivities { get; set; }
         public string ProjectState { get; set; }
         public ClientEmailName Client { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public int StartDay { get; set; }
+        public int StartMonth { get; set; }
+        public int StartYear { get; set; }
+        public int EndDay { get; set; }
+        public int EndMonth { get; set; }
+        public int EndYear { get; set; }
         public List<TeamInfo> Teams { get; set; }
     }
 }
