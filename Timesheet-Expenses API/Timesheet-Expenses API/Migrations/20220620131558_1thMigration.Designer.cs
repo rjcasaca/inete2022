@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220517145725_1thMigration")]
+    [Migration("20220620131558_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -305,8 +305,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasIndex("FileContentTypeId");
 
-                    b.HasIndex("FileId")
-                        .IsUnique();
+                    b.HasIndex("FileId");
 
                     b.ToTable("File Content");
                 });
@@ -606,43 +605,35 @@ namespace Timesheet_Expenses_API.Migrations
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
                 {
-                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", "ExpenseState")
+                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", null)
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseStateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", "ExpenseType")
+                    b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", null)
                         .WithMany("Expenses")
                         .HasForeignKey("ExpenseTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Timesheet_Expenses_API.Models.Project", "Project")
+                    b.HasOne("Timesheet_Expenses_API.Models.Project", null)
                         .WithMany("Expenses")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Timesheet_Expenses_API.Models.User", "User")
+                    b.HasOne("Timesheet_Expenses_API.Models.User", null)
                         .WithMany("Expenses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ExpenseState");
-
-                    b.Navigation("ExpenseType");
-
-                    b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense_File", b =>
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.Expense", "Expenses")
-                        .WithMany("Expense_File")
+                        .WithMany()
                         .HasForeignKey("ExpenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -661,14 +652,14 @@ namespace Timesheet_Expenses_API.Migrations
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.FileContentType", "FileContentType")
-                        .WithMany("FileContent")
+                        .WithMany()
                         .HasForeignKey("FileContentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Timesheet_Expenses_API.Models.File", "File")
-                        .WithOne("FileContent")
-                        .HasForeignKey("Timesheet_Expenses_API.Models.FileContent", "FileId")
+                        .WithMany()
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -821,8 +812,6 @@ namespace Timesheet_Expenses_API.Migrations
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
                 {
-                    b.Navigation("Expense_File");
-
                     b.Navigation("Line");
                 });
 
@@ -836,22 +825,11 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("Expenses");
                 });
 
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.File", b =>
-                {
-                    b.Navigation("FileContent")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContent", b =>
                 {
                     b.Navigation("Activity_File");
 
                     b.Navigation("Expense_File");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.FileContentType", b =>
-                {
-                    b.Navigation("FileContent");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Project", b =>

@@ -22,8 +22,8 @@ namespace Timesheet_Expenses_API.Models
      
 
         public int ProjectId { get; set; }
-  
-     
-       
+
+
+        public List<Line> Line { get; set; }
     }
 }

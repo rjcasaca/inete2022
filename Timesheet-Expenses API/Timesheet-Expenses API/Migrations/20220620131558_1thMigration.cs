@@ -546,8 +546,7 @@ namespace Timesheet_Expenses_API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_File Content_FileId",
                 table: "File Content",
-                column: "FileId",
-                unique: true);
+                column: "FileId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Line_ExpenseId",
