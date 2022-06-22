@@ -10,7 +10,7 @@ namespace Timesheet_Expenses_API.Models
         public int LineCityID { get; set; }
        public string City { get; set; }
         // migrations
-        public Line line { get; set; }
+        public List<Line> line { get; set; }
 
     }
 }
