@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220620131558_1thMigration")]
+    [Migration("20220621091542_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -192,6 +192,10 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<int>("ExpenseTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Expense_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
@@ -339,10 +343,23 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ExpenseId")
                         .HasColumnType("int");
 
+                    b.Property<int>("LineType")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("UnityPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("lineCIty")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("period")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Cod_Line");
@@ -350,6 +367,50 @@ namespace Timesheet_Expenses_API.Migrations
                     b.HasIndex("ExpenseId");
 
                     b.ToTable("Line");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.LineCity", b =>
+                {
+                    b.Property<int>("LineCityID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LineCityID"), 1L, 1);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("lineCod_Line")
+                        .HasColumnType("int");
+
+                    b.HasKey("LineCityID");
+
+                    b.HasIndex("lineCod_Line");
+
+                    b.ToTable("LineCity");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.LineType", b =>
+                {
+                    b.Property<int>("LineTypeID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LineTypeID"), 1L, 1);
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("lineCod_Line")
+                        .HasColumnType("int");
+
+                    b.HasKey("LineTypeID");
+
+                    b.HasIndex("lineCod_Line");
+
+                    b.ToTable("LineType");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Project", b =>
@@ -677,6 +738,28 @@ namespace Timesheet_Expenses_API.Migrations
                         .IsRequired();
 
                     b.Navigation("Expense");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.LineCity", b =>
+                {
+                    b.HasOne("Timesheet_Expenses_API.Models.Line", "line")
+                        .WithMany()
+                        .HasForeignKey("lineCod_Line")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("line");
+                });
+
+            modelBuilder.Entity("Timesheet_Expenses_API.Models.LineType", b =>
+                {
+                    b.HasOne("Timesheet_Expenses_API.Models.Line", "line")
+                        .WithMany()
+                        .HasForeignKey("lineCod_Line")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("line");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Project", b =>

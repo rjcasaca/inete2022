@@ -40,5 +40,7 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<Line> lines { get; set; }
         public DbSet<File> files { get; set; }
         public DbSet<User_Activity> activities_users { get; set; }
+        public DbSet<LineType> lineType { get; set; }
+        public DbSet<LineCity> lineCity { get; set; }
     }
 }

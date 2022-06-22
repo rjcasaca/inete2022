@@ -8,6 +8,7 @@ namespace Timesheet_Expenses_API.Models
     {
         [Key]
         public int Expense_Id { get; set; }
+        public string Expense_Name { get; set; }
         public DateTime Date { get; set; }
         public decimal TotalMoney { get; set; }
 

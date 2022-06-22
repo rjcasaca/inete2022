@@ -66,10 +66,10 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(userid);
         }
-        [HttpPost("{data};{ExpenseType};{ExpenseStateId};{email};{ProjectId};{TotalMoney}")]
-        public IActionResult CreateExpense([FromRoute] DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney)
+        [HttpPost("{data};{ExpenseType};{ExpenseStateId};{email};{ProjectId};{TotalMoney};{nameExpense}")]
+        public IActionResult CreateExpense([FromRoute] DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense)
         {
-            if (repos.CreateExpense(data, ExpenseType, ExpenseStateId, email, ProjectId, TotalMoney))
+            if (repos.CreateExpense(data, ExpenseType, ExpenseStateId, email, ProjectId, TotalMoney, nameExpense))
                 return Ok();
 
             return BadRequest();
@@ -93,19 +93,19 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
-        public IActionResult CreateLine(LinesObj line)
+        [HttpPost("{UnityPrice};{Date};{discription};{period};{linecity};{lineType};{ExpenseID}")]
+        public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, decimal period, int linecity, int lineType, int ExpenseID)
         {
-            if (repos.CreateLine(line))
+            if (repos.CreateLine(UnityPrice,Date,discription,period,linecity,lineType,ExpenseID))
                 return Ok();
 
             return BadRequest();
         }
        
-        [HttpPost]
-        public IActionResult CreateBill(Bill bill)
+        [HttpPost("{image};{Name};{FileContentTypeId};{expenseId};{FileID};{Type};{fileContentId}")]
+        public IActionResult CreateBill([FromRoute] byte[] image, string Name, int FileContentTypeId, int expenseId, int FileID, string Type, int fileContentId)
         {
-            if (repos.CreateBill(bill))
+            if (repos.CreateBill(image, Name, FileContentTypeId, expenseId, FileID, Type, fileContentId))
                 return Ok();
 
             return BadRequest();

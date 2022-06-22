@@ -7,16 +7,17 @@ namespace Timesheet_Expenses_API.Repositories
     {
         public int GetUserId(string email);
         public List<Expense> GetExpenses(int userId);
-        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney);
+        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
         public bool PutLine(int expenseid);
-        public bool CreateLine(LinesObj line);
-        public bool CreateBill(Bill bill);
+        public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, int linecity, int lineType, int ExpenseID);
+        public bool CreateBill(byte[] image, string Name, int FileContentTypeId, int expenseId, int FileID, string Type, int fileContentId);
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
         public decimal ValuePending(int userid);
         public decimal ValueDenied(int userid);
         public decimal ValueTotal(int userid);
         public bool UpdateState(int expenseid, string newstate);
+
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -67,7 +68,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
 
         }
-        //Busca Valor PEndente
+        //Busca Valor Pendente
         public decimal ValuePending(int userid)
         {
             try
@@ -170,13 +171,14 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //criar um despesa
-        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney)
+        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney,string nameExpense)
         {
             try { 
            
                 Expense obj = new Expense
                 {
                     Date = data,
+                    Expense_Name=nameExpense,
                     TotalMoney = TotalMoney,
                     ExpenseTypeId = db.expenseType.Where(e => e.Type.Equals(ExpenseType)).FirstOrDefault().ExpenseType_Id,
                     ExpenseStateId = db.expenseState.Where(es => es.State.Equals(ExpenseStateId)).FirstOrDefault().ExpenseState_Id,
@@ -232,16 +234,20 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //cria um line
-        public bool CreateLine(LinesObj line)
+        public bool CreateLine(decimal UnityPrice,DateTime Date,string discription, decimal period,int linecity,int lineType,int ExpenseID)
         {
             try
             { 
                 var obj = new Line
                 {
 
-                    UnityPrice = line.UnityPrice,
-                    Date = line.Date,
-                    ExpenseId = line.Expense
+                UnityPrice=UnityPrice,
+                Date=Date,
+                Discription=discription,
+                period=period,
+                lineCIty=linecity,
+                lineType=lineType,
+                ExpenseId=ExpenseID
                     
             };
                 db.lines.Add(obj);
@@ -256,41 +262,43 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
        //Crianção da Fatura
-        public bool CreateBill(Bill bill)
+        public bool CreateBill(byte[] image,string Name,int FileContentTypeId,int expenseId,int FileID, string Type,int fileContentId)
         {
             try
             {
                 var file = new Models.File
                 {
 
-                    File_Id = bill.FileId,
-                    base64 = bill.base64
+                    File_Id = FileID,
+                    base64 = image
                 };
                 db.files.Add(file);
                 db.SaveChanges();
 
                 var fileContentType = new Models.FileContentType
                 {
-                    FileContentType_Id = bill.FileContentId,
-                    Type = bill.Type
+                    FileContentType_Id = FileContentTypeId,
+                    Type = Type
                 };
                 db.fileContType.Add(fileContentType);
                 db.SaveChanges();
 
                 var FileContent = new Models.FileContent
                 {
-                    Name = bill.Name,
-                    FileId = bill.FileId,
-                    FileContentTypeId = bill.FileContentId
+                    Name = Name,
+                    FileId = FileID,
+                    FileContentTypeId = FileContentTypeId
                 };
                 db.fileContents.Add(FileContent);
                 db.SaveChanges();
 
                 var ExpenseFileContent = new Models.Expense_File
                 {
-                    ExpenseId = bill.expenseid,
-                    FileContentId = bill.FileContent_Id
+                    ExpenseId = expenseId,
+                    FileContentId = fileContentId
                 };
+                db.expenses_files.Add(ExpenseFileContent);
+                db.SaveChanges();
                 return true;
             }
             catch
