@@ -12,7 +12,7 @@ namespace Timesheet_Expenses_API.Models
         public int LineTypeID { get; set; }
         public string Type { get; set; }
         // migrations
-        public Line line { get; set; }
+        public List<Line> line { get; set; }
 
     }
 }
