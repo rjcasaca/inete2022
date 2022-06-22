@@ -129,6 +129,19 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LineCity",
+                columns: table => new
+                {
+                    LineCityID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineCity", x => x.LineCityID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LineType",
                 columns: table => new
                 {
@@ -494,6 +507,7 @@ namespace Timesheet_Expenses_API.Migrations
                     lineCIty = table.Column<int>(type: "int", nullable: false),
                     lineType = table.Column<int>(type: "int", nullable: false),
                     ExpenseId = table.Column<int>(type: "int", nullable: false),
+                    LineCityID = table.Column<int>(type: "int", nullable: true),
                     LineTypeID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -506,30 +520,15 @@ namespace Timesheet_Expenses_API.Migrations
                         principalColumn: "Expense_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Line_LineCity_LineCityID",
+                        column: x => x.LineCityID,
+                        principalTable: "LineCity",
+                        principalColumn: "LineCityID");
+                    table.ForeignKey(
                         name: "FK_Line_LineType_LineTypeID",
                         column: x => x.LineTypeID,
                         principalTable: "LineType",
                         principalColumn: "LineTypeID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LineCity",
-                columns: table => new
-                {
-                    LineCityID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    lineCod_Line = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LineCity", x => x.LineCityID);
-                    table.ForeignKey(
-                        name: "FK_LineCity_Line_lineCod_Line",
-                        column: x => x.lineCod_Line,
-                        principalTable: "Line",
-                        principalColumn: "Cod_Line",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -598,14 +597,14 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "ExpenseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Line_LineCityID",
+                table: "Line",
+                column: "LineCityID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Line_LineTypeID",
                 table: "Line",
                 column: "LineTypeID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LineCity_lineCod_Line",
-                table: "LineCity",
-                column: "lineCod_Line");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Project_ClientId",
@@ -665,7 +664,7 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "Expense_File");
 
             migrationBuilder.DropTable(
-                name: "LineCity");
+                name: "Line");
 
             migrationBuilder.DropTable(
                 name: "Team");
@@ -680,7 +679,13 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "File Content");
 
             migrationBuilder.DropTable(
-                name: "Line");
+                name: "Expense");
+
+            migrationBuilder.DropTable(
+                name: "LineCity");
+
+            migrationBuilder.DropTable(
+                name: "LineType");
 
             migrationBuilder.DropTable(
                 name: "User Function");
@@ -701,18 +706,6 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "File");
 
             migrationBuilder.DropTable(
-                name: "Expense");
-
-            migrationBuilder.DropTable(
-                name: "LineType");
-
-            migrationBuilder.DropTable(
-                name: "Activity State");
-
-            migrationBuilder.DropTable(
-                name: "Activity Type");
-
-            migrationBuilder.DropTable(
                 name: "ArquiUsers");
 
             migrationBuilder.DropTable(
@@ -720,6 +713,12 @@ namespace Timesheet_Expenses_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expense Type");
+
+            migrationBuilder.DropTable(
+                name: "Activity State");
+
+            migrationBuilder.DropTable(
+                name: "Activity Type");
 
             migrationBuilder.DropTable(
                 name: "Project");
