@@ -17,6 +17,10 @@ namespace Timesheet_Expenses_API.Repositories
         public decimal ValueDenied(int userid);
         public decimal ValueTotal(int userid);
         public bool UpdateState(int expenseid, string newstate);
+        public List<Line> GetLines(int expenseid);
+        public bool DeleteLine(int LineId);
+        public bool DeleteExpense(int expenseid);
+        public List<LineType> GetLineType(int line);
 
     }
 
@@ -68,6 +72,18 @@ namespace Timesheet_Expenses_API.Repositories
             }
 
         }
+
+        //Delete Line
+        public bool DeleteLine(int LineId)
+        {
+
+            try{
+                var line =db.lines.Find(LineId);
+                db.lines.Remove(line);
+                db.SaveChanges();
+                return true;
+            } catch { return false; }
+        }
         //Busca Valor Pendente
         public decimal ValuePending(int userid)
         {
@@ -118,6 +134,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
 
         }
+        //Busca Valor Total
         public decimal ValueTotal(int userid)
         {
             try
@@ -141,6 +158,17 @@ namespace Timesheet_Expenses_API.Repositories
                 return 0;
             }
 
+        }
+        public List<LineType> GetLineType(int line)
+        {
+            try {
+
+                List<LineType> lstLineType = db.lineType.ToList();
+                return lstLineType;
+            }
+            catch { return new List<LineType>(); }
+        
+        
         }
         public List<ExpenseType> GetTypeList(int user)
         {
@@ -195,6 +223,48 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
+        //Busca Todas as linhas da quela despesa
+        public List<Line> GetLines(int expenseid)
+        {
+            try {
+
+                List<Line> lstlines = db.lines.Where(l => l.ExpenseId.Equals(expenseid)).ToList();
+                return lstlines;
+
+
+            }
+            catch {
+
+                return new List<Line>();
+            }
+        
+        
+        
+        }
+        public bool DeleteExpense(int expenseid) 
+        {
+            try
+            {
+                var exp = db.expenses.Where(e => e.Expense_Id.Equals(expenseid)).FirstOrDefault();
+                List<Line> lstlines = db.lines.Where(l => l.ExpenseId.Equals(expenseid)).ToList();
+                db.expenses.Remove(exp);
+                foreach (Line ln in lstlines)
+                {
+
+                    db.lines.Remove(ln);
+
+                }
+                db.SaveChanges();
+                return true;
+            }
+            catch { return false; }
+        }
+
+
+
+
+
+
         //Calcula o valor Total gasto
         public bool PutLine(int expenseid)
         {

@@ -45,6 +45,16 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user_db);
         }
+
+
+        [HttpGet("{user}")]
+        public IActionResult GetLineType([FromRoute] int user)
+        {
+            var lstlinestype = repos.GetLineType(user);
+
+            return Ok(lstlinestype);
+        }
+
         [HttpGet("{user}")]
         public IActionResult ValueDenied([FromRoute] int user)
         {
@@ -52,6 +62,7 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user_db);
         }
+
         [HttpGet("{userid}")]
         public IActionResult GetExpenses([FromRoute] int userid)
         {
@@ -59,6 +70,29 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user);
         }
+
+        [HttpGet("{expenseid}")]
+        public IActionResult GetLines([FromRoute] int expenseid)
+        {
+            var lstlines = repos.GetLines(expenseid);
+
+            return Ok(lstlines);
+        }
+
+        [HttpDelete("{LineId}")]
+        public IActionResult DeleteLine([FromRoute] int LineId)
+        {
+            var deleteline = repos.DeleteLine(LineId);
+            return Ok(deleteline);
+        }
+
+        [HttpDelete("{expenseid}")]
+        public IActionResult DeleteExpense([FromRoute] int expenseid)
+        {
+            var deleteExp = repos.DeleteExpense(expenseid);
+            return Ok(deleteExp);
+        }
+
         [HttpGet("{user}")]
         public IActionResult GetTypeList([FromRoute] int user)
         {
@@ -66,6 +100,7 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(userid);
         }
+
         [HttpPost("{data};{ExpenseType};{ExpenseStateId};{email};{ProjectId};{TotalMoney};{nameExpense}")]
         public IActionResult CreateExpense([FromRoute] DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense)
         {
@@ -84,6 +119,7 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
+
         [HttpPut]
         public IActionResult UpdateState(int expenseid, string newstate)
         {
