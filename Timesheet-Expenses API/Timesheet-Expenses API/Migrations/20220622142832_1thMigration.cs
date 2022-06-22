@@ -129,6 +129,19 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LineType",
+                columns: table => new
+                {
+                    LineTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LineType", x => x.LineTypeID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Project State",
                 columns: table => new
                 {
@@ -479,8 +492,9 @@ namespace Timesheet_Expenses_API.Migrations
                     Discription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     period = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     lineCIty = table.Column<int>(type: "int", nullable: false),
-                    LineType = table.Column<int>(type: "int", nullable: false),
-                    ExpenseId = table.Column<int>(type: "int", nullable: false)
+                    lineType = table.Column<int>(type: "int", nullable: false),
+                    ExpenseId = table.Column<int>(type: "int", nullable: false),
+                    LineTypeID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -491,6 +505,11 @@ namespace Timesheet_Expenses_API.Migrations
                         principalTable: "Expense",
                         principalColumn: "Expense_Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Line_LineType_LineTypeID",
+                        column: x => x.LineTypeID,
+                        principalTable: "LineType",
+                        principalColumn: "LineTypeID");
                 });
 
             migrationBuilder.CreateTable(
@@ -507,26 +526,6 @@ namespace Timesheet_Expenses_API.Migrations
                     table.PrimaryKey("PK_LineCity", x => x.LineCityID);
                     table.ForeignKey(
                         name: "FK_LineCity_Line_lineCod_Line",
-                        column: x => x.lineCod_Line,
-                        principalTable: "Line",
-                        principalColumn: "Cod_Line",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "LineType",
-                columns: table => new
-                {
-                    LineTypeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    lineCod_Line = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_LineType", x => x.LineTypeID);
-                    table.ForeignKey(
-                        name: "FK_LineType_Line_lineCod_Line",
                         column: x => x.lineCod_Line,
                         principalTable: "Line",
                         principalColumn: "Cod_Line",
@@ -599,13 +598,13 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "ExpenseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LineCity_lineCod_Line",
-                table: "LineCity",
-                column: "lineCod_Line");
+                name: "IX_Line_LineTypeID",
+                table: "Line",
+                column: "LineTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LineType_lineCod_Line",
-                table: "LineType",
+                name: "IX_LineCity_lineCod_Line",
+                table: "LineCity",
                 column: "lineCod_Line");
 
             migrationBuilder.CreateIndex(
@@ -669,9 +668,6 @@ namespace Timesheet_Expenses_API.Migrations
                 name: "LineCity");
 
             migrationBuilder.DropTable(
-                name: "LineType");
-
-            migrationBuilder.DropTable(
                 name: "Team");
 
             migrationBuilder.DropTable(
@@ -706,6 +702,9 @@ namespace Timesheet_Expenses_API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Expense");
+
+            migrationBuilder.DropTable(
+                name: "LineType");
 
             migrationBuilder.DropTable(
                 name: "Activity State");
