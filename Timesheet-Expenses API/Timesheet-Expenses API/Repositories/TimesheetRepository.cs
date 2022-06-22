@@ -276,11 +276,11 @@ namespace Timesheet_Expenses_API.Repositories
                 foreach (Team t in team)
                 {
                     var proj = db.projects.Find(t.ProjectId);
-                    if (proj.ProjectStateId != 2)
+                    if (proj.ProjectStateId == 1)
                     {
                         var pInfo = new ProjectsIdName();
                         pInfo.projectId = proj.Project_Id;
-                        pInfo.PorjectName = proj.Name;
+                        pInfo.projectName = proj.Name;
                         projectsInfo.Add(pInfo);
                     }
                 }
@@ -405,7 +405,7 @@ namespace Timesheet_Expenses_API.Repositories
 
                 ProjectsIdName projIdName = new ProjectsIdName();
                 projIdName.projectId = db.projects.Find(activity.ProjectId).Project_Id;
-                projIdName.PorjectName = db.projects.Find(activity.ProjectId).Name;
+                projIdName.projectName = db.projects.Find(activity.ProjectId).Name;
                 activityInfos.ProjectInfo = projIdName;
 
                 var comments = db.comments.Where(c => c.ActivityId.Equals(activityId)).ToList();
@@ -438,7 +438,7 @@ namespace Timesheet_Expenses_API.Repositories
                 //adicionar o PorjectName e projectId do Project
                 ProjectsIdName projectIdName = new ProjectsIdName();
                 projectIdName.projectId = project.Project_Id;
-                projectIdName.PorjectName = project.Name;
+                projectIdName.projectName = project.Name;
                 projectInfo.ProjectsIdName = projectIdName;
 
                 //cria uma lista de Activities que estão relacionadas ao Project

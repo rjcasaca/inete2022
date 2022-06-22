@@ -1,8 +1,7 @@
 ﻿namespace Timesheet_Expenses_API.Models.Object.Timesheet
 {
-    public class ProjectsIdName
+    public class TimesheetProjectId
     {
         public int projectId { get; set; }
-        public string projectName { get; set; }
     }
 }
