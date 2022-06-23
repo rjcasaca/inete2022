@@ -23,6 +23,13 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(user_db);
         }
+        [HttpGet("{user};{expensename}")]
+        public IActionResult GetExpenseId([FromRoute] int user, string expensename)
+        {
+            var expenseid = repos.GetExpenseId(user, expensename);
+
+            return Ok(expenseid);
+        }
 
         [HttpGet("{user}")]
         public IActionResult ValueAproved([FromRoute]int user)

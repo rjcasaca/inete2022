@@ -22,6 +22,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool DeleteExpense(int expenseid);
         public List<LineType> GetLineType(int line);
         public List<LineCity> GetLinesCity(int user);
+        public int GetExpenseId(int userid, string expensename);
 
     }
 
@@ -397,6 +398,26 @@ namespace Timesheet_Expenses_API.Repositories
                 return true;
             } 
             catch { return false; }
+
+        }
+        public int GetExpenseId(int userid, string expensename)
+        {
+            try
+            {
+                List<Expense> lstexp = GetExpenses(userid);
+
+                foreach (Expense e in lstexp)
+                {
+                    if (e.Expense_Name == expensename)
+                    {
+                        return e.Expense_Id;
+                    }
+                }
+                return 0;
+            }
+            catch { return -1; }
+
+
 
         }
 
