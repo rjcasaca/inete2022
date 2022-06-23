@@ -9,7 +9,7 @@ namespace Timesheet_Expenses_API.Repositories
         public List<Expense> GetExpenses(int userId);
         public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
         public bool PutLine(int expenseid);
-        public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, int linecity, int lineType, int ExpenseID);
+        public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID);
         public bool CreateBill(byte[] image, string Name, int FileContentTypeId, int expenseId, int FileID, string Type, int fileContentId);
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
@@ -21,6 +21,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool DeleteLine(int LineId);
         public bool DeleteExpense(int expenseid);
         public List<LineType> GetLineType(int line);
+        public List<LineCity> GetLinesCity(int user);
 
     }
 
@@ -170,6 +171,18 @@ namespace Timesheet_Expenses_API.Repositories
         
         
         }
+        //busca todas as cidades
+        public List<LineCity> GetLinesCity(int user) 
+        {
+            try { 
+            List<LineCity> lineCities = db.lineCity.ToList();
+                return lineCities;
+            
+            } catch { return new List<LineCity>(); }
+        
+        
+        }
+        //Busca Todos os tipos de linhas existentes
         public List<ExpenseType> GetTypeList(int user)
         {
 
@@ -241,6 +254,7 @@ namespace Timesheet_Expenses_API.Repositories
         
         
         }
+        //Apaga a despesa com aquele id 
         public bool DeleteExpense(int expenseid) 
         {
             try
@@ -259,11 +273,6 @@ namespace Timesheet_Expenses_API.Repositories
             }
             catch { return false; }
         }
-
-
-
-
-
 
         //Calcula o valor Total gasto
         public bool PutLine(int expenseid)
@@ -284,6 +293,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
+        //Atualiza o Estado Da despesa
         public bool UpdateState(int expenseid, string newstate)
         {
             try
@@ -304,19 +314,19 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //cria um line
-        public bool CreateLine(decimal UnityPrice,DateTime Date,string discription, decimal period,int linecity,int lineType,int ExpenseID)
+        public bool CreateLine(decimal UnityPrice,DateTime Date,string discription, decimal period,string linecity,string lineType,int ExpenseID)
         {
             try
-            { 
+            {
                 var obj = new Line
                 {
 
-                UnityPrice=UnityPrice,
-                Date=Date,
-                Discription=discription,
-                period=period,
-                lineCIty=linecity,
-                lineType=lineType,
+                    UnityPrice = UnityPrice,
+                    Date = Date,
+                    Discription = discription,
+                    period = period,
+                    lineCIty = db.lineCity.Where(lc => lc.City.Equals(linecity)).FirstOrDefault().LineCityID,
+                    lineType = db.lineType.Where(lt => lt.Type.Equals(lineType)).FirstOrDefault().LineTypeID,
                 ExpenseId=ExpenseID
                     
             };
@@ -376,6 +386,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
+      
         public bool Update(string Newstate,int idExpense)
         {
             try 

@@ -130,7 +130,7 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpPost("{UnityPrice};{Date};{discription};{period};{linecity};{lineType};{ExpenseID}")]
-        public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, decimal period, int linecity, int lineType, int ExpenseID)
+        public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID)
         {
             if (repos.CreateLine(UnityPrice,Date,discription,period,linecity,lineType,ExpenseID))
                 return Ok();
@@ -145,6 +145,13 @@ namespace Timesheet_Expenses_API.Controllers
                 return Ok();
 
             return BadRequest();
+        }
+        [HttpGet("{user}")]
+        public IActionResult GetLinesCity([FromRoute] int user)
+        {
+            var LinesCity = repos.GetLinesCity(user);
+
+            return Ok(LinesCity);
         }
     }
 }
