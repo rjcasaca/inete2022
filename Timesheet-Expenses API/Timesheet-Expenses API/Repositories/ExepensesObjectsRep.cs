@@ -435,17 +435,20 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-
                 List<Line> lstline = GetLines(expenseid);
 
+                var auxline = db.lineType.Where(lt => lt.Type.Equals(line)).FirstOrDefault().LineTypeID;
+                Line linha = new Line();
                 foreach (Line l in lstline)
                 {
-                    if (l.lineType.ToString() == line)
+
+                    if (l.lineType == auxline)
                     {
-                        return l;
+                        linha = db.lines.Find(l.Cod_Line);
+
                     }
                 }
-                return new Line();
+                return linha;
             }
             catch
             {
