@@ -17,6 +17,7 @@ namespace Timesheet_Expenses_API.Repositories
         public List<TimesheetWorklog> GetUserWeekWorklog(DateTime date, int userId);
         public ActivityInfo GetActivitiesInfo(int activityId);
         public ProjectInfo GetProjectInfo(int projectId);
+        public UserInfo GetUserInfo(int userId);
         public List<string> GetBillingTypes();
         public List<string> GetWorklogState();
         public Date AddDays(DateTime date, int AddDays);
@@ -494,8 +495,8 @@ namespace Timesheet_Expenses_API.Repositories
                         {
                             //para cada User dentro da Team vai adicionar as informações do mesmo
                             TimesheetUserInfo timesheetUserInfo = new TimesheetUserInfo();
-                            timesheetUserInfo.Name = db.users.Find(tm.UserId).Name;
-                            timesheetUserInfo.Email = db.users.Find(tm.UserId).Email;
+                            timesheetUserInfo.UserId = db.users.Find(tm.UserId).User_Id;
+                            timesheetUserInfo.UserName = db.users.Find(tm.UserId).Name;
                             timesheetUserInfo.Function = db.userFunction.Find(tm.UserFunctionId).Function;
                             userInfos.Add(timesheetUserInfo);
                         }
@@ -612,6 +613,23 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return new Date();
+            }
+        }
+
+        //retorna a informação de um user
+        public UserInfo GetUserInfo(int userId)
+        {
+            try
+            {
+                UserInfo userInf = new UserInfo();
+                userInf.UserName = db.users.Find(userId).Name;
+                userInf.UserEmail = db.users.Find(userId).Email;
+
+                return userInf;
+            }
+            catch
+            {
+                return new UserInfo();
             }
         }
     }

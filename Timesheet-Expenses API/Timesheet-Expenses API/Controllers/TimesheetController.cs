@@ -79,6 +79,13 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(projectInfo_db);
         }
 
+        [HttpGet("{userId}")]
+        public IActionResult GetUserInfo([FromRoute] int userId)
+        {
+            var userInfo_db = repos.GetUserInfo(userId);
+            return Ok(userInfo_db);
+        }
+
         [HttpGet("{worklogId}")]
         public IActionResult GetWorklog([FromRoute] int worklogId)
         {
