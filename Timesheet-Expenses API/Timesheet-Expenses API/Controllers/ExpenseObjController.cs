@@ -160,5 +160,19 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(LinesCity);
         }
+        [HttpGet("{expenseID}")]
+        public IActionResult getExpense([FromRoute] int expenseID)
+        {
+            var getexpense = repos.getExpense(expenseID);
+
+            return Ok(getexpense);
+        }
+        [HttpGet("{line};{expenseID}")]
+        public IActionResult GetLine([FromRoute] string line, int expenseid)
+        {
+            var Getline = repos.GetLine(line, expenseid);
+
+            return Ok(Getline);
+        }
     }
 }

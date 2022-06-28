@@ -23,6 +23,8 @@ namespace Timesheet_Expenses_API.Repositories
         public List<LineType> GetLineType(int line);
         public List<LineCity> GetLinesCity(int user);
         public int GetExpenseId(int userid, string expensename);
+        public Expense getExpense(int expenseID);
+        public Line GetLine(string line, int expenseid);
 
     }
 
@@ -419,6 +421,36 @@ namespace Timesheet_Expenses_API.Repositories
 
 
 
+        }
+        public Expense getExpense(int expenseID)
+        {
+            try
+            {
+                Expense expense = db.expenses.Find(expenseID);
+                return expense;
+            }
+            catch { return new Expense(); }
+        }
+        public Line GetLine(string line, int expenseid)
+        {
+            try
+            {
+
+                List<Line> lstline = GetLines(expenseid);
+
+                foreach (Line l in lstline)
+                {
+                    if (l.lineType.ToString() == line)
+                    {
+                        return l;
+                    }
+                }
+                return new Line();
+            }
+            catch
+            {
+                return new Line();
+            }
         }
 
     }
