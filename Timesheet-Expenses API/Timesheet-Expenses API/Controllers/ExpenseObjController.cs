@@ -174,5 +174,13 @@ namespace Timesheet_Expenses_API.Controllers
 
             return Ok(Getline);
         }
+
+        [HttpGet("{expenseID}")]
+        public IActionResult verifyExpense([FromRoute] int expenseID)
+        {
+            var Verify = repos.verifyExpense(expenseID);
+
+            return Ok(Verify);
+        }
     }
 }

@@ -25,7 +25,7 @@ namespace Timesheet_Expenses_API.Repositories
         public int GetExpenseId(int userid, string expensename);
         public Expense getExpense(int expenseID);
         public Line GetLine(string line, int expenseid);
-
+        public bool verifyExpense(int expenseID);
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -456,5 +456,24 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
+        public bool verifyExpense(int expenseID)
+        {
+            try
+            {
+                int aux = 0;
+                if (db.expenses.Find(expenseID) == null)
+                {
+                    return false;
+
+                }
+                return true;
+
+
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
