@@ -5,12 +5,13 @@ namespace Timesheet_Expenses_API.Repositories
 {
     public interface IExepensesObjectsRep
     {
+        #region
         public int GetUserId(string email);
         public List<Expense> GetExpenses(int userId);
         public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
         public bool PutLine(int expenseid);
         public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID);
-        public bool CreateBill(byte[] image, string Name, int FileContentTypeId, int expenseId, int FileID, string Type, int fileContentId);
+        public bool CreateBill(byte[] image, string Name, int expenseId, string Type );
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
         public decimal ValuePending(int userid);
@@ -26,6 +27,9 @@ namespace Timesheet_Expenses_API.Repositories
         public Expense getExpense(int expenseID);
         public Line GetLine(string line, int expenseid);
         public bool verifyExpense(int expenseID);
+        public int getLineId(int expenseId, string Type);
+        /* public bool DeleteBIll(int billId);*/
+        #endregion
     }
 
     public class ExepensesObjectsRep : IExepensesObjectsRep
@@ -345,32 +349,23 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
        //Crianção da Fatura
-        public bool CreateBill(byte[] image,string Name,int FileContentTypeId,int expenseId,int FileID, string Type,int fileContentId)
+        public bool CreateBill(byte[] image,string Name,int expenseId,string Type )
         {
             try
             {
                 var file = new Models.File
                 {
 
-                    File_Id = FileID,
                     base64 = image
                 };
                 db.files.Add(file);
                 db.SaveChanges();
 
-                var fileContentType = new Models.FileContentType
-                {
-                    FileContentType_Id = FileContentTypeId,
-                    Type = Type
-                };
-                db.fileContType.Add(fileContentType);
-                db.SaveChanges();
-
                 var FileContent = new Models.FileContent
                 {
                     Name = Name,
-                    FileId = FileID,
-                    FileContentTypeId = FileContentTypeId
+                    FileId = db.files.Where(f => f.base64.Equals(image)).FirstOrDefault().File_Id,
+                    FileContentTypeId = db.fileContType.Where(fc => fc.Type.Equals(Type)).FirstOrDefault().FileContentType_Id
                 };
                 db.fileContents.Add(FileContent);
                 db.SaveChanges();
@@ -378,7 +373,7 @@ namespace Timesheet_Expenses_API.Repositories
                 var ExpenseFileContent = new Models.Expense_File
                 {
                     ExpenseId = expenseId,
-                    FileContentId = fileContentId
+                    FileContentId = FileContent.FileContent_Id
                 };
                 db.expenses_files.Add(ExpenseFileContent);
                 db.SaveChanges();
@@ -474,6 +469,34 @@ namespace Timesheet_Expenses_API.Repositories
             {
                 return false;
             }
+        }
+        /*public bool DeleteBIll(int billId)
+        {
+           
+        }*/
+        public int getLineId(int expenseId,string Type)
+        {
+            try
+            {
+
+                List<Line> lstline = GetLines(expenseId);
+                int idlinetype = db.lineType.Where(lt => lt.Type.Equals(Type)).FirstOrDefault().LineTypeID;
+                foreach (Line l in lstline)
+                {
+                    if (l.lineType == idlinetype) 
+                    {
+                        return l.Cod_Line;
+                    }
+                }
+                return 0;
+
+            }
+            catch
+            {
+                return -1;
+            }
+
+
         }
     }
 }

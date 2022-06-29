@@ -145,10 +145,10 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
        
-        [HttpPost("{image};{Name};{FileContentTypeId};{expenseId};{FileID};{Type};{fileContentId}")]
-        public IActionResult CreateBill([FromRoute] byte[] image, string Name, int FileContentTypeId, int expenseId, int FileID, string Type, int fileContentId)
+        [HttpPost("{image};{Name};{expenseId};{Type}")]
+        public IActionResult CreateBill([FromRoute] byte[] image, string Name, int expenseId, string Type )
         {
-            if (repos.CreateBill(image, Name, FileContentTypeId, expenseId, FileID, Type, fileContentId))
+            if (repos.CreateBill(image, Name, expenseId, Type))
                 return Ok();
 
             return BadRequest();
@@ -159,6 +159,13 @@ namespace Timesheet_Expenses_API.Controllers
             var LinesCity = repos.GetLinesCity(user);
 
             return Ok(LinesCity);
+        }
+        [HttpGet("{expenseId};{Type}")]
+        public IActionResult getLineId([FromRoute] int expenseId, string Type)
+        {
+            var lineid = repos.getLineId( expenseId,  Type);
+
+            return Ok(lineid);
         }
         [HttpGet("{expenseID}")]
         public IActionResult getExpense([FromRoute] int expenseID)

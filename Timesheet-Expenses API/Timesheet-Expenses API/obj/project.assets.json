@@ -2063,11 +2063,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
+      "projectUniqueName": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Documentos\\new inete 2022\\l\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
       "projectName": "Timesheet-Expenses API",
-      "projectPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
+      "projectPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Documentos\\new inete 2022\\l\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
       "packagesPath": "C:\\Users\\Novo\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\obj\\",
+      "outputPath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Documentos\\new inete 2022\\l\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
