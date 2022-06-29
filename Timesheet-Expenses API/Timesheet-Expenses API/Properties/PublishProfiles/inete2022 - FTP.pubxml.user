@@ -8,6 +8,6 @@ ao editar este arquivo MSBuild. Para saber mais sobre isso, visite https://go.mi
     <TimeStampOfAssociatedLegacyPublishXmlFile />
     <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAfHXzcLbjx0+S1IFEVkQVOgAAAAACAAAAAAAQZgAAAAEAACAAAACbTuSAKM3E+yc3g+CfWZHn4C3AhEBHs2EMiFrjYaSFgQAAAAAOgAAAAAIAACAAAAAKfNvwJJKPUTw/ZDmpYoXYiftbffpxXgg8sTdLpqMeJIAAAACA+EV6j7B1dPg+D+EHCJhBz5B8qo7KFckWmd1oe1gOHPkTEh/mzfso1uxgU25iHkaHTfgcN3lAfvFnN2lGtcryssK40xz3h+zwh9HKqXhxSF5dghMIZ6IEtJvelsOXKoipdSsMMBJAQ9r4WPjRiqbUjBfxQmzVZQ6Ay5iQ+eOJeEAAAADm260beJMZeENeTRNbJFp19H9oXcDZr+UdfVwqSz8HEnZcRn6VrsPYBOnsuvecknpEMRAQ3cSuy0z65dBbBfdp</EncryptedPassword>
     <_PublishTargetUrl>ftp://waws-prod-dm1-241.ftp.azurewebsites.windows.net/site/wwwroot</_PublishTargetUrl>
-    <History>False|2022-06-29T10:52:23.0392941Z;False|2022-05-26T10:13:12.3276638+01:00;False|2022-05-25T14:24:37.7052632+01:00;False|2022-05-25T11:15:22.7776915+01:00;</History>
+    <History>False|2022-06-29T14:02:59.0643026Z;False|2022-06-29T11:52:23.0392941+01:00;False|2022-05-26T10:13:12.3276638+01:00;False|2022-05-25T14:24:37.7052632+01:00;False|2022-05-25T11:15:22.7776915+01:00;</History>
   </PropertyGroup>
 </Project>

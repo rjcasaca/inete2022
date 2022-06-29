@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/B/Op1ex/Ka9vvsk2FHHj48XZb0N6QtkPD+bX/1DY2xvtuiNqFJz4s8hOirMZUjxtWxxC2mYG/MDhmmhUMs73Q==",
+  "dgSpecHash": "zFTxF9zt1vLwVWIjvbHeee6pZmlXmfMcDy1gz/NvKskpEhEHWx3FIWBkuNxMdbpXXeg/jbutfbgOlwMJ/vShFQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Documentos\\new inete 2022\\l\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
+  "projectFilePath": "C:\\Users\\Novo\\OneDrive - Arquiconsult\\Área de Trabalho\\Git\\inete2022\\Timesheet-Expenses API\\Timesheet-Expenses API\\Timesheet-Expenses API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Novo\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Novo\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
