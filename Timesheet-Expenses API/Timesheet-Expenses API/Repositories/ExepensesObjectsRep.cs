@@ -11,7 +11,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
         public bool PutLine(int expenseid);
         public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID);
-        public bool CreateBill(byte[] image, string Name, int expenseId, string Type );
+        public bool CreateBill(string image, string Name, int expenseId, string Type);
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
         public decimal ValuePending(int userid);
@@ -28,7 +28,7 @@ namespace Timesheet_Expenses_API.Repositories
         public Line GetLine(string line, int expenseid);
         public bool verifyExpense(int expenseID);
         public int getLineId(int expenseId, string Type);
-        /* public bool DeleteBIll(int billId);*/
+        public bool DeleteBill(string nameImage);
         #endregion
     }
 
@@ -348,8 +348,8 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-       //Crianção da Fatura
-        public bool CreateBill(byte[] image,string Name,int expenseId,string Type )
+        //Crianção da Fatura
+        public bool CreateBill(string image, string Name, int expenseId, string Type)
         {
             try
             {
@@ -384,7 +384,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-      
+
         public bool Update(string Newstate,int idExpense)
         {
             try 
@@ -497,6 +497,27 @@ namespace Timesheet_Expenses_API.Repositories
             }
 
 
+        }
+        public bool DeleteBill(string nameImage)
+        {
+            try
+            {
+                var file = db.files.Where(f => f.base64.Equals(nameImage)).FirstOrDefault().File_Id;
+                var fl = db.files.Where(f => f.base64.Equals(nameImage)).FirstOrDefault();
+
+                var content = db.fileContents.Where(fc => fc.FileId.Equals(file)).FirstOrDefault().FileContent_Id;
+                var cntnt = db.fileContents.Where(fc => fc.FileId.Equals(file)).FirstOrDefault();
+                Expense_File ExpenseContet = db.expenses_files.Find(content);
+
+                db.expenses_files.Remove(ExpenseContet);
+                db.fileContents.Remove(cntnt);
+                db.files.Remove(fl);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

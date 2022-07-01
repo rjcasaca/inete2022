@@ -9,7 +9,7 @@ namespace Timesheet_Expenses_API.Models
         [Key]
         public int File_Id { get; set; }
         [Required]
-        public byte[] base64 { get; set; }
+        public string base64 { get; set; }
 
     
     }

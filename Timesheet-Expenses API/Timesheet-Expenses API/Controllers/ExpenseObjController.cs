@@ -15,7 +15,12 @@ namespace Timesheet_Expenses_API.Controllers
         {
             repos = _repos;
         }
-
+        [HttpDelete("{nameImage}")]
+        public IActionResult DeleteBill([FromRoute] string nameImage)
+        {
+            var deleteBill = repos.DeleteBill(nameImage);
+            return Ok(deleteBill);
+        }
         [HttpGet("{email}")]
         public IActionResult GetUserInfo([FromRoute] string email)
         {
@@ -144,9 +149,9 @@ namespace Timesheet_Expenses_API.Controllers
 
             return BadRequest();
         }
-       
+
         [HttpPost("{image};{Name};{expenseId};{Type}")]
-        public IActionResult CreateBill([FromRoute] byte[] image, string Name, int expenseId, string Type )
+        public IActionResult CreateBill([FromRoute] string image, string Name, int expenseId, string Type)
         {
             if (repos.CreateBill(image, Name, expenseId, Type))
                 return Ok();
