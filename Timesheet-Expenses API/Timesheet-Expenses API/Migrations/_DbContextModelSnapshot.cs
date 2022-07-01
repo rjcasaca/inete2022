@@ -275,9 +275,9 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("File_Id"), 1L, 1);
 
-                    b.Property<byte[]>("base64")
+                    b.Property<string>("base64")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("File_Id");
 

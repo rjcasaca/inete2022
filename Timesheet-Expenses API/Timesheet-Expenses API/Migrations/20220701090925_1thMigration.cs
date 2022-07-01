@@ -108,7 +108,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     File_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    base64 = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    base64 = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

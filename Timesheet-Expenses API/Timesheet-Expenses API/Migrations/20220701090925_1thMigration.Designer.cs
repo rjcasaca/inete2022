@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220629082757_1thMigration")]
+    [Migration("20220701090925_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -277,9 +277,9 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("File_Id"), 1L, 1);
 
-                    b.Property<byte[]>("base64")
+                    b.Property<string>("base64")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("File_Id");
 
