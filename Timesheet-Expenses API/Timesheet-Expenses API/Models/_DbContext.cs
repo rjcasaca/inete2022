@@ -31,7 +31,6 @@ namespace Timesheet_Expenses_API.Models
         public DbSet<Project> projects { get; set; }
         public DbSet<Team> teams { get; set; }
         public DbSet<Activity> activities { get; set; }
-        public DbSet<Comment> comments { get; set; }
         public DbSet<Worklog> worklogs { get; set; }
         public DbSet<FileContent> fileContents { get; set; }
         public DbSet<Activity_File> activities_files { get; set; }

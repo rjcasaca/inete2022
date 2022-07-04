@@ -12,7 +12,7 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220701090925_1thMigration")]
+    [Migration("20220704085203_1thMigration")]
     partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,28 +151,6 @@ namespace Timesheet_Expenses_API.Migrations
                     b.HasKey("Client_Id");
 
                     b.ToTable("Client");
-                });
-
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Comment", b =>
-                {
-                    b.Property<int>("Comment_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Comment_Id"), 1L, 1);
-
-                    b.Property<int>("ActivityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Comment_Id");
-
-                    b.HasIndex("ActivityId");
-
-                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
@@ -653,17 +631,6 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Navigation("FileContent");
                 });
 
-            modelBuilder.Entity("Timesheet_Expenses_API.Models.Comment", b =>
-                {
-                    b.HasOne("Timesheet_Expenses_API.Models.Activity", "Activity")
-                        .WithMany("Comment")
-                        .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Activity");
-                });
-
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Expense", b =>
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", null)
@@ -851,8 +818,6 @@ namespace Timesheet_Expenses_API.Migrations
             modelBuilder.Entity("Timesheet_Expenses_API.Models.Activity", b =>
                 {
                     b.Navigation("Activity_File");
-
-                    b.Navigation("Comment");
 
                     b.Navigation("Worklog");
 

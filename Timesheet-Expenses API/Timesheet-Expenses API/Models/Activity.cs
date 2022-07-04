@@ -24,7 +24,6 @@ namespace Timesheet_Expenses_API.Models
 
 
         public List<User_Activity> user_Activities { get; set; }
-        public List<Comment> Comment { get; set; }
         public List<Worklog> Worklog { get; set; }
         public List<Activity_File> Activity_File { get; set; }
     }

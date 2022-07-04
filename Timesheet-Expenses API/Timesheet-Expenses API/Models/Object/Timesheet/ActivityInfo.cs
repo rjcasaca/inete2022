@@ -7,6 +7,5 @@
         public string ActivityType { get; set; }
         public string ActivityDescription { get; set; }
         public ProjectsIdName ProjectInfo { get; set; }
-        public List<CommentText> ActivityComments { get; set; }
     }
 }

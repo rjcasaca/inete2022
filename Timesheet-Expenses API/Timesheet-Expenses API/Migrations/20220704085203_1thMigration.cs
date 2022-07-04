@@ -384,26 +384,6 @@ namespace Timesheet_Expenses_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comment",
-                columns: table => new
-                {
-                    Comment_Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ActivityId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Comment", x => x.Comment_Id);
-                    table.ForeignKey(
-                        name: "FK_Comment_Activity_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activity",
-                        principalColumn: "Activity_Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "User_Activity",
                 columns: table => new
                 {
@@ -552,11 +532,6 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "FileContentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ActivityId",
-                table: "Comment",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Expense_ExpenseStateId",
                 table: "Expense",
                 column: "ExpenseStateId");
@@ -656,9 +631,6 @@ namespace Timesheet_Expenses_API.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Activity_File");
-
-            migrationBuilder.DropTable(
-                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Expense_File");
