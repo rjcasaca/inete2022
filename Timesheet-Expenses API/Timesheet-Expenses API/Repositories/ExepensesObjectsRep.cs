@@ -352,7 +352,7 @@ namespace Timesheet_Expenses_API.Repositories
         {
             try
             {
-                var file = new Models.File
+                 var file = new Models.File
                 {
 
                     base64 = image
@@ -363,7 +363,7 @@ namespace Timesheet_Expenses_API.Repositories
                 var FileContent = new Models.FileContent
                 {
                     Name = Name,
-                    FileId = db.files.Where(f => f.base64.Equals(image)).FirstOrDefault().File_Id,
+                    FileId =file.File_Id,
                     FileContentTypeId = db.fileContType.Where(fc => fc.Type.Equals(Type)).FirstOrDefault().FileContentType_Id
                 };
                 db.fileContents.Add(FileContent);
