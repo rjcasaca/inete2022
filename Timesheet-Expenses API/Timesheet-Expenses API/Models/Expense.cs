@@ -9,12 +9,11 @@ namespace Timesheet_Expenses_API.Models
         [Key]
         public int Expense_Id { get; set; }
         public string Expense_Name { get; set; }
-        public DateTime Date { get; set; }
+        public string Month { get; set; }
+        public int Year { get; set; }
         public decimal TotalMoney { get; set; }
 
         //Navigation Properties
-        public int ExpenseTypeId { get; set; }
-       
 
         public int ExpenseStateId { get; set; }
       

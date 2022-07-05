@@ -8,9 +8,9 @@ namespace Timesheet_Expenses_API.Repositories
         #region
         public int GetUserId(string email);
         public List<Expense> GetExpenses(int userId);
-        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
+        public bool CreateExpense(string Month, int Year, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense);
         public bool PutLine(int expenseid);
-        public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID);
+        public bool CreateLine(decimal UnityPrice, DateTime Date, string discription, string linecity, string lineType, int ExpenseID);
         public bool CreateBill(string image, string Name, int expenseId, string Type);
         public decimal ValueAproved(int userid);
         public List<ExpenseType> GetTypeList(int user);
@@ -219,16 +219,16 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //criar um despesa
-        public bool CreateExpense(DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney,string nameExpense)
+        public bool CreateExpense(string Month,int Year,string ExpenseStateId, string email, string ProjectId, decimal TotalMoney,string nameExpense)
         {
             try { 
            
                 Expense obj = new Expense
                 {
-                    Date = data,
+                    Month= Month,
+                    Year= Year,
                     Expense_Name=nameExpense,
                     TotalMoney = TotalMoney,
-                    ExpenseTypeId = db.expenseType.Where(e => e.Type.Equals(ExpenseType)).FirstOrDefault().ExpenseType_Id,
                     ExpenseStateId = db.expenseState.Where(es => es.State.Equals(ExpenseStateId)).FirstOrDefault().ExpenseState_Id,
                     UserId = GetUserId(email),
                     ProjectId = db.projects.Where(p => p.Name.Equals(ProjectId)).FirstOrDefault().Project_Id
@@ -321,7 +321,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //cria um line
-        public bool CreateLine(decimal UnityPrice,DateTime Date,string discription, decimal period,string linecity,string lineType,int ExpenseID)
+        public bool CreateLine(decimal UnityPrice,DateTime Date,string discription,string linecity,string lineType,int ExpenseID)
         {
             try
             {
@@ -331,10 +331,9 @@ namespace Timesheet_Expenses_API.Repositories
                     UnityPrice = UnityPrice,
                     Date = Date,
                     Discription = discription,
-                    period = period,
                     lineCIty = db.lineCity.Where(lc => lc.City.Equals(linecity)).FirstOrDefault().LineCityID,
                     lineType = db.lineType.Where(lt => lt.Type.Equals(lineType)).FirstOrDefault().LineTypeID,
-                ExpenseId=ExpenseID
+                    ExpenseId=ExpenseID
                     
             };
                 db.lines.Add(obj);
@@ -470,10 +469,7 @@ namespace Timesheet_Expenses_API.Repositories
                 return false;
             }
         }
-        /*public bool DeleteBIll(int billId)
-        {
-           
-        }*/
+        
         public int getLineId(int expenseId,string Type)
         {
             try

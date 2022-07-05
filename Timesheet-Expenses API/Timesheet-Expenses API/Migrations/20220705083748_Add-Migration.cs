@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Timesheet_Expenses_API.Migrations
 {
-    public partial class _1thMigration : Migration
+    public partial class AddMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -291,12 +291,13 @@ namespace Timesheet_Expenses_API.Migrations
                     Expense_Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Expense_Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Month = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     TotalMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ExpenseTypeId = table.Column<int>(type: "int", nullable: false),
                     ExpenseStateId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    ExpenseType_Id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -314,11 +315,10 @@ namespace Timesheet_Expenses_API.Migrations
                         principalColumn: "ExpenseState_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Expense_Expense Type_ExpenseTypeId",
-                        column: x => x.ExpenseTypeId,
+                        name: "FK_Expense_Expense Type_ExpenseType_Id",
+                        column: x => x.ExpenseType_Id,
                         principalTable: "Expense Type",
-                        principalColumn: "ExpenseType_Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ExpenseType_Id");
                     table.ForeignKey(
                         name: "FK_Expense_Project_ProjectId",
                         column: x => x.ProjectId,
@@ -483,7 +483,6 @@ namespace Timesheet_Expenses_API.Migrations
                     UnityPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Discription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    period = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     lineCIty = table.Column<int>(type: "int", nullable: false),
                     lineType = table.Column<int>(type: "int", nullable: false),
                     ExpenseId = table.Column<int>(type: "int", nullable: false),
@@ -537,9 +536,9 @@ namespace Timesheet_Expenses_API.Migrations
                 column: "ExpenseStateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expense_ExpenseTypeId",
+                name: "IX_Expense_ExpenseType_Id",
                 table: "Expense",
-                column: "ExpenseTypeId");
+                column: "ExpenseType_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Expense_ProjectId",

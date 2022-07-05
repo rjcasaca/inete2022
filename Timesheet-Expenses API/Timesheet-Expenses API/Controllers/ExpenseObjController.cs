@@ -113,10 +113,10 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(userid);
         }
 
-        [HttpPost("{data};{ExpenseType};{ExpenseStateId};{email};{ProjectId};{TotalMoney};{nameExpense}")]
-        public IActionResult CreateExpense([FromRoute] DateTime data, string ExpenseType, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense)
+        [HttpPost("{Month};{Year};{ExpenseStateId};{email};{ProjectId};{TotalMoney};{nameExpense}")]
+        public IActionResult CreateExpense([FromRoute] string Month, int Year, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense)
         {
-            if (repos.CreateExpense(data, ExpenseType, ExpenseStateId, email, ProjectId, TotalMoney, nameExpense))
+            if (repos.CreateExpense( Month,  Year,  ExpenseStateId,  email,  ProjectId,  TotalMoney,  nameExpense))
                 return Ok();
 
             return BadRequest();
@@ -141,10 +141,10 @@ namespace Timesheet_Expenses_API.Controllers
             return BadRequest();
         }
 
-        [HttpPost("{UnityPrice};{Date};{discription};{period};{linecity};{lineType};{ExpenseID}")]
-        public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, decimal period, string linecity, string lineType, int ExpenseID)
+        [HttpPost("{UnityPrice};{Date};{discription};{linecity};{lineType};{ExpenseID}")]
+        public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, string linecity, string lineType, int ExpenseID)
         {
-            if (repos.CreateLine(UnityPrice,Date,discription,period,linecity,lineType,ExpenseID))
+            if (repos.CreateLine(UnityPrice,Date,discription,linecity,lineType,ExpenseID))
                 return Ok();
 
             return BadRequest();

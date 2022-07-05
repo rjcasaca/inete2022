@@ -10,7 +10,6 @@ namespace Timesheet_Expenses_API.Models
         public decimal UnityPrice { get; set; }
         public DateTime Date { get; set; }
         public string Discription { get; set; }
-        public decimal period { get; set; }
         public int lineCIty { get; set; }
         public int lineType { get; set; }
         //Navigation Properties

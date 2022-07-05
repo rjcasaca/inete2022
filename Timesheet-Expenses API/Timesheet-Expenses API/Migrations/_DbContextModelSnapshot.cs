@@ -159,16 +159,17 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Expense_Id"), 1L, 1);
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("ExpenseStateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ExpenseTypeId")
+                    b.Property<int?>("ExpenseType_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Expense_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Month")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -181,11 +182,14 @@ namespace Timesheet_Expenses_API.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
                     b.HasKey("Expense_Id");
 
                     b.HasIndex("ExpenseStateId");
 
-                    b.HasIndex("ExpenseTypeId");
+                    b.HasIndex("ExpenseType_Id");
 
                     b.HasIndex("ProjectId");
 
@@ -340,9 +344,6 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.Property<int>("lineType")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("period")
-                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Cod_Line");
 
@@ -639,9 +640,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", null)
                         .WithMany("Expenses")
-                        .HasForeignKey("ExpenseTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExpenseType_Id");
 
                     b.HasOne("Timesheet_Expenses_API.Models.Project", null)
                         .WithMany("Expenses")
