@@ -12,8 +12,8 @@ using Timesheet_Expenses_API.Models;
 namespace Timesheet_Expenses_API.Migrations
 {
     [DbContext(typeof(_DbContext))]
-    [Migration("20220705083748_Add-Migration")]
-    partial class AddMigration
+    [Migration("20220706103551_1thMigration")]
+    partial class _1thMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

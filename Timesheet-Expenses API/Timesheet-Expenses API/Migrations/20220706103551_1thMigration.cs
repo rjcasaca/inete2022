@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Timesheet_Expenses_API.Migrations
 {
-    public partial class AddMigration : Migration
+    public partial class _1thMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
