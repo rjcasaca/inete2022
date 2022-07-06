@@ -21,6 +21,9 @@ namespace Timesheet_Expenses_API.Repositories
         public List<string> GetBillingTypes();
         public List<string> GetWorklogState();
         public Date AddDays(DateTime date, int AddDays);
+        public List<ProjectHours> GetProjectHour(int userId);
+        public List<ActivityHours> GetActivityHours(int userId, int projectId);
+        public List<UserActivityWorklogs> GetUserActivityWorklogs(int userId, int activityId);
     }
 
     public class TimesheetRepository : ITimesheetRepository
@@ -620,6 +623,119 @@ namespace Timesheet_Expenses_API.Repositories
             catch
             {
                 return new UserInfo();
+            }
+        }
+
+        //recebe um userId e retorna todos os projetos com as recpetivas horas gastas
+        public List<ProjectHours> GetProjectHour(int userId)
+        {
+            try
+            {
+                List<ProjectHours> projects = new List<ProjectHours>();
+
+                //procura as equipas com o userId indicado
+                var team = db.teams.Where(t => t.UserId.Equals(userId)).ToList();
+                //cria e devolve a lista de projectos que se relacionam com o user
+                List<ProjectsIdName> projectsInfo = new List<ProjectsIdName>();
+                foreach (Team t in team)
+                {
+                    var proj = db.projects.Find(t.ProjectId);
+                    var pInfo = new ProjectsIdName();
+                    pInfo.projectId = proj.Project_Id;
+                    pInfo.projectName = proj.Name;
+                    projectsInfo.Add(pInfo);
+                }
+
+                //adicionar a cada projeto relacionado ao user as horas que gastou
+                foreach (ProjectsIdName pin in projectsInfo)
+                {
+                    var activities = db.activities.Where(a => a.ProjectId.Equals(pin.projectId)).ToList();
+                    decimal hours = 0;
+                    foreach (Activity act in activities)
+                    {
+                        var worklogs = db.worklogs.Where(wl => wl.ActivityId.Equals(act.Activity_Id) && wl.UserId.Equals(userId)).ToList();
+                        foreach (Worklog wl in worklogs)
+                        {
+                            hours += wl.Hours;
+                        }
+                    }
+                    //criar o objeto ProjectHours
+                    ProjectHours projHours = new ProjectHours();
+                    projHours.hours = hours;
+                    projHours.projectsIdName = pin;
+                    projects.Add(projHours);
+                }
+
+                return projects;
+            }
+            catch
+            {
+                return new List<ProjectHours>();
+            }
+        }
+
+        //recebe um userId e um projectId e retorna todas as atividades e as respetivas horas
+        public List<ActivityHours> GetActivityHours(int userId, int projectId)
+        {
+            try
+            {
+                List<ActivityHours> activityHours = new List<ActivityHours>();
+
+                //procura todas as activities relacionadas com aquele projeto
+                var activities = db.activities.Where(a => a.ProjectId.Equals(projectId)).ToList();
+                foreach (Activity act in activities)
+                {
+                    decimal hours = 0;
+                    //procura todas as worklogs relacionadas com os dois
+                    var worklogs = db.worklogs.Where(wl => wl.ActivityId.Equals(act.Activity_Id) && wl.UserId.Equals(userId)).ToList();
+                    foreach (Worklog wl in worklogs)
+                    {
+                        hours += wl.Hours;
+                    }
+                    ActivityIdName actIdName = new ActivityIdName();
+                    actIdName.ActivityId = act.Activity_Id;
+                    actIdName.ActivityName = act.Name;
+                    //criar objeto para adicionar à lista
+                    ActivityHours actHours = new ActivityHours();
+                    actHours.hours = hours;
+                    actHours.activityIdName = actIdName;
+                    activityHours.Add(actHours);
+                }
+
+                return activityHours;
+            }
+            catch
+            {
+                return new List<ActivityHours>();
+            }
+        }
+
+        //recebe um userId e um activityId e retorna todas as worklogs relacionadas com os dois
+        public List<UserActivityWorklogs> GetUserActivityWorklogs(int userId, int activityId)
+        {
+            try
+            {
+                List<UserActivityWorklogs> userActivityWorklogs = new List<UserActivityWorklogs>();
+
+                //procura todas as worklogs relacionadas com os dois
+                var worklogs = db.worklogs.Where(wl => wl.ActivityId.Equals(activityId) && wl.UserId.Equals(userId)).ToList();
+                foreach (Worklog wl in worklogs)
+                {
+                    //cria o objeto e adiciona à lista
+                    UserActivityWorklogs userActWl = new UserActivityWorklogs();
+                    userActWl.worklogId = wl.Cod_Worklog;
+                    userActWl.hours = wl.Hours;
+                    userActWl.Day = wl.Date.Day;
+                    userActWl.Month = wl.Date.Month;
+                    userActWl.Year = wl.Date.Year;
+                    userActivityWorklogs.Add(userActWl);
+                }
+
+                return userActivityWorklogs;
+            }
+            catch
+            {
+                return new List<UserActivityWorklogs>();
             }
         }
     }

@@ -44,6 +44,27 @@ namespace Timesheet_Expenses_API.Controllers
             return Ok(projects_db);
         }
 
+        [HttpGet("{userId}")]
+        public IActionResult GetProjectHour([FromRoute] int userId)
+        {
+            var ProjectHours_db = repos.GetProjectHour(userId);
+            return Ok(ProjectHours_db);
+        }
+
+        [HttpGet("{userId};{projectId}")]
+        public IActionResult GetActivityHours([FromRoute] int userId, int projectId)
+        {
+            var ActivityHours_db = repos.GetActivityHours(userId, projectId);
+            return Ok(ActivityHours_db);
+        }
+
+        [HttpGet("{userId};{activityId}")]
+        public IActionResult GetUserActivityWorklogs([FromRoute] int userId, int activityId)
+        {
+            var GetUserActivityWorklogs_db = repos.GetUserActivityWorklogs(userId, activityId);
+            return Ok(GetUserActivityWorklogs_db);
+        }
+
         [HttpGet("{userId};{projectId}")]
         public IActionResult GetActivityUser([FromRoute] int userId, int projectId)
         {
