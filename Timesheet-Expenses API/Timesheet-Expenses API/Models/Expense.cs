@@ -15,7 +15,7 @@ namespace Timesheet_Expenses_API.Models
 
         //Navigation Properties
 
-        public int ExpenseStateId { get; set; }
+        public string ExpenseState { get; set; }
       
 
         public int UserId { get; set; }

@@ -116,10 +116,11 @@ namespace Timesheet_Expenses_API.Controllers
         [HttpPost("{Month};{Year};{ExpenseStateId};{email};{ProjectId};{TotalMoney};{nameExpense}")]
         public IActionResult CreateExpense([FromRoute] string Month, int Year, string ExpenseStateId, string email, string ProjectId, decimal TotalMoney, string nameExpense)
         {
-            if (repos.CreateExpense( Month,  Year,  ExpenseStateId,  email,  ProjectId,  TotalMoney,  nameExpense))
-                return Ok();
+            var _CreateExpense = repos.CreateExpense(Month, Year, ExpenseStateId, email, ProjectId, TotalMoney, nameExpense);
+            
+                return Ok(_CreateExpense);
 
-            return BadRequest();
+            return BadRequest(_CreateExpense);
         }
 
         [HttpPut]
@@ -133,7 +134,7 @@ namespace Timesheet_Expenses_API.Controllers
         }
 
         [HttpPut]
-        public IActionResult UpdateState(int expenseid, string newstate)
+        public IActionResult UpdateState(string expenseid, string newstate)
         {
             if (repos.UpdateState(expenseid, newstate))
                 return Ok();
@@ -144,8 +145,8 @@ namespace Timesheet_Expenses_API.Controllers
         [HttpPost("{UnityPrice};{Date};{discription};{linecity};{lineType};{ExpenseID}")]
         public IActionResult CreateLine([FromRoute] decimal UnityPrice, DateTime Date, string discription, string linecity, string lineType, int ExpenseID)
         {
-            if (repos.CreateLine(UnityPrice,Date,discription,linecity,lineType,ExpenseID))
-                return Ok();
+            var _CreateLine = repos.CreateLine(UnityPrice, Date, discription, linecity, lineType, ExpenseID);
+                return Ok(_CreateLine);
 
             return BadRequest();
         }
@@ -153,8 +154,8 @@ namespace Timesheet_Expenses_API.Controllers
         [HttpPost("{image};{Name};{expenseId};{Type}")]
         public IActionResult CreateBill([FromRoute] string image, string Name, int expenseId, string Type)
         {
-            if (repos.CreateBill(image, Name, expenseId, Type))
-                return Ok();
+            var _CreateBill = repos.CreateBill(image, Name, expenseId, Type);
+                return Ok(_CreateBill);
 
             return BadRequest();
         }
@@ -164,6 +165,13 @@ namespace Timesheet_Expenses_API.Controllers
             var LinesCity = repos.GetLinesCity(user);
 
             return Ok(LinesCity);
+        }
+        [HttpGet("{id}")]
+        public IActionResult GetState([FromRoute] int id)
+        {
+            var State = repos.GetState(id);
+
+            return Ok(State);
         }
         [HttpGet("{expenseId};{Type}")]
         public IActionResult getLineId([FromRoute] int expenseId, string Type)

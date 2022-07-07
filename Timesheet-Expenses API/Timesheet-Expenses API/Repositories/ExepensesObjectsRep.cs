@@ -17,7 +17,7 @@ namespace Timesheet_Expenses_API.Repositories
         public decimal ValuePending(int userid);
         public decimal ValueDenied(int userid);
         public decimal ValueTotal(int userid);
-        public bool UpdateState(int expenseid, string newstate);
+        public bool UpdateState(string expenseid, string newstate);
         public List<Line> GetLines(int expenseid);
         public bool DeleteLine(int LineId);
         public bool DeleteExpense(int expenseid);
@@ -29,6 +29,7 @@ namespace Timesheet_Expenses_API.Repositories
         public bool verifyExpense(int expenseID);
         public int getLineId(int expenseId, string Type);
         public bool DeleteBill(string nameImage);
+        public string GetState(int idState);
         #endregion
     }
 
@@ -64,7 +65,7 @@ namespace Timesheet_Expenses_API.Repositories
                 List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
                 foreach(Expense exp in lstexpenses) 
                 {
-                    if (exp.ExpenseStateId == 1) 
+                    if (exp.ExpenseState == "Approved") 
                     {
                         result += exp.TotalMoney;
                     
@@ -101,7 +102,7 @@ namespace Timesheet_Expenses_API.Repositories
                 List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
                 foreach (Expense exp in lstexpenses)
                 {
-                    if (exp.ExpenseStateId == 3)
+                    if (exp.ExpenseState == "Pending")
                     {
                         result += exp.TotalMoney;
 
@@ -117,6 +118,19 @@ namespace Timesheet_Expenses_API.Repositories
             }
 
         }
+        public string GetState(int idState)
+        {
+            try 
+            {
+                string state = db.expenseState.Where(es => es.ExpenseState_Id.Equals(idState)).FirstOrDefault().State;
+                return state;
+            } 
+            catch 
+            {
+                return "";
+            }
+
+        }   
         //Busca Valor Rejeitado
         public decimal ValueDenied(int userid)
         {
@@ -126,7 +140,7 @@ namespace Timesheet_Expenses_API.Repositories
                 List<Expense> lstexpenses = db.expenses.Where(e => e.UserId.Equals(userid)).ToList();
                 foreach (Expense exp in lstexpenses)
                 {
-                    if (exp.ExpenseStateId == 2)
+                    if (exp.ExpenseState == "Denied")
                     {
                         result += exp.TotalMoney;
 
@@ -219,7 +233,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //criar um despesa
-        public bool CreateExpense(string Month,int Year,string ExpenseStateId, string email, string ProjectId, decimal TotalMoney,string nameExpense)
+        public bool CreateExpense(string Month,int Year,string ExpenseState, string email, string ProjectId, decimal TotalMoney,string nameExpense)
         {
             try { 
            
@@ -229,7 +243,7 @@ namespace Timesheet_Expenses_API.Repositories
                     Year= Year,
                     Expense_Name=nameExpense,
                     TotalMoney = TotalMoney,
-                    ExpenseStateId = db.expenseState.Where(es => es.State.Equals(ExpenseStateId)).FirstOrDefault().ExpenseState_Id,
+                    ExpenseState = ExpenseState,
                     UserId = GetUserId(email),
                     ProjectId = db.projects.Where(p => p.Name.Equals(ProjectId)).FirstOrDefault().Project_Id
                 };
@@ -301,12 +315,12 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
         //Atualiza o Estado Da despesa
-        public bool UpdateState(int expenseid, string newstate)
+        public bool UpdateState(string expenseid, string newstate)
         {
             try
             {
-                var expense = db.expenses.Where(e => e.ExpenseStateId.Equals(expenseid)).FirstOrDefault();
-                expense.ExpenseStateId = db.expenseState.Where(es => es.State.Equals(newstate)).FirstOrDefault().ExpenseState_Id;
+                var expense = db.expenses.Where(e => e.ExpenseState.Equals(expenseid)).FirstOrDefault();
+                expense.ExpenseState = newstate;
 
                 
                
@@ -384,18 +398,7 @@ namespace Timesheet_Expenses_API.Repositories
             }
         }
 
-        public bool Update(string Newstate,int idExpense)
-        {
-            try 
-            {var expID= db.expenseState.Where(es => es.State.Equals(Newstate)).FirstOrDefault().ExpenseState_Id;
-                var expense = db.expenses.Find(idExpense);
-                expense.ExpenseStateId = expID;
-                db.SaveChanges();
-                return true;
-            } 
-            catch { return false; }
-
-        }
+        
         public int GetExpenseId(int userid, string expensename)
         {
             try

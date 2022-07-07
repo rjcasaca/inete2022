@@ -159,7 +159,11 @@ namespace Timesheet_Expenses_API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Expense_Id"), 1L, 1);
 
-                    b.Property<int>("ExpenseStateId")
+                    b.Property<string>("ExpenseState")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ExpenseState_Id")
                         .HasColumnType("int");
 
                     b.Property<int?>("ExpenseType_Id")
@@ -187,7 +191,7 @@ namespace Timesheet_Expenses_API.Migrations
 
                     b.HasKey("Expense_Id");
 
-                    b.HasIndex("ExpenseStateId");
+                    b.HasIndex("ExpenseState_Id");
 
                     b.HasIndex("ExpenseType_Id");
 
@@ -634,9 +638,7 @@ namespace Timesheet_Expenses_API.Migrations
                 {
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseState", null)
                         .WithMany("Expenses")
-                        .HasForeignKey("ExpenseStateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExpenseState_Id");
 
                     b.HasOne("Timesheet_Expenses_API.Models.ExpenseType", null)
                         .WithMany("Expenses")
